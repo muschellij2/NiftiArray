@@ -1,9 +1,12 @@
 Package: niftiArray
-Title: What the Package Does (one line, title case)
+Title: HDF5 Delayed Array for Nifti Objects
 Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-Depends: R (>= 3.6.0)
+Authors@R: c(person(given = "John",
+           family = "Muschelli",
+           email = "muschellij2@gmail.com",
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-6469-1750")))
+Description: Nifti Objects as DelayedArrays backended in HDF5.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -12,3 +15,10 @@ Suggests:
     rmarkdown,
     testthat
 VignetteBuilder: knitr
+Imports: 
+    HDF5Array,
+    rhdf5,
+    RNifti,
+    DelayedArray,
+    S4Vectors
+RoxygenNote: 6.1.1
