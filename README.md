@@ -1,6 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+The `niftiArray` package is under development please check back later\!
+
 # niftiArray
 
 <!-- badges: start -->
@@ -11,53 +13,37 @@ status](https://travis-ci.org/muschellij2/niftiArray.svg?branch=master)](https:/
 status](https://ci.appveyor.com/api/projects/status/github/muschellij2/niftiArray?branch=master&svg=true)](https://ci.appveyor.com/project/muschellij2/niftiArray)
 <!-- badges: end -->
 
-The goal of niftiArray is to …
+The goal of `niftiArray` is to allow for memory efficient fast random
+access of NIfTI objects. `niftiArray` is an R package that allows for
+convenient and memory-efficient containers for on-disk representation of
+NIfTI objects. We allow for DelayedArray extensions and support all
+operations supported by DelayedArray objects. These operations can be
+either delayed or block-processed.
 
 ## Installation
 
-You can install the released version of niftiArray from
-[CRAN](https://CRAN.R-project.org) with:
+You can install the development version of `niftiArray` from
+[GitHub](https://github.com/) with:
 
 ``` r
-install.packages("niftiArray")
+# install.packages('remotes')
+remotes::install_github("muschellij2/niftiArray")
 ```
 
-And the development version from [GitHub](https://github.com/) with:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("muschellij2/niftiArray")
-```
+We are working to get a stable version on
+[Neuroconductor](www.neuroconductor.org).
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+<center>
 
-``` r
-library(niftiArray)
-## basic example code
-```
+<iframe src="https://giphy.com/embed/1ken0zzzL79NPy3QZj" width="380" height="380" frameBorder="0" class="giphy-embed" allowFullScreen>
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+</iframe>
 
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
+<p>
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date.
+<a href="https://giphy.com/gifs/spotify-coming-soon-1ken0zzzL79NPy3QZj">via
+GIPHY</a>
 
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub\!
+</p>
