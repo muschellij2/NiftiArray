@@ -2,10 +2,14 @@ Package: niftiArray
 Title: HDF5 Delayed Array for Nifti Objects
 Version: 0.0.0.9000
 Authors@R: c(person(given = "John",
-           family = "Muschelli",
-           email = "muschellij2@gmail.com",
-           role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0001-6469-1750")))
+                    family = "Muschelli",
+                    email = "muschellij2@gmail.com",
+                    role = c("aut", "cre"),
+                    comment = c(ORCID = "0000-0001-6469-1750")),
+             person(given = "Alessandra",
+                    family = "Valcarcel",
+                    role = "aut",
+                    email = "alval@pennmedicine.upenn.edu"))
 Description: Nifti Objects as DelayedArrays backended in HDF5.
 License: GPL-3
 Encoding: UTF-8
