@@ -2,7 +2,7 @@
 % Please edit documentation in R/niftiArray.R
 \name{NiftiArray}
 \alias{NiftiArray}
-\title{Construct NiftyArray}
+\title{Construct NiftiArray}
 \usage{
 NiftiArray(filepath, name = "image", header_name = "hdr", type = NA)
 }
@@ -10,5 +10,5 @@ NiftiArray(filepath, name = "image", header_name = "hdr", type = NA)
 \item{type}{}
 }
 \description{
-Construct NiftyArray
+Construct NiftiArray
 }

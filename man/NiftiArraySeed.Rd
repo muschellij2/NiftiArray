@@ -2,7 +2,7 @@
 % Please edit documentation in R/aaa_niftiArraySeed.R
 \name{NiftiArraySeed}
 \alias{NiftiArraySeed}
-\title{Seed for NiftyArray Class}
+\title{Seed for NiftiArray Class}
 \usage{
 NiftiArraySeed(filepath, name = "image", header_name = "hdr",
   type = NA)
@@ -11,5 +11,5 @@ NiftiArraySeed(filepath, name = "image", header_name = "hdr",
 \item{type}{}
 }
 \description{
-Seed for NiftyArray Class
+Seed for NiftiArray Class
 }
