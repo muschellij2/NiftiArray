@@ -15,19 +15,22 @@
 #' @examples
 #' nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
 #' res = writeNiftiArray(nii_fname)
-writeNiftiArray <- function(x, filepath=tempfile(fileext = ".h5"),
-                            name = "image",
-                            header_name = "hdr",
-                            chunkdim=NULL,
-                            level=NULL,
-                            verbose=FALSE)
+writeNiftiArray <- function(
+  x, filepath=tempfile(fileext = ".h5"),
+  name = "image",
+  header_name = "hdr",
+  chunkdim=NULL,
+  level=NULL,
+  verbose=FALSE)
 {
 
   # for filepath for .nii.gz
   if (is.character(x)) {
     fe = tools::file_ext(x)
+    fe = tolower(fe)
     if (fe == "gz") {
       fe = tools::file_ext(sub("[.]gz$", "", x))
+      fe = tolower(fe)
     }
     if (fe == "nii") {
       x = RNifti::readNifti(x)

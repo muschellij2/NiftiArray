@@ -24,6 +24,24 @@ setMethod("nifti_header", "NiftiArray", function(image) {
 
 #' @rdname nifti_header
 #' @export
+#' @aliases nifti_header,DelayedArray-method
+setMethod("nifti_header", "DelayedArray", function(image) {
+  seeds = image@seed@seeds
+  nii_seeds = sapply(seeds, function(x) {
+    is(x, "NiftiArray") | is(x, "NiftiArraySeed")
+  })
+  if (!any(nii_seeds)) {
+    stop("No seeds in Delayed Array are NiftiArray or NiftiArraySeed")
+  }
+  seeds = seeds[ nii_seeds ]
+  seeds = seeds[[ length(seeds) ]]
+  nifti_header(seeds)
+})
+
+
+
+#' @rdname nifti_header
+#' @export
 #' @aliases nifti_header,ANY-method
 setMethod("nifti_header", "ANY", function(image) {
   RNifti::niftiHeader(image)
