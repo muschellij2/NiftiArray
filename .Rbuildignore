@@ -5,3 +5,6 @@
 ^\.travis\.yml$
 ^appveyor\.yml$
 ^R/coercion_using_as\.R$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
