@@ -10,6 +10,8 @@
 #' @param level 	The compression level to use for writing the data to disk.
 #' Passed to [HDF5Array::writeHDF5Array].
 #' @param verbose Display progress. Passed to [HDF5Array::writeHDF5Array].
+#' @param header list of header information to override call of
+#' [nifti_header]
 #'
 #' @export
 #' @examples
@@ -21,7 +23,8 @@ writeNiftiArray <- function(
   header_name = "hdr",
   chunkdim=NULL,
   level=NULL,
-  verbose=FALSE)
+  verbose=FALSE,
+  header = NULL)
 {
 
   # for filepath for .nii.gz
@@ -37,11 +40,15 @@ writeNiftiArray <- function(
     }
   }
 
-  hdr = nifti_header(x)
-  aa = attributes(hdr)
-  aa$class = NULL
-  class(hdr) = "list"
-  attributes(hdr) = aa
+  if (is.null(header)) {
+    hdr = header
+  } else {
+    hdr = nifti_header(x)
+    aa = attributes(hdr)
+    aa$class = NULL
+    class(hdr) = "list"
+    attributes(hdr) = aa
+  }
   if (!is(x, "DelayedArray")) {
     x = array(x, dim = dim(x))
   }

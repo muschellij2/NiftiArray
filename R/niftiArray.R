@@ -1,10 +1,3 @@
-#' @importClassesFrom HDF5Array HDF5Array
-setClass("NiftiArray",
-         contains = "HDF5Array",
-         slots = c(
-           seed = "NiftiArraySeed")
-)
-
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ### Constructor
 ###

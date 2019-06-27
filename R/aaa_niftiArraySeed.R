@@ -1,6 +1,7 @@
 ### =========================================================================
 ### NiftiArraySeed objects
-### -------------------------------------------------------------------------
+### ----------------------
+
 #' @importClassesFrom HDF5Array HDF5ArraySeed
 #' @aliases DelayedArray,NiftiArraySeed-method
 #' @exportClass NiftiArraySeed
@@ -46,6 +47,22 @@ setClass("NiftiArraySeed",
            magic = "character"
          )
 )
+
+#' @importClassesFrom HDF5Array HDF5Array
+#' @rdname NiftiArray
+#' @exportClass NiftiArray
+setClass("NiftiArray",
+         contains = "HDF5Array",
+         slots = c(
+           seed = "NiftiArraySeed")
+)
+
+#' NiftiMatrix Class
+#'
+#' @importClassesFrom DelayedArray DelayedMatrix
+#' @rdname NiftiMatrix
+#' @exportClass NiftiMatrix
+setClass("NiftiMatrix", contains = c("NiftiArray", "DelayedMatrix"))
 
 
 
@@ -101,3 +118,7 @@ NiftiArraySeed <- function(filepath,
   args = c("NiftiArraySeed", args )
   do.call(S4Vectors::new2, args = args)
 }
+
+
+
+

@@ -6,7 +6,7 @@
 \usage{
 writeNiftiArray(x, filepath = tempfile(fileext = ".h5"),
   name = "image", header_name = "hdr", chunkdim = NULL,
-  level = NULL, verbose = FALSE)
+  level = NULL, verbose = FALSE, header = NULL)
 }
 \arguments{
 \item{x}{a \code{niftiImage} object or file path to \code{NIfTI} file}
@@ -25,6 +25,9 @@ writing the data to disk. Passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::w
 Passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
 
 \item{verbose}{Display progress. Passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
+
+\item{header}{list of header information to override call of
+\link{nifti_header}}
 }
 \description{
 Write NiftiArray Object
