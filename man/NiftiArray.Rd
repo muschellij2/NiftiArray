@@ -2,13 +2,33 @@
 % Please edit documentation in R/niftiArray.R
 \name{NiftiArray}
 \alias{NiftiArray}
-\title{Construct NiftiArray}
+\alias{class:NiftiArray}
+\title{NIfTI images as DelayedArray objects, using HDF5Array}
 \usage{
 NiftiArray(filepath, name = "image", header_name = "hdr", type = NA)
 }
 \arguments{
-\item{type}{}
+\item{filepath}{The path (as a single character string) to the HDF5
+file where the dataset is located.}
+
+\item{name}{The name of the image in the HDF5 file.}
+
+\item{header_name}{The name of the header in the HDF5 file.}
+
+\item{type}{\code{NA} or the R atomic type, passed to
+\code{\link[HDF5Array:HDF5Array]{HDF5Array::HDF5Array()}}}
+}
+\value{
+A \code{NiftiArray} object
 }
 \description{
-Construct NiftiArray
+The NiftiArray class is a \link[DelayedArray:DelayedArray]{DelayedArray::DelayedArray} subclass
+represented in HDF5, with the header.
+All the operations available for \link[HDF5Array:HDF5Array]{HDF5Array::HDF5Array}
+objects work on NiftiArray objects.
+}
+\examples{
+nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
+res = NiftiArray(nii_fname)
+res2 = NiftiArray(slot(slot(res, "seed"), "filepath"))
 }

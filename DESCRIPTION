@@ -1,6 +1,6 @@
 Package: niftiArray
 Title: HDF5 Delayed Array for Nifti Objects
-Version: 0.0.0.9001
+Version: 0.0.0.9002
 Authors@R: c(person(given = "John",
                     family = "Muschelli",
                     email = "muschellij2@gmail.com",
@@ -29,3 +29,4 @@ Imports:
 RoxygenNote: 6.1.1
 URL: https://github.com/muschellij2/niftiArray
 BugReports: https://github.com/muschellij2/niftiArray/issues
+Roxygen: list(markdown = TRUE)

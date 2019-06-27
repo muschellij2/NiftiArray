@@ -8,8 +8,23 @@ NiftiArraySeed(filepath, name = "image", header_name = "hdr",
   type = NA)
 }
 \arguments{
-\item{type}{}
+\item{filepath}{The path (as a single character string) to the HDF5
+file where the dataset is located.}
+
+\item{name}{The name of the image in the HDF5 file.}
+
+\item{header_name}{The name of the header in the HDF5 file.}
+
+\item{type}{\code{NA} or the R atomic type, passed to
+\code{\link[HDF5Array:HDF5Array]{HDF5Array::HDF5Array()}}}
+}
+\value{
+A \code{NiftiArraySeed} object
 }
 \description{
 Seed for NiftiArray Class
+}
+\examples{
+nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
+res = NiftiArraySeed(nii_fname)
 }

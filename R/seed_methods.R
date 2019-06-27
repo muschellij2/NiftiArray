@@ -4,6 +4,11 @@
 #' @aliases nifti_header,NiftiArraySeed-method
 #' @param image An image or NiftiArray object.
 #' @export
+#' @examples
+#' nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
+#' nifti_header(nii_fname)
+#' res = writeNiftiArray(nii_fname)
+#' nifti_header(res)
 setGeneric("nifti_header", function(image) {
   standardGeneric("nifti_header")
 })

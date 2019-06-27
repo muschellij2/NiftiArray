@@ -1,14 +1,20 @@
 #' Write NiftiArray Object
 #'
-#' @param x
-#' @param filepath
-#' @param name
-#' @param header_name
-#' @param chunkdim
-#' @param level
-#' @param verbose
+#' @param x a `niftiImage` object or file path to `NIfTI` file
+#' @param filepath The path (as a single character string) to the HDF5
+#'  file.
+#' @param name The name of the image in the HDF5 file.
+#' @param header_name The name of the header in the HDF5 file.
+#' @param chunkdim The dimensions of the chunks to use for
+#' writing the data to disk. Passed to [HDF5Array::writeHDF5Array].
+#' @param level 	The compression level to use for writing the data to disk.
+#' Passed to [HDF5Array::writeHDF5Array].
+#' @param verbose Display progress. Passed to [HDF5Array::writeHDF5Array].
 #'
 #' @export
+#' @examples
+#' nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
+#' res = writeNiftiArray(nii_fname)
 writeNiftiArray <- function(x, filepath=tempfile(fileext = ".h5"),
                             name = "image",
                             header_name = "hdr",

@@ -2,6 +2,8 @@
 ### NiftiArraySeed objects
 ### -------------------------------------------------------------------------
 #' @importClassesFrom HDF5Array HDF5ArraySeed
+#' @aliases DelayedArray,NiftiArraySeed-method
+#' @export
 setClass("NiftiArraySeed",
          contains = "HDF5ArraySeed",
          slots = c(
@@ -48,17 +50,21 @@ setClass("NiftiArraySeed",
 
 #' Seed for NiftiArray Class
 #'
-#' @param filepath
-#' @param name
-#' @param header_name
-#' @param type
+#' @param filepath The path (as a single character string) to the HDF5
+#'  file where the dataset is located.
+#' @param name The name of the image in the HDF5 file.
+#' @param header_name The name of the header in the HDF5 file.
+#' @param type `NA` or the R atomic type, passed to
+#' [HDF5Array::HDF5Array()]
 #'
-#' @return
+#' @return A `NiftiArraySeed` object
 #' @export
 #' @importFrom HDF5Array HDF5ArraySeed
 #' @importFrom rhdf5 h5read
 #' @importFrom S4Vectors new2
 #' @examples
+#' nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
+#' res = NiftiArraySeed(nii_fname)
 NiftiArraySeed <- function(filepath,
                            name = "image",
                            header_name = "hdr",

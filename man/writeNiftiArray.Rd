@@ -9,8 +9,27 @@ writeNiftiArray(x, filepath = tempfile(fileext = ".h5"),
   level = NULL, verbose = FALSE)
 }
 \arguments{
-\item{verbose}{}
+\item{x}{a \code{niftiImage} object or file path to \code{NIfTI} file}
+
+\item{filepath}{The path (as a single character string) to the HDF5
+file.}
+
+\item{name}{The name of the image in the HDF5 file.}
+
+\item{header_name}{The name of the header in the HDF5 file.}
+
+\item{chunkdim}{The dimensions of the chunks to use for
+writing the data to disk. Passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
+
+\item{level}{The compression level to use for writing the data to disk.
+Passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
+
+\item{verbose}{Display progress. Passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
 }
 \description{
 Write NiftiArray Object
+}
+\examples{
+nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
+res = writeNiftiArray(nii_fname)
 }

@@ -14,18 +14,35 @@ setMethod("DelayedArray", "NiftiArraySeed",
           function(seed) DelayedArray::new_DelayedArray(seed, Class = "NiftiArray")
 )
 
-#' Construct NiftiArray
+
+#' NIfTI images as DelayedArray objects, using HDF5Array
 #'
-#' @param filepath
-#' @param name
-#' @param header_name
-#' @param type
+#' The NiftiArray class is a [DelayedArray::DelayedArray] subclass
+#' represented in HDF5, with the header.
+#' All the operations available for [HDF5Array::HDF5Array]
+#' objects work on NiftiArray objects.
 #'
-#' @return
+#'
+#' @param filepath The path (as a single character string) to the HDF5
+#'  file where the dataset is located.
+#' @param name The name of the image in the HDF5 file.
+#' @param header_name The name of the header in the HDF5 file.
+#' @param type `NA` or the R atomic type, passed to
+#' [HDF5Array::HDF5Array()]
+#'
+#' @return A `NiftiArray` object
 #' @export
+#'
+#' @aliases class:NiftiArray
+#' @aliases NiftiArray-class
+#' @aliases NiftiArray
+#'
 #' @importFrom DelayedArray DelayedArray
 #' @import methods
 #' @examples
+#' nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
+#' res = NiftiArray(nii_fname)
+#' res2 = NiftiArray(slot(slot(res, "seed"), "filepath"))
 NiftiArray <- function(filepath, name = "image", header_name = "hdr", type = NA)
 {
   if (is(filepath, "NiftiArraySeed")) {
