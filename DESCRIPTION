@@ -30,3 +30,5 @@ RoxygenNote: 6.1.1
 URL: https://github.com/muschellij2/niftiArray
 BugReports: https://github.com/muschellij2/niftiArray/issues
 Roxygen: list(markdown = TRUE)
+biocViews: Infrastructure, DataRepresentation, DataImport
+

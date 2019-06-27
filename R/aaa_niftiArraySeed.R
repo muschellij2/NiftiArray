@@ -3,7 +3,8 @@
 ### -------------------------------------------------------------------------
 #' @importClassesFrom HDF5Array HDF5ArraySeed
 #' @aliases DelayedArray,NiftiArraySeed-method
-#' @export
+#' @exportClass NiftiArraySeed
+#' @rdname NiftiArraySeed
 setClass("NiftiArraySeed",
          contains = "HDF5ArraySeed",
          slots = c(

@@ -13,14 +13,18 @@ setGeneric("nifti_header", function(image) {
   standardGeneric("nifti_header")
 })
 
+#' @rdname nifti_header
 #' @export
+#' @aliases nifti_header,NiftiArray-method
 setMethod("nifti_header", "NiftiArray", function(image) {
   nifti_header(image@seed)
 })
 
 
 
+#' @rdname nifti_header
 #' @export
+#' @aliases nifti_header,ANY-method
 setMethod("nifti_header", "ANY", function(image) {
   RNifti::niftiHeader(image)
 })

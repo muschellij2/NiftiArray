@@ -4,9 +4,15 @@
 \name{nifti_header}
 \alias{nifti_header}
 \alias{nifti_header,NiftiArraySeed-method}
+\alias{nifti_header,NiftiArray-method}
+\alias{nifti_header,ANY-method}
 \title{Dump a NIfTI header}
 \usage{
 nifti_header(image)
+
+\S4method{nifti_header}{NiftiArray}(image)
+
+\S4method{nifti_header}{ANY}(image)
 
 \S4method{nifti_header}{NiftiArraySeed}(image)
 }
