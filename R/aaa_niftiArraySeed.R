@@ -46,7 +46,7 @@ setClass("NiftiArraySeed",
 
 
 
-#' Seed for NiftyArray Class
+#' Seed for NiftiArray Class
 #'
 #' @param filepath
 #' @param name
@@ -55,7 +55,9 @@ setClass("NiftiArraySeed",
 #'
 #' @return
 #' @export
-#'
+#' @importFrom HDF5Array HDF5ArraySeed
+#' @importFrom rhdf5 h5read
+#' @importFrom S4Vectors new2
 #' @examples
 NiftiArraySeed <- function(filepath,
                            name = "image",

@@ -14,7 +14,7 @@ setMethod("DelayedArray", "NiftiArraySeed",
           function(seed) DelayedArray::new_DelayedArray(seed, Class="NiftiArray")
 )
 
-#' Construct NiftyArray
+#' Construct NiftiArray
 #'
 #' @param filepath
 #' @param name
@@ -23,7 +23,7 @@ setMethod("DelayedArray", "NiftiArraySeed",
 #'
 #' @return
 #' @export
-#'
+#' @importFrom DelayedArray DelayedArray
 #' @examples
 NiftiArray <- function(filepath, name = "image", header_name = "hdr", type = NA)
 {
