@@ -44,9 +44,6 @@ testthat::test_that("Checking equivalent headers", {
 
   a_img_hdr = attributes(img_hdr)
   a_hdr = attributes(hdr)
-  a_img_hdr$pixunits = NULL
-  a_hdr$pixunits = NULL
-
   xx = mapply(function(x, y) {
     testthat::expect_equal(x, y)
     NULL

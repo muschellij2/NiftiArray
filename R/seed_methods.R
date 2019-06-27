@@ -75,6 +75,7 @@ setMethod("nifti_header", "NiftiArraySeed", function(image) {
   ndim = length(dim(image))
   attr(out, "imagedim") = dim(image)
   attr(out, "pixdim") = image@pixdim[2:(2 + ndim - 1)]
+  attr(out, "pixunits") = pixunits(out$xyzt_units)
   class(out) = "niftiHeader"
   # aa = attributes(RNifti::niftiHeader(out))
   # attr(out, "pixdim") = attr(aa, "pixdim")
