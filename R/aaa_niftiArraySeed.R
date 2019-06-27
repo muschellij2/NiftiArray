@@ -64,6 +64,20 @@ NiftiArraySeed <- function(filepath,
                            header_name = "hdr",
                            type=NA)
 {
+  # for filepath for .nii.gz
+  fe = tools::file_ext(filepath)
+  if (fe == "gz") {
+    fe = tools::file_ext(sub("[.]gz$", "", filepath))
+  }
+  if (fe == "nii") {
+    x = RNifti::readNifti(filepath)
+    filepath = tempfile(fileext = ".h5")
+    writeNiftiArray(x, filepath = filepath,
+                    name = name,
+                    header_name = header_name)
+    rm(x); gc()
+  }
+
   seed = HDF5Array::HDF5ArraySeed(filepath, name = name, type = type)
   args = list(
     filepath = seed@filepath,

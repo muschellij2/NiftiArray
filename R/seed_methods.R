@@ -1,19 +1,35 @@
-#' @rdname niftiHeader
-#' @aliases niftiHeader,NiftiArraySeed-method
+#' Dump a NIfTI header
+#'
+#' @rdname nifti_header
+#' @aliases nifti_header,NiftiArraySeed-method
+#' @param image An image or NiftiArray object.
 #' @export
-setMethod("niftiHeader", "NiftiArray", function(image) {
-  niftiHeader(image@seed)
+setGeneric("nifti_header", function(image) {
+  standardGeneric("nifti_header")
 })
 
-#' @rdname niftiHeader
-#' @aliases niftiHeader,NiftiArraySeed-method
-#' @importFrom RNifti niftiHeader
 #' @export
-setMethod("niftiHeader", "NiftiArraySeed", function(image) {
+setMethod("nifti_header", "NiftiArray", function(image) {
+  nifti_header(image@seed)
+})
+
+
+
+#' @export
+setMethod("nifti_header", "ANY", function(image) {
+  RNifti::niftiHeader(image)
+})
+
+
+#' @rdname nifti_header
+#' @aliases nifti_header,NiftiArraySeed-method
+#' @import RNifti
+#' @export
+setMethod("nifti_header", "NiftiArraySeed", function(image) {
   out = list(
     sizeof_hdr = image@sizeof_hdr,
     dim_info = image@dim_info,
-    dim_ = image@dim_,
+    dim = image@dim_,
     intent_p1 = image@intent_p1,
     intent_p2 = image@intent_p2,
     intent_p3 = image@intent_p3,

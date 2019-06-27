@@ -2,7 +2,7 @@
 setClass("NiftiArray",
          contains = "HDF5Array",
          slots = c(
-           seed="NiftiArraySeed")
+           seed = "NiftiArraySeed")
 )
 
 ### - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -11,7 +11,7 @@ setClass("NiftiArray",
 
 #' @importMethodsFrom DelayedArray DelayedArray
 setMethod("DelayedArray", "NiftiArraySeed",
-          function(seed) DelayedArray::new_DelayedArray(seed, Class="NiftiArray")
+          function(seed) DelayedArray::new_DelayedArray(seed, Class = "NiftiArray")
 )
 
 #' Construct NiftiArray
@@ -24,6 +24,7 @@ setMethod("DelayedArray", "NiftiArraySeed",
 #' @return
 #' @export
 #' @importFrom DelayedArray DelayedArray
+#' @import methods
 #' @examples
 NiftiArray <- function(filepath, name = "image", header_name = "hdr", type = NA)
 {
