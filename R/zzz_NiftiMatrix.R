@@ -1,3 +1,12 @@
+#' "niftiImage" class
+#'
+#' @name niftiImage-class
+#' @aliases niftiImage
+#' @family niftiImage
+#'
+setOldClass("niftiImage")
+
+
 
 .as_NiftiArray <- function(from) writeNiftiArray(from)  # write to current dump
 
@@ -24,6 +33,7 @@ setAs("DelayedMatrix", "NiftiMatrix", .as_NiftiArray)
 #' @rdname NiftiMatrix
 #' @aliases matrixClass,NiftiArray-method
 #' @name matrixClass
+#' @param x Typically a DelayedArray object.
 setMethod("matrixClass", "NiftiArray", function(x) "NiftiMatrix")
 
 #' @aliases coerce,NiftiArray,NiftiMatrix-method

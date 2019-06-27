@@ -1,5 +1,5 @@
 library(testthat)
-library(niftiArray)
+library(NiftiArray)
 library(RNifti)
 library(DelayedArray)
 

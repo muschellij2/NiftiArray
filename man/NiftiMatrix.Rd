@@ -14,6 +14,9 @@
 \usage{
 \S4method{matrixClass}{NiftiArray}(x)
 }
+\arguments{
+\item{x}{Typically a DelayedArray object.}
+}
 \description{
 NiftiMatrix Class
 }

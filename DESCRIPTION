@@ -1,4 +1,4 @@
-Package: niftiArray
+Package: NiftiArray
 Title: HDF5 Delayed Array for Nifti Objects
 Version: 0.0.0.9002
 Authors@R: c(person(given = "John",

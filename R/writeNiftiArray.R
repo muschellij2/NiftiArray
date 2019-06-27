@@ -21,7 +21,6 @@ writeNiftiArray <- function(
   x, filepath=tempfile(fileext = ".h5"),
   name = "image",
   header_name = "hdr",
-  vector_name = "vector",
   chunkdim=NULL,
   level=NULL,
   verbose=FALSE,
