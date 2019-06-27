@@ -47,5 +47,4 @@ We are working to get a stable version on [Neuroconductor](www.neuroconductor.or
 
 ## Example
 
-<center>
-<iframe src="https://giphy.com/embed/1ken0zzzL79NPy3QZj" width="380" height="380" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/spotify-coming-soon-1ken0zzzL79NPy3QZj">via GIPHY</a></p>
+![](https://media.giphy.com/media/1ken0zzzL79NPy3QZj/giphy.gif)
