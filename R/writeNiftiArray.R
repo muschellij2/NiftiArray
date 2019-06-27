@@ -40,7 +40,7 @@ writeNiftiArray <- function(
     }
   }
 
-  if (is.null(header)) {
+  if (!is.null(header)) {
     hdr = header
   } else {
     hdr = nifti_header(x)

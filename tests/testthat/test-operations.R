@@ -29,9 +29,6 @@ testthat::test_that("Operations and DelayedArray give header", {
 
 
 
-
-
-
 testthat::test_that("Operations and DelayedArray give header", {
 
   res = writeNiftiArray(img)
