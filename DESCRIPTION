@@ -17,7 +17,8 @@ LazyData: true
 Suggests: 
     knitr,
     rmarkdown,
-    testthat
+    testthat,
+    DelayedMatrixStats
 VignetteBuilder: knitr
 Imports: 
     HDF5Array,

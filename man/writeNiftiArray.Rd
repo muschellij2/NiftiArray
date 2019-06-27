@@ -5,8 +5,8 @@
 \title{Write NiftiArray Object}
 \usage{
 writeNiftiArray(x, filepath = tempfile(fileext = ".h5"),
-  name = "image", header_name = "hdr", chunkdim = NULL,
-  level = NULL, verbose = FALSE, header = NULL)
+  name = "image", header_name = "hdr", vector_name = "vector",
+  chunkdim = NULL, level = NULL, verbose = FALSE, header = NULL)
 }
 \arguments{
 \item{x}{a \code{niftiImage} object or file path to \code{NIfTI} file}

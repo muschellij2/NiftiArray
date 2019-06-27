@@ -21,6 +21,7 @@ writeNiftiArray <- function(
   x, filepath=tempfile(fileext = ".h5"),
   name = "image",
   header_name = "hdr",
+  vector_name = "vector",
   chunkdim=NULL,
   level=NULL,
   verbose=FALSE,
@@ -44,11 +45,11 @@ writeNiftiArray <- function(
     hdr = header
   } else {
     hdr = nifti_header(x)
-    aa = attributes(hdr)
-    aa$class = NULL
-    class(hdr) = "list"
-    attributes(hdr) = aa
   }
+  aa = attributes(hdr)
+  aa$class = NULL
+  class(hdr) = "list"
+  attributes(hdr) = aa
   if (!is(x, "DelayedArray")) {
     x = array(x, dim = dim(x))
   }

@@ -32,9 +32,35 @@ setMethod("matrixClass", "NiftiArray", function(x) "NiftiMatrix")
 #' @name coerce
 #' @export
 setAs("NiftiArray", "NiftiMatrix", function(from) {
-  # mat = matrix(x, ncol = 1)
-  # writeNiftiArray(mat, )
-  new("NiftiMatrix", from)
+  dfrom = dim(from)
+  nd = length(dfrom)
+  if (nd > 2) {
+    hdr = nifti_header(from)
+    mat = matrix(from, ncol = 1)
+    writeNiftiArray(mat, header = hdr)
+  } else {
+    new("NiftiMatrix", from)
+  }
+})
+
+#' @aliases coerce,NiftiArray,NiftiMatrix-method
+#' @importMethodsFrom methods coerce
+#' @rdname NiftiMatrix
+#' @name coerce
+#' @export
+setAs("NiftiArray", "niftiImage", function(from) {
+  hdr = nifti_header(from)
+  out_img = RNifti::updateNifti(as.array(from), template = hdr)
+  out_img
+})
+
+#' @aliases coerce,NiftiArray,NiftiMatrix-method
+#' @importMethodsFrom methods coerce
+#' @rdname NiftiMatrix
+#' @name coerce
+#' @export
+setAs("NiftiMatrix", "niftiImage", function(from) {
+  as(as(from, "NiftiArray"), "niftiImage")
 })
 
 
@@ -42,7 +68,13 @@ setAs("NiftiArray", "NiftiMatrix", function(from) {
 #' @rdname NiftiMatrix
 #' @export
 #' @name coerce
-setAs("NiftiMatrix", "NiftiArray", function(from) from)  # no-op
+setAs("NiftiMatrix", "NiftiArray", function(from) {
+  hdr = nifti_header(from)
+  d = hdr$dim
+  d = d[ 2:(2 + d[1] - 1)]
+  mat = array(from, dim = d)
+  writeNiftiArray(mat, header = hdr)
+})  # no-op
 
 #' @rdname NiftiMatrix
 #' @aliases coerce,ANY,NiftiMatrix-method
