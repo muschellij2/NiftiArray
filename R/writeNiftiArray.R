@@ -11,16 +11,18 @@
 #' Passed to [HDF5Array::writeHDF5Array].
 #' @param verbose Display progress. Passed to [HDF5Array::writeHDF5Array].
 #' @param header list of header information to override call of
+#' @param overwrite FALSE by default and an in the event that an HDF5 file already exists for `filepath` input then do not overwrite it.
+#' If set to TRUE then the "image" and "hdr" objects at this file location will overwrite.
 #' [nifti_header]
 #'
 #' @export
 #' @importFrom HDF5Array writeHDF5Array
-#' @importFrom rhdf5 h5closeAll h5delete h5write
+#' @importFrom rhdf5 h5close h5delete h5write
 #' @examples
 #' nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
 #' res = writeNiftiArray(nii_fname)
 writeNiftiArray <- function(
-  x, filepath=tempfile(fileext = ".h5"),
+  x, filepath=tempfile(fileext = ".h5", overwrite = FALSE),
   name = "image",
   header_name = "hdr",
   chunkdim=NULL,
@@ -30,11 +32,14 @@ writeNiftiArray <- function(
 {
   # Check if filepath exists as h5 already
   # If it does delete it
-  if(file.exists(filepath)){
+  if(file.exists(filepath) & overwrite == TRUE){
     # Could keep the file but remove the contents/groups in the h5 with
     rhdf5::h5delete(file = filepath, name = "image")
     rhdf5::h5delete(file = filepath, name = "hdr")
+  } else if(file.exists(filepath) & overwrite == FALSE){
+    stop('The HDF5 filepath given already exists. Please delete file or set overwrite = TRUE.')
   }
+  # Function will error if the file exists
 
   # for filepath for .nii.gz
   if (is.character(x)) {
@@ -69,7 +74,7 @@ writeNiftiArray <- function(
   rhdf5::h5write(hdr, file = filepath, name = header_name)
 
   # Close all open HDF5 handles in the environment
-  rhdf5::h5closeAll()
+  rhdf5::h5close(filepath)
 
   NiftiArray(filepath, name = name, header_name = header_name)
 }

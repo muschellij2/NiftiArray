@@ -1,5 +1,5 @@
 ---
-title: "bad-vignette"
+title: "NiftiArray: An R Package to Implement Fast Random Access of NIfTI Objects"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{bad-vignette}
@@ -10,10 +10,49 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE,
+  echo = TRUE
 )
 ```
 
-```{r setup}
+This page is still under construction! Check back later for updates!
+
+# Overview
+
+R is not well suited for big datasets. NIfTI images, depending on the image dimension and voxel size, can be quite large when loaded and memory is a concern. As sample size increases it becomes difficult to perform simple operations across subjects. For example, calculating the mean image across 800 subjects is computationally intense since not all 800 subjects can be loaded into memory at once. Therefore, there is a need for alternative approaches. 
+
+The Hierarchical Data Format version 5 (HDF5), is a file format that supports large, complex, heterogeneous data. This file format allows for fast random access of data on-disk. That is, HDF5 files can be directly manipulated without loading the object into memory and overcome a number of the issues related to working with big data in R. 
+
+The `rhdf5` R package allows for direct manipulation of the HDF5 dataset on disk. This package can be utilized to convert, read, write, and manipulate the HDF5 data stored on disk. Other packages like `HDF5Array` provide memory-efficient on-disk access to the HDF5 dataset for standard R matrix/array manipulation. Simply put, as a user you feel as though you are working with a locally loaded large array (or matrix) and interact the same way you would if the object was loaded. For example, if you want to extract the value at array index 1,29,300 you can still simply call `data[1,29,.300]`. This large array `data` is never actually loaded into memory but rather is being accessed on disk in real time so memory is kept low and efficient.
+
+Current methods were not designed for use explicitely with 3D array or images but support. So we extended and built something to seamlessly work with images....
+
+DelayedArray tools...
+
+
+
+The `NiftiArray` package allows for fast [random access](https://en.wikipedia.org/wiki/Random_access) of imaging data in NIfTI format and supports [`DelayedArray` operations](https://bioconductor.org/packages/release/bioc/html/DelayedArray.html). The pacakge establishes the `NiftiArray` class, a convenient and memory-efficient array-like container for on-disk representation of NIfTI image(s). The `NiftiArray` class is an extension of the [`HDF5Array` class](https://bioconductor.org/packages/release/bioc/html/HDF5Array.html) and converts NIfTI objects on disk to HDF5 files which allow for block processing and memory-efficient reprresentations in R.
+
+This package allows users to save NIfTI objects as HDF5 files while conserving the array structure and NIfTI header. Once the data are stored as an HDF5 they can be represented as a `NIfTIArray` object. This object all
+
+## Installation
+
+You can install the development version of `NiftiArray` from [GitHub](https://github.com/) with:
+
+```{r}
+# install.packages('remotes')
+remotes::install_github("muschellij2/NiftiArray")
+```
+
+We are working to get a stable version on [Neuroconductor](www.neuroconductor.org).
+
+## Packages
+
+The packages you will need to load for use with this tutorial are below:
+
+```{r}
 library(NiftiArray)
 ```
+
+
