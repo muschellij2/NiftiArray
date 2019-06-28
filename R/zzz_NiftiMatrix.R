@@ -22,7 +22,7 @@ setAs("ANY", "NiftiArray", .as_NiftiArray)
 #' @export
 setAs("DelayedArray", "NiftiArray", .as_NiftiArray)
 
-#' @aliases coerce,DelayedMatrix,NiftiArray-method
+#' @aliases coerce,DelayedMatrix,NiftiMatrix-method
 #' @rdname NiftiArray
 #' @name coerce
 #' @export
@@ -53,7 +53,7 @@ setAs("NiftiArray", "NiftiMatrix", function(from) {
   }
 })
 
-#' @aliases coerce,NiftiArray,NiftiMatrix-method
+#' @aliases coerce,NiftiArray,niftiImage-method
 #' @importMethodsFrom methods coerce
 #' @rdname NiftiArray
 #' @name coerce
@@ -64,7 +64,7 @@ setAs("NiftiArray", "niftiImage", function(from) {
   out_img
 })
 
-#' @aliases coerce,NiftiArray,NiftiMatrix-method
+#' @aliases coerce,NiftiMatrix,niftiImage-method
 #' @importMethodsFrom methods coerce
 #' @rdname NiftiArray
 #' @name coerce
