@@ -3,13 +3,8 @@
 \docType{class}
 \name{NiftiMatrix-class}
 \alias{NiftiMatrix-class}
-\alias{coerce}
-\alias{coerce,DelayedMatrix,NiftiArray-method}
 \alias{matrixClass}
 \alias{matrixClass,NiftiArray-method}
-\alias{coerce,NiftiArray,NiftiMatrix-method}
-\alias{coerce,NiftiMatrix,NiftiArray-method}
-\alias{coerce,ANY,NiftiMatrix-method}
 \title{NiftiMatrix Class}
 \usage{
 \S4method{matrixClass}{NiftiArray}(x)

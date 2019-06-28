@@ -9,6 +9,10 @@
 \alias{coerce}
 \alias{coerce,ANY,NiftiArray-method}
 \alias{coerce,DelayedArray,NiftiArray-method}
+\alias{coerce,DelayedMatrix,NiftiArray-method}
+\alias{coerce,NiftiArray,NiftiMatrix-method}
+\alias{coerce,NiftiMatrix,NiftiArray-method}
+\alias{coerce,ANY,NiftiMatrix-method}
 \title{NIfTI images as DelayedArray objects, using HDF5Array}
 \usage{
 NiftiArray(filepath, name = "image", header_name = "hdr", type = NA)

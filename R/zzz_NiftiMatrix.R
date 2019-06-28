@@ -23,7 +23,7 @@ setAs("ANY", "NiftiArray", .as_NiftiArray)
 setAs("DelayedArray", "NiftiArray", .as_NiftiArray)
 
 #' @aliases coerce,DelayedMatrix,NiftiArray-method
-#' @rdname NiftiMatrix
+#' @rdname NiftiArray
 #' @name coerce
 #' @export
 setAs("DelayedMatrix", "NiftiMatrix", .as_NiftiArray)
@@ -38,7 +38,7 @@ setMethod("matrixClass", "NiftiArray", function(x) "NiftiMatrix")
 
 #' @aliases coerce,NiftiArray,NiftiMatrix-method
 #' @importMethodsFrom methods coerce
-#' @rdname NiftiMatrix
+#' @rdname NiftiArray
 #' @name coerce
 #' @export
 setAs("NiftiArray", "NiftiMatrix", function(from) {
@@ -55,7 +55,7 @@ setAs("NiftiArray", "NiftiMatrix", function(from) {
 
 #' @aliases coerce,NiftiArray,NiftiMatrix-method
 #' @importMethodsFrom methods coerce
-#' @rdname NiftiMatrix
+#' @rdname NiftiArray
 #' @name coerce
 #' @export
 setAs("NiftiArray", "niftiImage", function(from) {
@@ -66,7 +66,7 @@ setAs("NiftiArray", "niftiImage", function(from) {
 
 #' @aliases coerce,NiftiArray,NiftiMatrix-method
 #' @importMethodsFrom methods coerce
-#' @rdname NiftiMatrix
+#' @rdname NiftiArray
 #' @name coerce
 #' @export
 setAs("NiftiMatrix", "niftiImage", function(from) {
@@ -75,7 +75,7 @@ setAs("NiftiMatrix", "niftiImage", function(from) {
 
 
 #' @aliases coerce,NiftiMatrix,NiftiArray-method
-#' @rdname NiftiMatrix
+#' @rdname NiftiArray
 #' @export
 #' @name coerce
 setAs("NiftiMatrix", "NiftiArray", function(from) {
@@ -86,7 +86,7 @@ setAs("NiftiMatrix", "NiftiArray", function(from) {
   writeNiftiArray(mat, header = hdr)
 })  # no-op
 
-#' @rdname NiftiMatrix
+#' @rdname NiftiArray
 #' @aliases coerce,ANY,NiftiMatrix-method
 #' @export
 #' @name coerce
