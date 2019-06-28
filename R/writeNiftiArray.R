@@ -17,18 +17,19 @@
 #'
 #' @export
 #' @importFrom HDF5Array writeHDF5Array
-#' @importFrom rhdf5 h5close h5delete h5write
+#' @importFrom rhdf5 h5closeAll h5delete h5write
 #' @examples
 #' nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
 #' res = writeNiftiArray(nii_fname)
 writeNiftiArray <- function(
-  x, filepath=tempfile(fileext = ".h5", overwrite = FALSE),
+  x, filepath=tempfile(fileext = ".h5"),
   name = "image",
   header_name = "hdr",
   chunkdim=NULL,
   level=NULL,
   verbose=FALSE,
-  header = NULL)
+  header = NULL,
+  overwrite = FALSE)
 {
   # Check if filepath exists as h5 already
   # If it does delete it
@@ -74,7 +75,7 @@ writeNiftiArray <- function(
   rhdf5::h5write(hdr, file = filepath, name = header_name)
 
   # Close all open HDF5 handles in the environment
-  rhdf5::h5close(filepath)
+  rhdf5::h5closeAll()
 
   NiftiArray(filepath, name = name, header_name = header_name)
 }
