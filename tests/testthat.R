@@ -3,4 +3,4 @@ library(NiftiArray)
 library(RNifti)
 library(DelayedArray)
 
-test_check("niftiArray")
+test_check("NiftiArray")
