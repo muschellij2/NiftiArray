@@ -8,7 +8,7 @@
 \title{Seed for NiftiArray Class}
 \usage{
 NiftiArraySeed(filepath, name = "image", header_name = "hdr",
-  type = NA)
+  type = NA, header = NULL)
 }
 \arguments{
 \item{filepath}{The path (as a single character string) to the HDF5
@@ -20,6 +20,9 @@ file where the dataset is located.}
 
 \item{type}{\code{NA} or the R atomic type, passed to
 \code{\link[HDF5Array:HDF5Array]{HDF5Array::HDF5Array()}}}
+
+\item{header}{list of header information to override call of
+\link{nifti_header}}
 }
 \value{
 A \code{NiftiArraySeed} object

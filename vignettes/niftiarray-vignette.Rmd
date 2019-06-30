@@ -2,7 +2,7 @@
 title: "NiftiArray: An R Package to Implement Fast Random Access of NIfTI Objects"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{bad-vignette}
+  %\VignetteIndexEntry{Using NiftiArray}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

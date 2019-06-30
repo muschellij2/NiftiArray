@@ -11,13 +11,16 @@
 \alias{coerce,DelayedArray,NiftiArray-method}
 \alias{coerce,DelayedMatrix,NiftiMatrix-method}
 \alias{coerce,NiftiArray,NiftiMatrix-method}
+\alias{coerce,NiftiArrayList,NiftiMatrix-method}
+\alias{coerce,numeric,NiftiMatrix-method}
 \alias{coerce,NiftiArray,niftiImage-method}
 \alias{coerce,NiftiMatrix,niftiImage-method}
 \alias{coerce,NiftiMatrix,NiftiArray-method}
 \alias{coerce,ANY,NiftiMatrix-method}
 \title{NIfTI images as DelayedArray objects, using HDF5Array}
 \usage{
-NiftiArray(filepath, name = "image", header_name = "hdr", type = NA)
+NiftiArray(filepath, name = "image", header_name = "hdr", type = NA,
+  header = NULL)
 }
 \arguments{
 \item{filepath}{The path (as a single character string) to the HDF5
@@ -28,7 +31,10 @@ file where the dataset is located.}
 \item{header_name}{The name of the header in the HDF5 file.}
 
 \item{type}{\code{NA} or the R atomic type, passed to
-\code{\link[HDF5Array:HDF5Array]{HDF5Array::HDF5Array()}}}
+\code{\link[HDF5Array:HDF5Array]{HDF5Array::HDF5Array()}}.}
+
+\item{header}{list of header information to override call of
+\link{nifti_header}}
 }
 \value{
 A \code{NiftiArray} object

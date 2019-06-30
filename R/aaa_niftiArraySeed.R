@@ -74,6 +74,8 @@ setClass("NiftiMatrix", contains = c("NiftiArray", "DelayedMatrix"))
 #' @param header_name The name of the header in the HDF5 file.
 #' @param type `NA` or the R atomic type, passed to
 #' [HDF5Array::HDF5Array()]
+#' @param header list of header information to override call of
+#' [nifti_header]
 #'
 #' @return A `NiftiArraySeed` object
 #' @export
@@ -86,7 +88,8 @@ setClass("NiftiMatrix", contains = c("NiftiArray", "DelayedMatrix"))
 NiftiArraySeed <- function(filepath,
                            name = "image",
                            header_name = "hdr",
-                           type=NA)
+                           type=NA,
+                           header = NULL)
 {
   # for filepath for .nii.gz
   fe = tools::file_ext(filepath)
@@ -98,7 +101,8 @@ NiftiArraySeed <- function(filepath,
     filepath = tempfile(fileext = ".h5")
     writeNiftiArray(x, filepath = filepath,
                     name = name,
-                    header_name = header_name)
+                    header_name = header_name,
+                    header = header)
     rm(x); gc()
   }
 
@@ -110,10 +114,14 @@ NiftiArraySeed <- function(filepath,
     first_val = seed@first_val,
     chunkdim = seed@chunkdim
   )
-  hdr = rhdf5::h5read(filepath, name = header_name)
+  if (is.null(header)) {
+    hdr = rhdf5::h5read(filepath, name = header_name)
+    hdr$dim_ = hdr$dim
+    hdr$dim = NULL
+  } else {
+    hdr = header
+  }
   hdr = lapply(hdr, as.vector)
-  hdr$dim_ = hdr$dim
-  hdr$dim = NULL
   args = c(args, hdr)
   args = c("NiftiArraySeed", args )
   do.call(S4Vectors::new2, args = args)

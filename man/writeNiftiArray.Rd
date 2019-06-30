@@ -26,11 +26,11 @@ Passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
 
 \item{verbose}{Display progress. Passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
 
-\item{header}{list of header information to override call of}
+\item{header}{list of header information to override call of
+\link{nifti_header}}
 
 \item{overwrite}{FALSE by default and an in the event that an HDF5 file already exists for \code{filepath} input then do not overwrite it.
-If set to TRUE then the "image" and "hdr" objects at this file location will overwrite.
-\link{nifti_header}}
+If set to TRUE then the "image" and "hdr" objects at this file location will overwrite.}
 }
 \description{
 Write NiftiArray Object
@@ -38,4 +38,11 @@ Write NiftiArray Object
 \examples{
 nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
 res = writeNiftiArray(nii_fname)
+filepath = tempfile(fileext = ".h5")
+res = writeNiftiArray(nii_fname, filepath = filepath)
+testthat::expect_error(
+   writeNiftiArray(nii_fname, filepath = filepath),
+   regexp = "already exist",
+)
+res = writeNiftiArray(nii_fname, filepath = filepath, overwrite = TRUE)
 }

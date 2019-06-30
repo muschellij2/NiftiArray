@@ -48,3 +48,90 @@ We are working to get a stable version on [Neuroconductor](www.neuroconductor.or
 ## Example
 
 ![](https://media.giphy.com/media/1ken0zzzL79NPy3QZj/giphy.gif)
+
+Here we use the example image from `RNifti`.  We use the `writeNiftiArray` function to create a `NiftiArray` object:
+```{r}
+library(NiftiArray)
+nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
+res = writeNiftiArray(nii_fname)
+class(res)
+dim(res)
+res
+```
+
+We can see the file on disk that was written out:
+
+```{r}
+res@seed@filepath
+```
+
+We see that the object is a low-memory `DelayedArray`:
+```{r}
+object.size(res)
+```
+
+You can also simply use the `NiftiArray` function of the NIfTI filename to create the array:
+
+```{r}
+res = NiftiArray(nii_fname)
+```
+
+We see the header information is encoded in the `seed` slot of the object, which can be accessed using the `nifti_header` function:
+```{r}
+nifti_header(res)
+```
+
+### Creating a Matrix
+
+
+```{r}
+mat = as(res, "NiftiMatrix")
+mat
+```
+
+Now that the image is a matrix, we can bind the columns together,
+```{r}
+mat = DelayedArray::acbind(mat, mat, mat, mat)
+testthat::expect_is(mat, "DelayedMatrix")
+object.size(mat)
+```
+
+Now that we have the data in a `DelayedMatrix` class, we can use the package `DelayedMatrixStats` package that calls the `matrixStats` package for quick operations:
+
+```{r}
+vec_result = DelayedMatrixStats::rowMedians(mat)
+head(vec_result)
+```
+
+Turning the output back into a `NiftiArray`, we have to pass in the `header` argument, passing in the correct header information.  We can either create the `NiftiArray` output by creating a matrix, then the `NiftiMatrix`, then the `NiftiArray`.
+
+```{r}
+res_mat = matrix(vec_result, ncol = 1)
+res_mat = as(res_mat, "NiftiMatrix")
+hdr = nifti_header(res)
+res_mat = writeNiftiArray(res_mat, header = hdr)
+class(res_mat)
+res_arr = as(res_mat, "NiftiArray")
+```
+
+Or we can create an array and then making the `NiftiArray`:
+
+```{r}
+arr = array(vec_result, dim = dim(res) )
+hdr = nifti_header(res)
+res_arr = writeNiftiArray(arr, header = hdr)
+res_arr
+nifti_header(res_arr)
+```
+
+
+### Converting back to niftiImage
+
+We can return a `niftiImage` from the `NiftiArray` object, as follows:
+
+```{r}
+nii = as(res_arr, "niftiImage")
+nii
+```
+
+

@@ -21,7 +21,9 @@ setMethod("DelayedArray", "NiftiArraySeed",
 #' @param name The name of the image in the HDF5 file.
 #' @param header_name The name of the header in the HDF5 file.
 #' @param type `NA` or the R atomic type, passed to
-#' [HDF5Array::HDF5Array()]
+#' [HDF5Array::HDF5Array()].
+#' @param header list of header information to override call of
+#' [nifti_header]
 #'
 #' @return A `NiftiArray` object
 #' @export
@@ -36,14 +38,16 @@ setMethod("DelayedArray", "NiftiArraySeed",
 #' nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
 #' res = NiftiArray(nii_fname)
 #' res2 = NiftiArray(slot(slot(res, "seed"), "filepath"))
-NiftiArray <- function(filepath, name = "image", header_name = "hdr", type = NA)
+NiftiArray <- function(filepath, name = "image", header_name = "hdr",
+                       type = NA, header = NULL)
 {
   if (is(filepath, "NiftiArraySeed")) {
     seed <- filepath
   } else {
     seed <- NiftiArraySeed(filepath, name = name,
                            header_name = header_name,
-                           type = type)
+                           type = type,
+                           header = header)
   }
   DelayedArray::DelayedArray(seed)
 }

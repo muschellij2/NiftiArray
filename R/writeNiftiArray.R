@@ -11,9 +11,9 @@
 #' Passed to [HDF5Array::writeHDF5Array].
 #' @param verbose Display progress. Passed to [HDF5Array::writeHDF5Array].
 #' @param header list of header information to override call of
+#' [nifti_header]
 #' @param overwrite FALSE by default and an in the event that an HDF5 file already exists for `filepath` input then do not overwrite it.
 #' If set to TRUE then the "image" and "hdr" objects at this file location will overwrite.
-#' [nifti_header]
 #'
 #' @export
 #' @importFrom HDF5Array writeHDF5Array
@@ -21,8 +21,15 @@
 #' @examples
 #' nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
 #' res = writeNiftiArray(nii_fname)
+#' filepath = tempfile(fileext = ".h5")
+#' res = writeNiftiArray(nii_fname, filepath = filepath)
+#' testthat::expect_error(
+#'    writeNiftiArray(nii_fname, filepath = filepath),
+#'    regexp = "already exist",
+#' )
+#' res = writeNiftiArray(nii_fname, filepath = filepath, overwrite = TRUE)
 writeNiftiArray <- function(
-  x, filepath=tempfile(fileext = ".h5"),
+  x, filepath = tempfile(fileext = ".h5"),
   name = "image",
   header_name = "hdr",
   chunkdim=NULL,
@@ -33,12 +40,15 @@ writeNiftiArray <- function(
 {
   # Check if filepath exists as h5 already
   # If it does delete it
-  if(file.exists(filepath) & overwrite == TRUE){
-    # Could keep the file but remove the contents/groups in the h5 with
-    rhdf5::h5delete(file = filepath, name = "image")
-    rhdf5::h5delete(file = filepath, name = "hdr")
-  } else if(file.exists(filepath) & overwrite == FALSE){
-    stop('The HDF5 filepath given already exists. Please delete file or set overwrite = TRUE.')
+  if (file.exists(filepath)) {
+    if (overwrite) {
+      # Could keep the file but remove the contents/groups in the h5 with
+      rhdf5::h5delete(file = filepath, name = name)
+      rhdf5::h5delete(file = filepath, name = header_name)
+    } else {
+      stop(paste0("The HDF5 filepath given already exists. ",
+                  "Please delete file or set overwrite = TRUE."))
+    }
   }
   # Function will error if the file exists
 

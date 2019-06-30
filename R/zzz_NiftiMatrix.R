@@ -53,8 +53,37 @@ setAs("NiftiArray", "NiftiMatrix", function(from) {
   }
 })
 
+
+#' @aliases coerce,NiftiArrayList,NiftiMatrix-method
+#' @rdname NiftiArray
+#' @name coerce
+#' @export
+setAs("NiftiArrayList", "NiftiMatrix", function(from) {
+  from = lapply(from, function(x) {
+    as(x, "NiftiMatrix")
+  })
+  do.call(DelayedArray::acbind, args = from)
+})
+
+
+#' @aliases coerce,numeric,NiftiMatrix-method
+#' @rdname NiftiArray
+#' @name coerce
+#' @export
+setAs("numeric", "NiftiMatrix", function(from) {
+  from = matrix(from, ncol = 1)
+  new("NiftiMatrix", from)
+})
+
+#' @rdname NiftiArray
+#' @aliases coerce,numeric,NiftiMatrix-method
+#' @export
+#' @name coerce
+setAs("numeric", "NiftiArray",
+      function(from) as(as(from, "NiftiMatrix"), "NiftiArray")
+)
+
 #' @aliases coerce,NiftiArray,niftiImage-method
-#' @importMethodsFrom methods coerce
 #' @rdname NiftiArray
 #' @name coerce
 #' @export
@@ -65,7 +94,6 @@ setAs("NiftiArray", "niftiImage", function(from) {
 })
 
 #' @aliases coerce,NiftiMatrix,niftiImage-method
-#' @importMethodsFrom methods coerce
 #' @rdname NiftiArray
 #' @name coerce
 #' @export
