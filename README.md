@@ -23,6 +23,8 @@ Status](https://ci.appveyor.com/api/projects/status/github/avalcarcel9/NiftiArra
 [![Coverage
 Status](https://img.shields.io/coveralls/avalcarcel9/NiftiArray.svg)](https://coveralls.io/r/avalcarcel9/NiftiArray?branch=master)
 
+[![Codecov test
+coverage](https://codecov.io/gh/muschellij2/NiftiArray/branch/master/graph/badge.svg)](https://codecov.io/gh/muschellij2/NiftiArray?branch=master)
 <!-- badges: end -->
 
 The goal of `NiftiArray` is to allow for memory efficient fast random
@@ -87,7 +89,7 @@ We can see the file on disk that was written out:
 
 ``` r
 res@seed@filepath
-#> [1] "/private/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T/RtmpWDkPCR/file4bc95d2129db.h5"
+#> [1] "/private/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T/Rtmpzk6d90/file6f3764773ace.h5"
 ```
 
 We see that the object is a low-memory `DelayedArray`:

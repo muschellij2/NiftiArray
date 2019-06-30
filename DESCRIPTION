@@ -18,7 +18,8 @@ Suggests:
     knitr,
     rmarkdown,
     testthat,
-    DelayedMatrixStats
+    DelayedMatrixStats,
+    covr
 VignetteBuilder: knitr
 Imports: 
     HDF5Array,
