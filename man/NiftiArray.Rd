@@ -13,10 +13,12 @@
 \alias{coerce,NiftiArray,NiftiMatrix-method}
 \alias{coerce,NiftiArrayList,NiftiMatrix-method}
 \alias{coerce,numeric,NiftiMatrix-method}
+\alias{coerce,numeric,NiftiArray-method}
 \alias{coerce,NiftiArray,niftiImage-method}
 \alias{coerce,NiftiMatrix,niftiImage-method}
 \alias{coerce,NiftiMatrix,NiftiArray-method}
 \alias{coerce,ANY,NiftiMatrix-method}
+\alias{coerce,NiftiArrayList,NiftiArray-method}
 \title{NIfTI images as DelayedArray objects, using HDF5Array}
 \usage{
 NiftiArray(filepath, name = "image", header_name = "hdr", type = NA,

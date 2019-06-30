@@ -7,6 +7,14 @@
 setOldClass("niftiImage")
 
 
+#' "NiftiArrayList" class
+#'
+#' @name NiftiArrayList-class
+#' @family NiftiArrayList
+#'
+setOldClass("NiftiArrayList")
+
+
 
 .as_NiftiArray <- function(from) writeNiftiArray(from)  # write to current dump
 
@@ -62,7 +70,9 @@ setAs("NiftiArrayList", "NiftiMatrix", function(from) {
   from = lapply(from, function(x) {
     as(x, "NiftiMatrix")
   })
-  do.call(DelayedArray::acbind, args = from)
+  hdr = nifti_header(from[[1]])
+  from = do.call(DelayedArray::acbind, args = from)
+  writeNiftiArray(from, header = hdr)
 })
 
 
@@ -76,7 +86,7 @@ setAs("numeric", "NiftiMatrix", function(from) {
 })
 
 #' @rdname NiftiArray
-#' @aliases coerce,numeric,NiftiMatrix-method
+#' @aliases coerce,numeric,NiftiArray-method
 #' @export
 #' @name coerce
 setAs("numeric", "NiftiArray",
@@ -121,3 +131,29 @@ setAs("NiftiMatrix", "NiftiArray", function(from) {
 setAs("ANY", "NiftiMatrix",
       function(from) as(as(from, "NiftiArray"), "NiftiMatrix")
 )
+
+#' @rdname NiftiArray
+#' @aliases coerce,NiftiArrayList,NiftiArray-method
+#' @export
+#' @name coerce
+setAs("NiftiArrayList", "NiftiArray", function(from) {
+  ndims = lapply(from, dim)
+  ndims = sapply(ndims, length)
+  stopifnot(all(ndims == ndims[1]))
+  ndims = unique(ndims)
+  hdr = nifti_header(from[[1]])
+  # Adapted from
+  # https://support.bioconductor.org/p/107051/
+  from = lapply(from, function(x) {
+    dim(x) = c(dim(x), 1)
+    x = DelayedArray::aperm(x, perm = (ndims + 1):1)
+    x
+  })
+  # 1 for
+  res = do.call(DelayedArray::arbind, args = from)
+  res = aperm(res, (ndims + 1):1)
+  hdr$dim[ndims + 1 + 1] = dim(res)[ndims + 1]
+  hdr$pixdim[ndims + 1 + 1] = 1
+  res = writeNiftiArray(res, header = hdr)
+  res
+})

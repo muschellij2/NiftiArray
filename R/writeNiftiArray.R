@@ -51,7 +51,7 @@ writeNiftiArray <- function(
     }
   }
   # Function will error if the file exists
-
+  run_gc = FALSE
   # for filepath for .nii.gz
   if (is.character(x)) {
     fe = tools::file_ext(x)
@@ -62,6 +62,7 @@ writeNiftiArray <- function(
     }
     if (fe == "nii") {
       x = RNifti::readNifti(x)
+      run_gc = TRUE
     }
   }
 
@@ -74,6 +75,9 @@ writeNiftiArray <- function(
   aa$class = NULL
   class(hdr) = "list"
   attributes(hdr) = aa
+  if (is.vector(x)) {
+    x = matrix(x, ncol = 1)
+  }
   if (!is(x, "DelayedArray")) {
     x = array(x, dim = dim(x))
   }
@@ -81,6 +85,9 @@ writeNiftiArray <- function(
                             filepath = filepath, name = name,
                             chunkdim = chunkdim, level = level,
                             verbose = verbose)
+  if (run_gc) {
+    rm(x); gc()
+  }
   # write header
   rhdf5::h5write(hdr, file = filepath, name = header_name)
 
