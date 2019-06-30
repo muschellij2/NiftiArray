@@ -6,7 +6,7 @@
 \usage{
 writeNiftiArray(x, filepath = tempfile(fileext = ".h5"),
   name = "image", header_name = "hdr", chunkdim = NULL,
-  level = NULL, verbose = FALSE, header = NULL)
+  level = NULL, verbose = FALSE, header = NULL, overwrite = FALSE)
 }
 \arguments{
 \item{x}{a \code{niftiImage} object or file path to \code{NIfTI} file}
@@ -26,7 +26,10 @@ Passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
 
 \item{verbose}{Display progress. Passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
 
-\item{header}{list of header information to override call of
+\item{header}{list of header information to override call of}
+
+\item{overwrite}{FALSE by default and an in the event that an HDF5 file already exists for \code{filepath} input then do not overwrite it.
+If set to TRUE then the "image" and "hdr" objects at this file location will overwrite.
 \link{nifti_header}}
 }
 \description{

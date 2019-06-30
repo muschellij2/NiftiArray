@@ -21,7 +21,7 @@ testthat::test_that("Operations and DelayedArray give header", {
   testthat::expect_equal(DelayedArray::matrixClass(mat), "NiftiMatrix")
   check_array(mat)
 
-  mat = acbind(mat, mat, mat, mat)
+  mat = DelayedArray::acbind(mat, mat, mat, mat)
   testthat::expect_is(mat, "DelayedMatrix")
   testthat::expect_equal(DelayedArray::matrixClass(mat), "DelayedMatrix")
 
