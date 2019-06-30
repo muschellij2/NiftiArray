@@ -4,6 +4,5 @@ language: R
 cache: packages
 bioc_required: true
 
-  after_success:
-    - CODECOV_TOKEN="0ee126e2-7c81-463e-89be-40b79f246d84"
-    - Rscript -e 'covr::codecov(type = "all")'
+after_success:
+  - Rscript -e 'covr::codecov(type = "all")'
