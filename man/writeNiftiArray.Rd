@@ -45,4 +45,6 @@ testthat::expect_error(
    regexp = "already exist",
 )
 res = writeNiftiArray(nii_fname, filepath = filepath, overwrite = TRUE)
+img = RNifti::readNifti(nii_fname)
+writeNiftiArray(c(img), header = nifti_header(img))
 }

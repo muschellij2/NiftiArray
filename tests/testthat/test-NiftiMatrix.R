@@ -21,6 +21,12 @@ testthat::test_that("Operations and DelayedArray give header", {
   testthat::expect_equal(DelayedArray::matrixClass(mat), "NiftiMatrix")
   check_array(mat)
 
+  hdf5mat = HDF5Array::HDF5Array(res@seed@filepath, "image")
+  testthat::expect_is(as(hdf5mat, "NiftiMatrix"), "NiftiMatrix")
+  testthat::expect_warning(as(hdf5mat, "NiftiMatrix"))
+  testthat::expect_equal(DelayedArray::matrixClass(mat), "NiftiMatrix")
+  check_array(mat)
+
   mat = DelayedArray::acbind(mat, mat, mat, mat)
   testthat::expect_is(mat, "DelayedMatrix")
   testthat::expect_equal(DelayedArray::matrixClass(mat), "DelayedMatrix")

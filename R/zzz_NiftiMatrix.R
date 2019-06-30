@@ -7,13 +7,6 @@
 setOldClass("niftiImage")
 
 
-#' "NiftiArrayList" class
-#'
-#' @name NiftiArrayList-class
-#' @family NiftiArrayList
-#'
-setOldClass("NiftiArrayList")
-
 
 
 .as_NiftiArray <- function(from) writeNiftiArray(from)  # write to current dump
@@ -34,7 +27,29 @@ setAs("DelayedArray", "NiftiArray", .as_NiftiArray)
 #' @rdname NiftiArray
 #' @name coerce
 #' @export
-setAs("DelayedMatrix", "NiftiMatrix", .as_NiftiArray)
+setAs("DelayedMatrix", "NiftiMatrix",
+      function(from) as(as(from, "NiftiArray"), "NiftiMatrix"))
+
+
+#' @aliases coerce,HDF5Array,NiftiArray-method
+#' @rdname NiftiArray
+#' @name coerce
+#' @export
+setAs("HDF5Array", "NiftiArray", .as_NiftiArray)
+
+#' @aliases coerce,HDF5Array,NiftiMatrix-method
+#' @rdname NiftiArray
+#' @name coerce
+#' @export
+setAs("HDF5Array", "NiftiMatrix",
+      function(from) as(as(from, "NiftiArray"), "NiftiMatrix"))
+
+#' @aliases coerce,HDF5Matrix,NiftiMatrix-method
+#' @rdname NiftiArray
+#' @name coerce
+#' @export
+setAs("HDF5Matrix", "NiftiMatrix",
+      function(from) as(as(from, "NiftiArray"), "NiftiMatrix"))
 
 
 #' @importMethodsFrom DelayedArray matrixClass
@@ -82,7 +97,7 @@ setAs("NiftiArrayList", "NiftiMatrix", function(from) {
 #' @export
 setAs("numeric", "NiftiMatrix", function(from) {
   from = matrix(from, ncol = 1)
-  new("NiftiMatrix", from)
+  as(as(from, "NiftiArray"), "NiftiMatrix")
 })
 
 #' @rdname NiftiArray

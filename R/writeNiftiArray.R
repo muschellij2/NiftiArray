@@ -28,6 +28,8 @@
 #'    regexp = "already exist",
 #' )
 #' res = writeNiftiArray(nii_fname, filepath = filepath, overwrite = TRUE)
+#' img = RNifti::readNifti(nii_fname)
+#' writeNiftiArray(c(img), header = nifti_header(img))
 writeNiftiArray <- function(
   x, filepath = tempfile(fileext = ".h5"),
   name = "image",
@@ -71,10 +73,6 @@ writeNiftiArray <- function(
   } else {
     hdr = nifti_header(x)
   }
-  aa = attributes(hdr)
-  aa$class = NULL
-  class(hdr) = "list"
-  attributes(hdr) = aa
   if (is.vector(x)) {
     x = matrix(x, ncol = 1)
   }
@@ -88,11 +86,18 @@ writeNiftiArray <- function(
   if (run_gc) {
     rm(x); gc()
   }
-  # write header
-  rhdf5::h5write(hdr, file = filepath, name = header_name)
 
-  # Close all open HDF5 handles in the environment
-  rhdf5::h5closeAll()
+  if (!is.null(hdr)) {
+    aa = attributes(hdr)
+    aa$class = NULL
+    class(hdr) = "list"
+    attributes(hdr) = aa
 
+    # write header
+    rhdf5::h5write(hdr, file = filepath, name = header_name)
+
+    # Close all open HDF5 handles in the environment
+    rhdf5::h5closeAll()
+  }
   NiftiArray(filepath, name = name, header_name = header_name)
 }

@@ -2,6 +2,15 @@
 ### NiftiArraySeed objects
 ### ----------------------
 
+
+#' "NiftiArrayList" class
+#'
+#' @name NiftiArrayList-class
+#' @family NiftiArrayList
+#'
+setOldClass("NiftiArrayList")
+
+
 #' @importClassesFrom HDF5Array HDF5ArraySeed
 #' @aliases DelayedArray,NiftiArraySeed-method
 #' @exportClass NiftiArraySeed
@@ -85,6 +94,8 @@ setClass("NiftiMatrix", contains = c("NiftiArray", "DelayedMatrix"))
 #' @examples
 #' nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
 #' res = NiftiArraySeed(nii_fname)
+#' hdr = nifti_header(res)
+#' res2 = NiftiArraySeed(nii_fname, header = hdr)
 NiftiArraySeed <- function(filepath,
                            name = "image",
                            header_name = "hdr",
@@ -116,10 +127,14 @@ NiftiArraySeed <- function(filepath,
   )
   if (is.null(header)) {
     hdr = rhdf5::h5read(filepath, name = header_name)
-    hdr$dim_ = hdr$dim
-    hdr$dim = NULL
   } else {
     hdr = header
+  }
+  if ("dim" %in% names(hdr)) {
+    if (!("dim_" %in% names(hdr))) {
+      hdr$dim_ = hdr$dim
+    }
+    hdr$dim = NULL
   }
   hdr = lapply(hdr, as.vector)
   args = c(args, hdr)

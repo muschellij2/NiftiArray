@@ -20,24 +20,51 @@ setMethod("nifti_header", "NiftiArray", function(image) {
   nifti_header(image@seed)
 })
 
+#' @rdname nifti_header
+#' @export
+#' @aliases nifti_header,NiftiArrayList-method
+setMethod("nifti_header", "NiftiArrayList", function(image) {
+  nii_seeds = sapply(image, function(x) {
+    is(x, "NiftiArray") | is(x, "NiftiArraySeed")
+  })
+  if (!any(nii_seeds)) {
+    stop("No images in NiftiArrayList are NiftiArray or NiftiArraySeed")
+  }
+  image = image[ nii_seeds ]
+  image = image[[ length(image) ]]
+  nifti_header(image)
+})
+
 
 
 #' @rdname nifti_header
 #' @export
 #' @aliases nifti_header,DelayedArray-method
 setMethod("nifti_header", "DelayedArray", function(image) {
-  seeds = image@seed@seeds
-  nii_seeds = sapply(seeds, function(x) {
-    is(x, "NiftiArray") | is(x, "NiftiArraySeed")
-  })
-  if (!any(nii_seeds)) {
-    stop("No seeds in Delayed Array are NiftiArray or NiftiArraySeed")
+  seed = slot(image, "seed")
+  if ("seeds" %in% slotNames(seed)) {
+    seeds = seed@seeds
+    nii_seeds = sapply(seeds, function(x) {
+      is(x, "NiftiArray") | is(x, "NiftiArraySeed")
+    })
+    if (!any(nii_seeds)) {
+      stop("No seeds in DelayedArray are NiftiArray or NiftiArraySeed")
+    }
+    seeds = seeds[ nii_seeds ]
+    seeds = seeds[[ length(seeds) ]]
+  } else {
+    seeds = seed
   }
-  seeds = seeds[ nii_seeds ]
-  seeds = seeds[[ length(seeds) ]]
   nifti_header(seeds)
 })
 
+#' @rdname nifti_header
+#' @export
+#' @aliases nifti_header,HDF5ArraySeed-method
+setMethod("nifti_header", "HDF5ArraySeed", function(image) {
+  warning("No header available, giving default header")
+  RNifti::niftiHeader()
+})
 
 
 #' @rdname nifti_header

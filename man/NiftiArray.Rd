@@ -10,6 +10,9 @@
 \alias{coerce,ANY,NiftiArray-method}
 \alias{coerce,DelayedArray,NiftiArray-method}
 \alias{coerce,DelayedMatrix,NiftiMatrix-method}
+\alias{coerce,HDF5Array,NiftiArray-method}
+\alias{coerce,HDF5Array,NiftiMatrix-method}
+\alias{coerce,HDF5Matrix,NiftiMatrix-method}
 \alias{coerce,NiftiArray,NiftiMatrix-method}
 \alias{coerce,NiftiArrayList,NiftiMatrix-method}
 \alias{coerce,numeric,NiftiMatrix-method}
@@ -51,4 +54,5 @@ objects work on NiftiArray objects.
 nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
 res = NiftiArray(nii_fname)
 res2 = NiftiArray(slot(slot(res, "seed"), "filepath"))
+res2 = NiftiArray(slot(res, "seed"))
 }
