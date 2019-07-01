@@ -19,7 +19,7 @@ The `NiftiArray` package is under development please check back later!
 
 <!-- badges: start -->
 muschellij2 badges:
-[![Build Status](https://travis-ci.org/muschellij2/NiftiArray.svg?branch=master)](https://travis-ci.org/muschellij2/NiftiArray)
+[![Build Status](https://travis-ci.com/muschellij2/NiftiArray.svg?branch=master)](https://travis-ci.com/muschellij2/NiftiArray)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/muschellij2/NiftiArray?branch=master&svg=true)](https://ci.appveyor.com/project/muschellij2/NiftiArray)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/NiftiArray)](https://cran.r-project.org/package=NiftiArray)
 [![Codecov test coverage](https://codecov.io/gh/muschellij2/NiftiArray/branch/master/graph/badge.svg)](https://codecov.io/gh/muschellij2/NiftiArray?branch=master)

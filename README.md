@@ -8,7 +8,7 @@ The `NiftiArray` package is under development please check back later\!
 <!-- badges: start -->
 
 muschellij2 badges: [![Build
-Status](https://travis-ci.org/muschellij2/NiftiArray.svg?branch=master)](https://travis-ci.org/muschellij2/NiftiArray)
+Status](https://travis-ci.com/muschellij2/NiftiArray.svg?branch=master)](https://travis-ci.com/muschellij2/NiftiArray)
 [![AppVeyor Build
 Status](https://ci.appveyor.com/api/projects/status/github/muschellij2/NiftiArray?branch=master&svg=true)](https://ci.appveyor.com/project/muschellij2/NiftiArray)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/NiftiArray)](https://cran.r-project.org/package=NiftiArray)
@@ -88,7 +88,7 @@ We can see the file on disk that was written out:
 
 ``` r
 res@seed@filepath
-#> [1] "/private/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T/RtmpxXCL0Z/file7902558431c6.h5"
+#> [1] "/private/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T/RtmpyVro02/file794dc397671.h5"
 ```
 
 We see that the object is a low-memory `DelayedArray`:
