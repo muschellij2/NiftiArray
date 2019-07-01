@@ -67,6 +67,14 @@ setMethod("nifti_header", "DelayedArray", function(image) {
 
 #' @rdname nifti_header
 #' @export
+#' @aliases nifti_header,HDF5Array-method
+setMethod("nifti_header", "HDF5Array", function(image) {
+  warning("No header available, giving default header")
+  RNifti::niftiHeader()
+})
+
+#' @rdname nifti_header
+#' @export
 #' @aliases nifti_header,HDF5ArraySeed-method
 setMethod("nifti_header", "HDF5ArraySeed", function(image) {
   warning("No header available, giving default header")

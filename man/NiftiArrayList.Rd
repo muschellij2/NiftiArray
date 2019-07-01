@@ -10,7 +10,7 @@ NiftiArrayList(x, ...)
 \item{x}{a character or list of objects to be called with
 \link{writeNiftiArray}}
 
-\item{...}{additional arguments to pass to \link{writeNiftiArray}}
+\item{...}{additional arguments to pass to \link{NiftiArray}}
 }
 \value{
 A list of class \code{NiftiArrayList}, which is a
@@ -27,4 +27,9 @@ res = NiftiArrayList(nii_fname)
 testthat::expect_is(res, "NiftiArrayList")
 mat = as(res, "NiftiMatrix")
 arr = as(res, "NiftiArray")
+h5 = unlist(DelayedArray::seedApply(res, slot, "filepath"))
+res2 = NiftiArrayList(h5)
+testthat::expect_is(res2, "NiftiArrayList")
+mat = as(res2, "NiftiMatrix")
+arr = as(res2, "NiftiArray")
 }

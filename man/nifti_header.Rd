@@ -7,6 +7,7 @@
 \alias{nifti_header,NiftiArray-method}
 \alias{nifti_header,NiftiArrayList-method}
 \alias{nifti_header,DelayedArray-method}
+\alias{nifti_header,HDF5Array-method}
 \alias{nifti_header,HDF5ArraySeed-method}
 \alias{nifti_header,ANY-method}
 \title{Dump a NIfTI header}
@@ -18,6 +19,8 @@ nifti_header(image)
 \S4method{nifti_header}{NiftiArrayList}(image)
 
 \S4method{nifti_header}{DelayedArray}(image)
+
+\S4method{nifti_header}{HDF5Array}(image)
 
 \S4method{nifti_header}{HDF5ArraySeed}(image)
 
