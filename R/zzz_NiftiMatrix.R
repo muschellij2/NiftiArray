@@ -204,7 +204,7 @@ setAs(
     if (verbose) {
       message("Running writeNiftiArray")
     }
-    res = writeNiftiArray(res, header = hdr)
+    res = writeNiftiArray(res, header = hdr, verbose = verbose)
     res
   })
 
