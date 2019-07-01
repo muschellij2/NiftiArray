@@ -5,6 +5,7 @@ nii_fname = system.file("extdata", "example.nii.gz",
 h5_fname = tempfile(fileext = ".h5")
 img = RNifti::readNifti(nii_fname)
 img_hdr = nifti_header(img)
+arr_list = NiftiArrayList(rep(nii_fname, 5))
 
 check_array = function(x) {
   testthat::expect_is(x, "NiftiArray")
@@ -12,6 +13,38 @@ check_array = function(x) {
   testthat::expect_is(x, "DelayedArray")
 }
 
+
+testthat::test_that("Operations NiftiArrayList give header", {
+
+  res = Reduce("+", arr_list)
+  testthat::expect_is(res, "DelayedArray")
+  testthat::expect_is(as(res, "NiftiArray"), "NiftiArray")
+
+  hdr = nifti_header(res)
+  testthat::expect_is(hdr, "niftiHeader")
+  writeNiftiArray(res)
+
+  res = res / 4
+  testthat::expect_is(res, "DelayedArray")
+  check_array(as(res, "NiftiArray"))
+
+  res = log(res + 1)
+  testthat::expect_is(res, "DelayedArray")
+  check_array(as(res, "NiftiArray"))
+
+  sub = res[1:30, 1:30, 1:30]
+  testthat::expect_is(sub, "DelayedArray")
+  check_array(as(sub, "NiftiArray"))
+
+  sub = DelayedArray::aperm(res, c(3, 1, 2))
+  testthat::expect_is(sub, "DelayedArray")
+  check_array(as(sub, "NiftiArray"))
+
+  res[1:30, 1:30, 1:30] = 1
+  testthat::expect_is(res, "DelayedArray")
+  check_array(as(res, "NiftiArray"))
+
+})
 
 
 testthat::test_that("Operations and DelayedArray give header", {

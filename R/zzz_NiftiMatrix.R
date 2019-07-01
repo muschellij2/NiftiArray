@@ -179,3 +179,5 @@ setAs(
     res = writeNiftiArray(res, header = hdr)
     res
   })
+
+

@@ -45,9 +45,11 @@ setMethod("nifti_header", "NiftiArrayList", function(image) {
 #' @export
 #' @aliases nifti_header,DelayedArray-method
 setMethod("nifti_header", "DelayedArray", function(image) {
-  seed = slot(image, "seed")
-  if ("seeds" %in% slotNames(seed)) {
-    seeds = seed@seeds
+  seeds = DelayedArray::seedApply(image, identity)
+  if (length(seeds) == 0) {
+    seeds = NULL
+  }
+  if (!is.null(seeds)) {
     nii_seeds = vapply(seeds, function(x) {
       is(x, "NiftiArray") | is(x, "NiftiArraySeed")
     }, FUN.VALUE = logical(1))
@@ -58,7 +60,7 @@ setMethod("nifti_header", "DelayedArray", function(image) {
     seeds = seeds[ nii_seeds ]
     seeds = seeds[[ length(seeds) ]]
   } else {
-    seeds = seed
+    seeds = slot(image, "seed")
   }
   nifti_header(seeds)
 })
@@ -70,7 +72,6 @@ setMethod("nifti_header", "HDF5ArraySeed", function(image) {
   warning("No header available, giving default header")
   RNifti::niftiHeader()
 })
-
 
 #' @rdname nifti_header
 #' @export
