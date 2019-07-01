@@ -140,10 +140,12 @@ setMethod("nifti_header", "NiftiArraySeed", function(image) {
 # setMethod("intent_p1", "NiftiArraySeed", function(object) object@intent_p1)
 # setMethod("intent_p2", "NiftiArraySeed", function(object) object@intent_p2)
 # setMethod("intent_p3", "NiftiArraySeed", function(object) object@intent_p3)
-# setMethod("intent_code", "NiftiArraySeed", function(object) object@intent_code)
+# setMethod("intent_code", "NiftiArraySeed",
+# function(object) object@intent_code)
 # setMethod("datatype", "NiftiArraySeed", function(object) object@datatype)
 # setMethod("bitpix", "NiftiArraySeed", function(object) object@bitpix)
-# setMethod("slice_start", "NiftiArraySeed", function(object) object@slice_start)
+# setMethod("slice_start", "NiftiArraySeed",
+# function(object) object@slice_start)
 # setMethod("pixdim", "NiftiArraySeed", function(object) object@pixdim)
 # setMethod("vox_offset", "NiftiArraySeed", function(object) object@vox_offset)
 # setMethod("scl_slope", "NiftiArraySeed", function(object) object@scl_slope)
@@ -153,7 +155,8 @@ setMethod("nifti_header", "NiftiArraySeed", function(image) {
 # setMethod("xyzt_units", "NiftiArraySeed", function(object) object@xyzt_units)
 # setMethod("cal_max", "NiftiArraySeed", function(object) object@cal_max)
 # setMethod("cal_min", "NiftiArraySeed", function(object) object@cal_min)
-# setMethod("slice_duration", "NiftiArraySeed", function(object) object@slice_duration)
+# setMethod("slice_duration", "NiftiArraySeed",
+# function(object) object@slice_duration)
 # setMethod("toffset", "NiftiArraySeed", function(object) object@toffset)
 # setMethod("descrip", "NiftiArraySeed", function(object) object@descrip)
 # setMethod("aux_file", "NiftiArraySeed", function(object) object@aux_file)
@@ -168,5 +171,6 @@ setMethod("nifti_header", "NiftiArraySeed", function(image) {
 # setMethod("srow_x", "NiftiArraySeed", function(object) object@srow_x)
 # setMethod("srow_y", "NiftiArraySeed", function(object) object@srow_y)
 # setMethod("srow_z", "NiftiArraySeed", function(object) object@srow_z)
-# setMethod("intent_name", "NiftiArraySeed", function(object) object@intent_name)
+# setMethod("intent_name", "NiftiArraySeed",
+# function(object) object@intent_name)
 # setMethod("magic", "NiftiArraySeed", function(object) object@magic)

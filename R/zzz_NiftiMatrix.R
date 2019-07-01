@@ -27,8 +27,9 @@ setAs("DelayedArray", "NiftiArray", .as_NiftiArray)
 #' @rdname NiftiArray
 #' @name coerce
 #' @export
-setAs("DelayedMatrix", "NiftiMatrix",
-      function(from) as(as(from, "NiftiArray"), "NiftiMatrix"))
+setAs(
+  "DelayedMatrix", "NiftiMatrix",
+  function(from) as(as(from, "NiftiArray"), "NiftiMatrix"))
 
 
 #' @aliases coerce,HDF5Array,NiftiArray-method
@@ -41,15 +42,18 @@ setAs("HDF5Array", "NiftiArray", .as_NiftiArray)
 #' @rdname NiftiArray
 #' @name coerce
 #' @export
-setAs("HDF5Array", "NiftiMatrix",
-      function(from) as(as(from, "NiftiArray"), "NiftiMatrix"))
+setAs(
+  "HDF5Array",
+  "NiftiMatrix",
+  function(from) as(as(from, "NiftiArray"), "NiftiMatrix"))
 
 #' @aliases coerce,HDF5Matrix,NiftiMatrix-method
 #' @rdname NiftiArray
 #' @name coerce
 #' @export
-setAs("HDF5Matrix", "NiftiMatrix",
-      function(from) as(as(from, "NiftiArray"), "NiftiMatrix"))
+setAs(
+  "HDF5Matrix", "NiftiMatrix",
+  function(from) as(as(from, "NiftiArray"), "NiftiMatrix"))
 
 
 #' @importMethodsFrom DelayedArray matrixClass
@@ -151,24 +155,26 @@ setAs("ANY", "NiftiMatrix",
 #' @aliases coerce,NiftiArrayList,NiftiArray-method
 #' @export
 #' @name coerce
-setAs("NiftiArrayList", "NiftiArray", function(from) {
-  ndims = lapply(from, dim)
-  ndims = vapply(ndims, length, FUN.VALUE = integer(1))
-  stopifnot(all(ndims == ndims[1]))
-  ndims = unique(ndims)
-  hdr = nifti_header(from[[1]])
-  # Adapted from
-  # https://support.bioconductor.org/p/107051/
-  from = lapply(from, function(x) {
-    dim(x) = c(dim(x), 1)
-    x = DelayedArray::aperm(x, perm = (ndims + 1):1)
-    x
+setAs(
+  "NiftiArrayList", "NiftiArray",
+  function(from) {
+    ndims = lapply(from, dim)
+    ndims = vapply(ndims, length, FUN.VALUE = integer(1))
+    stopifnot(all(ndims == ndims[1]))
+    ndims = unique(ndims)
+    hdr = nifti_header(from[[1]])
+    # Adapted from
+    # https://support.bioconductor.org/p/107051/
+    from = lapply(from, function(x) {
+      dim(x) = c(dim(x), 1)
+      x = DelayedArray::aperm(x, perm = (ndims + 1):1)
+      x
+    })
+    # 1 for
+    res = do.call(DelayedArray::arbind, args = from)
+    res = aperm(res, (ndims + 1):1)
+    hdr$dim[ndims + 1 + 1] = dim(res)[ndims + 1]
+    hdr$pixdim[ndims + 1 + 1] = 1
+    res = writeNiftiArray(res, header = hdr)
+    res
   })
-  # 1 for
-  res = do.call(DelayedArray::arbind, args = from)
-  res = aperm(res, (ndims + 1):1)
-  hdr$dim[ndims + 1 + 1] = dim(res)[ndims + 1]
-  hdr$pixdim[ndims + 1 + 1] = 1
-  res = writeNiftiArray(res, header = hdr)
-  res
-})

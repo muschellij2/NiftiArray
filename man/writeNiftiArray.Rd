@@ -11,27 +11,29 @@ writeNiftiArray(x, filepath = tempfile(fileext = ".h5"),
 \arguments{
 \item{x}{a \code{niftiImage} object or file path to \code{NIfTI} file}
 
-\item{filepath}{The path (as a single character string) to the HDF5
-file.}
+\item{filepath}{The path (single character string) to the HDF5 file.}
 
 \item{name}{The name of the image in the HDF5 file.}
 
 \item{header_name}{The name of the header in the HDF5 file.}
 
 \item{chunkdim}{The dimensions of the chunks to use for
-writing the data to disk. Passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
-
-\item{level}{The compression level to use for writing the data to disk.
+writing the data to disk.
 Passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
 
-\item{verbose}{Display progress. Passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
+\item{level}{The compression level,
+passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
 
-\item{header}{list of header information to override call of
-\link{nifti_header}}
+\item{verbose}{Display progress,
+passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
 
-\item{overwrite}{FALSE by default and an in the event that an HDF5 file
-already exists for \code{filepath} input then do not overwrite it.
-If set to TRUE then the "image" and "hdr" objects at this file
+\item{header}{list of header information;
+overrides call of \link{nifti_header}}
+
+\item{overwrite}{\code{FALSE} by default and an in the
+event that an HDF5 file already exists for \code{filepath}
+input then do not overwrite it.
+If set to \code{TRUE} then the "image" and "hdr" objects at this file
 location will overwrite.}
 }
 \value{

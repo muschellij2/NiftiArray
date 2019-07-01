@@ -45,10 +45,12 @@ file where the dataset is located.}
 A \code{NiftiArray} object
 }
 \description{
-The NiftiArray class is a \link[DelayedArray:DelayedArray]{DelayedArray::DelayedArray} subclass
-represented in HDF5, with the header.
-All the operations available for \link[HDF5Array:HDF5Array]{HDF5Array::HDF5Array}
-objects work on NiftiArray objects.
+NiftiArray, a \link[HDF5Array:HDF5Array]{HDF5Array::HDF5Array} with a header.
+}
+\note{
+All the operations available for
+\link[HDF5Array:HDF5Array]{HDF5Array::HDF5Array} objects work on
+NiftiArray objects.
 }
 \examples{
 nii_fname = system.file("extdata",

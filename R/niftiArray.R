@@ -13,10 +13,11 @@ setMethod("DelayedArray", "NiftiArraySeed",
 
 #' NIfTI images as DelayedArray objects, using HDF5Array
 #'
-#' The NiftiArray class is a [DelayedArray::DelayedArray] subclass
-#' represented in HDF5, with the header.
-#' All the operations available for [HDF5Array::HDF5Array]
-#' objects work on NiftiArray objects.
+#' NiftiArray, a [HDF5Array::HDF5Array] with a header.
+#'
+#' @note All the operations available for
+#' [HDF5Array::HDF5Array] objects work on
+#' NiftiArray objects.
 #'
 #'
 #' @param filepath The path (as a single character string) to the HDF5
