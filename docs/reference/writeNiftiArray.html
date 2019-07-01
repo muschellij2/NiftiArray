@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NiftiArray</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
@@ -86,15 +86,18 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/bad-vignette.html">bad-vignette</a>
+      <a href="../articles/niftiarray-vignette.html">NiftiArray: Fast Random Access of NIfTI Objects</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/muschellij2/niftiArray">
+  <a href="https://github.com/muschellij2/NiftiArray">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -112,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Write NiftiArray Object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/muschellij2/niftiArray/blob/master/R/writeNiftiArray.R'><code>R/writeNiftiArray.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/muschellij2/NiftiArray/blob/master/R/writeNiftiArray.R'><code>R/writeNiftiArray.R</code></a></small>
     <div class="hidden name"><code>writeNiftiArray.Rd</code></div>
     </div>
 
@@ -124,7 +127,7 @@
 
     <pre class="usage"><span class='fu'>writeNiftiArray</span>(<span class='no'>x</span>, <span class='kw'>filepath</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempfile</a></span>(<span class='kw'>fileext</span> <span class='kw'>=</span> <span class='st'>".h5"</span>),
   <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"image"</span>, <span class='kw'>header_name</span> <span class='kw'>=</span> <span class='st'>"hdr"</span>, <span class='kw'>chunkdim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>header</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>header</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,8 +138,7 @@
     </tr>
     <tr>
       <th>filepath</th>
-      <td><p>The path (as a single character string) to the HDF5
-file.</p></td>
+      <td><p>The path (single character string) to the HDF5 file.</p></td>
     </tr>
     <tr>
       <th>name</th>
@@ -149,34 +151,71 @@ file.</p></td>
     <tr>
       <th>chunkdim</th>
       <td><p>The dimensions of the chunks to use for
-writing the data to disk. Passed to <a href='https://www.rdocumentation.org/packages/HDF5Array/topics/writeHDF5Array'>HDF5Array::writeHDF5Array</a>.</p></td>
-    </tr>
-    <tr>
-      <th>level</th>
-      <td><p>The compression level to use for writing the data to disk.
+writing the data to disk.
 Passed to <a href='https://www.rdocumentation.org/packages/HDF5Array/topics/writeHDF5Array'>HDF5Array::writeHDF5Array</a>.</p></td>
     </tr>
     <tr>
+      <th>level</th>
+      <td><p>The compression level,
+passed to <a href='https://www.rdocumentation.org/packages/HDF5Array/topics/writeHDF5Array'>HDF5Array::writeHDF5Array</a>.</p></td>
+    </tr>
+    <tr>
       <th>verbose</th>
-      <td><p>Display progress. Passed to <a href='https://www.rdocumentation.org/packages/HDF5Array/topics/writeHDF5Array'>HDF5Array::writeHDF5Array</a>.</p></td>
+      <td><p>Display progress,
+passed to <a href='https://www.rdocumentation.org/packages/HDF5Array/topics/writeHDF5Array'>HDF5Array::writeHDF5Array</a>.</p></td>
     </tr>
     <tr>
       <th>header</th>
-      <td><p>list of header information to override call of
-<a href='nifti_header.html'>nifti_header</a></p></td>
+      <td><p>list of header information;
+overrides call of <a href='nifti_header.html'>nifti_header</a></p></td>
+    </tr>
+    <tr>
+      <th>overwrite</th>
+      <td><p><code>FALSE</code> by default and an in the
+event that an HDF5 file already exists for <code>filepath</code>
+input then do not overwrite it.
+If set to <code>TRUE</code> then the "image" and "hdr" objects at this file
+location will overwrite.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>NiftiArray</code> object.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>nii_fname</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"example.nii.gz"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"RNifti"</span>)
-<span class='no'>res</span> <span class='kw'>=</span> <span class='fu'>writeNiftiArray</span>(<span class='no'>nii_fname</span>)</div></pre>
+<span class='no'>res</span> <span class='kw'>=</span> <span class='fu'>writeNiftiArray</span>(<span class='no'>nii_fname</span>)
+<span class='no'>filepath</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempfile</a></span>(<span class='kw'>fileext</span> <span class='kw'>=</span> <span class='st'>".h5"</span>)
+<span class='no'>res</span> <span class='kw'>=</span> <span class='fu'>writeNiftiArray</span>(<span class='no'>nii_fname</span>, <span class='kw'>filepath</span> <span class='kw'>=</span> <span class='no'>filepath</span>)
+<span class='kw pkg'>testthat</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/testthat/topics/output-expectations'>expect_error</a></span>(
+   <span class='fu'>writeNiftiArray</span>(<span class='no'>nii_fname</span>, <span class='kw'>filepath</span> <span class='kw'>=</span> <span class='no'>filepath</span>),
+   <span class='kw'>regexp</span> <span class='kw'>=</span> <span class='st'>"already exist"</span>,
+)
+<span class='no'>res</span> <span class='kw'>=</span> <span class='fu'>writeNiftiArray</span>(<span class='no'>nii_fname</span>, <span class='kw'>filepath</span> <span class='kw'>=</span> <span class='no'>filepath</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>img</span> <span class='kw'>=</span> <span class='kw pkg'>RNifti</span><span class='kw ns'>::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/RNifti/topics/readNifti'>readNifti</a></span>(<span class='no'>nii_fname</span>)
+<span class='fu'>writeNiftiArray</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>img</span>), <span class='kw'>header</span> <span class='kw'>=</span> <span class='fu'><a href='nifti_header.html'>nifti_header</a></span>(<span class='no'>img</span>))</div><div class='output co'>#&gt; &lt;552960 x 1&gt; NiftiMatrix object of type "integer":
+#&gt;           [,1]
+#&gt;      [1,]    0
+#&gt;      [2,]    0
+#&gt;      [3,]    0
+#&gt;      [4,]    0
+#&gt;      [5,]    0
+#&gt;       ...    .
+#&gt; [552956,]    0
+#&gt; [552957,]    0
+#&gt; [552958,]    0
+#&gt; [552959,]    0
+#&gt; [552960,]    0</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#value">Value</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 

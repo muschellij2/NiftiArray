@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">NiftiArray</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
@@ -53,14 +53,17 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/bad-vignette.html">bad-vignette</a>
+      <a href="articles/niftiarray-vignette.html">NiftiArray: Fast Random Access of NIfTI Objects</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/muschellij2/niftiArray">
+  <a href="https://github.com/muschellij2/NiftiArray">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -86,10 +89,9 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#niftiarray" class="anchor"></a>NiftiArray</h1></div>
 <!-- badges: start -->
-<p>muschellij2 badges: <a href="https://travis-ci.org/muschellij2/NiftiArray"><img src="https://travis-ci.org/muschellij2/NiftiArray.svg?branch=master" alt="Build Status"></a> <a href="https://ci.appveyor.com/project/muschellij2/NiftiArray"><img src="https://ci.appveyor.com/api/projects/status/github/muschellij2/NiftiArray?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a> <a href="https://cran.r-project.org/package=NiftiArray"><img src="https://www.r-pkg.org/badges/version/NiftiArray" alt="CRAN_Status_Badge"></a> <a href="https://coveralls.io/r/muschellij2/NiftiArray?branch=master"><img src="https://img.shields.io/coveralls/muschellij2/NiftiArray.svg" alt="Coverage Status"></a></p>
-<p>avalcarcel9 badges: <a href="https://travis-ci.org/avalcarcel9/NiftiArray"><img src="https://travis-ci.org/avalcarcel9/NiftiArray.svg?branch=master" alt="Build Status"></a> <a href="https://ci.appveyor.com/project/avalcarcel9/NiftiArray"><img src="https://ci.appveyor.com/api/projects/status/github/avalcarcel9/NiftiArray?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a> <a href="https://cran.r-project.org/package=NiftiArray"><img src="https://www.r-pkg.org/badges/version/NiftiArray" alt="CRAN_Status_Badge"></a> <a href="https://coveralls.io/r/avalcarcel9/NiftiArray?branch=master"><img src="https://img.shields.io/coveralls/avalcarcel9/NiftiArray.svg" alt="Coverage Status"></a></p>
-<!-- badges: end -->
-<p>The goal of <code>NiftiArray</code> is to allow for memory efficient fast random access of NIfTI objects. <code>NiftiArray</code> is an R package that allows for convenient and memory-efficient containers for on-disk representation of NIfTI objects. We allow for DelayedArray extensions and support all operations supported by DelayedArray objects. These operations can be either delayed or block-processed.</p>
+<p>muschellij2 badges: <a href="https://travis-ci.com/muschellij2/NiftiArray"><img src="https://travis-ci.com/muschellij2/NiftiArray.svg?branch=master" alt="Build Status"></a> <a href="https://ci.appveyor.com/project/muschellij2/NiftiArray"><img src="https://ci.appveyor.com/api/projects/status/github/muschellij2/NiftiArray?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a> <a href="https://cran.r-project.org/package=NiftiArray"><img src="https://www.r-pkg.org/badges/version/NiftiArray" alt="CRAN_Status_Badge"></a> <a href="https://codecov.io/gh/muschellij2/NiftiArray?branch=master"><img src="https://codecov.io/gh/muschellij2/NiftiArray/branch/master/graph/badge.svg" alt="Codecov test coverage"></a> <a href="https://coveralls.io/r/muschellij2/NiftiArray?branch=master"><img src="https://img.shields.io/coveralls/muschellij2/NiftiArray.svg" alt="Coverage Status"></a></p>
+<p>avalcarcel9 badges: <a href="https://travis-ci.org/avalcarcel9/NiftiArray"><img src="https://travis-ci.org/avalcarcel9/NiftiArray.svg?branch=master" alt="Build Status"></a> <a href="https://ci.appveyor.com/project/avalcarcel9/NiftiArray"><img src="https://ci.appveyor.com/api/projects/status/github/avalcarcel9/NiftiArray?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a> <a href="https://cran.r-project.org/package=NiftiArray"><img src="https://www.r-pkg.org/badges/version/NiftiArray" alt="CRAN_Status_Badge"></a> <a href="https://coveralls.io/r/avalcarcel9/NiftiArray?branch=master"><img src="https://img.shields.io/coveralls/avalcarcel9/NiftiArray.svg" alt="Coverage Status"></a> <!-- badges: end --></p>
+<p>The goal of <code>NiftiArray</code> is to allow for memory efficient fast random access of NIfTI objects. <code>NiftiArray</code> is an R package that allows for convenient and memory-efficient containers for on-disk representation of NIfTI objects. We allow for <code>DelayedArray</code> extensions and support all operations supported by DelayedArray objects. These operations can be either delayed or block-processed.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -102,6 +104,191 @@
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
 <p><img src="https://media.giphy.com/media/1ken0zzzL79NPy3QZj/giphy.gif"></p>
+<p>Here we use the example image from <code>RNifti</code>. We use the <code>writeNiftiArray</code> function to create a <code>NiftiArray</code> object:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(NiftiArray)</a>
+<a class="sourceLine" id="cb2-2" title="2">nii_fname =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"example.nii.gz"</span>, <span class="dt">package =</span> <span class="st">"RNifti"</span>)</a>
+<a class="sourceLine" id="cb2-3" title="3">res =<span class="st"> </span><span class="kw"><a href="reference/writeNiftiArray.html">writeNiftiArray</a></span>(nii_fname)</a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span>(res)</a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="co">#&gt; [1] "NiftiArray"</span></a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt; attr(,"package")</span></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt; [1] "NiftiArray"</span></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/dim">dim</a></span>(res)</a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; [1] 96 96 60</span></a>
+<a class="sourceLine" id="cb2-10" title="10">res</a>
+<a class="sourceLine" id="cb2-11" title="11"><span class="co">#&gt; &lt;96 x 96 x 60&gt; NiftiArray object of type "integer":</span></a>
+<a class="sourceLine" id="cb2-12" title="12"><span class="co">#&gt; ,,1</span></a>
+<a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt;        [,1]  [,2]  [,3]  [,4] ... [,93] [,94] [,95] [,96]</span></a>
+<a class="sourceLine" id="cb2-14" title="14"><span class="co">#&gt;  [1,]     0     0     0     0   .     0     0     0     0</span></a>
+<a class="sourceLine" id="cb2-15" title="15"><span class="co">#&gt;  [2,]     0     0     0     0   .     0     0     0     0</span></a>
+<a class="sourceLine" id="cb2-16" title="16"><span class="co">#&gt;   ...     .     .     .     .   .     .     .     .     .</span></a>
+<a class="sourceLine" id="cb2-17" title="17"><span class="co">#&gt; [95,]     0     0     0     0   .     0     0     0     0</span></a>
+<a class="sourceLine" id="cb2-18" title="18"><span class="co">#&gt; [96,]     0     0     0     0   .     0     0     0     0</span></a>
+<a class="sourceLine" id="cb2-19" title="19"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-20" title="20"><span class="co">#&gt; ...</span></a>
+<a class="sourceLine" id="cb2-21" title="21"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-22" title="22"><span class="co">#&gt; ,,60</span></a>
+<a class="sourceLine" id="cb2-23" title="23"><span class="co">#&gt;        [,1]  [,2]  [,3]  [,4] ... [,93] [,94] [,95] [,96]</span></a>
+<a class="sourceLine" id="cb2-24" title="24"><span class="co">#&gt;  [1,]     0     0     0     0   .     0     0     0     0</span></a>
+<a class="sourceLine" id="cb2-25" title="25"><span class="co">#&gt;  [2,]     0     0     0     0   .     0     0     0     0</span></a>
+<a class="sourceLine" id="cb2-26" title="26"><span class="co">#&gt;   ...     .     .     .     .   .     .     .     .     .</span></a>
+<a class="sourceLine" id="cb2-27" title="27"><span class="co">#&gt; [95,]     0     0     0     0   .     0     0     0     0</span></a>
+<a class="sourceLine" id="cb2-28" title="28"><span class="co">#&gt; [96,]     0     0     0     0   .     0     0     0     0</span></a></code></pre></div>
+<p>We can see the file on disk that was written out:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">res<span class="op">@</span>seed<span class="op">@</span>filepath</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="co">#&gt; [1] "/private/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T/RtmptLwEaC/fileee3a61e27b7.h5"</span></a></code></pre></div>
+<p>We see that the object is a low-memory <code>DelayedArray</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/object.size">object.size</a></span>(res)</a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="co">#&gt; 8688 bytes</span></a></code></pre></div>
+<p>You can also simply use the <code>NiftiArray</code> function of the NIfTI filename to create the array:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">res =<span class="st"> </span><span class="kw"><a href="reference/NiftiArray.html">NiftiArray</a></span>(nii_fname)</a></code></pre></div>
+<p>We see the header information is encoded in the <code>seed</code> slot of the object, which can be accessed using the <code>nifti_header</code> function:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="reference/nifti_header.html">nifti_header</a></span>(res)</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="co">#&gt; NIfTI-1 header</span></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt;     sizeof_hdr: 348</span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt;       dim_info: 0</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt;            dim: 3  96  96  60  1  1  1  1</span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt;      intent_p1: 0</span></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt;      intent_p2: 0</span></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt;      intent_p3: 0</span></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt;    intent_code: 0</span></a>
+<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt;       datatype: 8</span></a>
+<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt;         bitpix: 32</span></a>
+<a class="sourceLine" id="cb6-12" title="12"><span class="co">#&gt;    slice_start: 0</span></a>
+<a class="sourceLine" id="cb6-13" title="13"><span class="co">#&gt;         pixdim: -1.0  2.5  2.5  2.5  0.0  0.0  0.0  0.0</span></a>
+<a class="sourceLine" id="cb6-14" title="14"><span class="co">#&gt;     vox_offset: 352</span></a>
+<a class="sourceLine" id="cb6-15" title="15"><span class="co">#&gt;      scl_slope: 0</span></a>
+<a class="sourceLine" id="cb6-16" title="16"><span class="co">#&gt;      scl_inter: 0</span></a>
+<a class="sourceLine" id="cb6-17" title="17"><span class="co">#&gt;      slice_end: 0</span></a>
+<a class="sourceLine" id="cb6-18" title="18"><span class="co">#&gt;     slice_code: 0</span></a>
+<a class="sourceLine" id="cb6-19" title="19"><span class="co">#&gt;     xyzt_units: 10</span></a>
+<a class="sourceLine" id="cb6-20" title="20"><span class="co">#&gt;        cal_max: 2503</span></a>
+<a class="sourceLine" id="cb6-21" title="21"><span class="co">#&gt;        cal_min: 0</span></a>
+<a class="sourceLine" id="cb6-22" title="22"><span class="co">#&gt; slice_duration: 0</span></a>
+<a class="sourceLine" id="cb6-23" title="23"><span class="co">#&gt;        toffset: 0</span></a>
+<a class="sourceLine" id="cb6-24" title="24"><span class="co">#&gt;        descrip: TractoR NIfTI writer v3.0.0</span></a>
+<a class="sourceLine" id="cb6-25" title="25"><span class="co">#&gt;       aux_file: </span></a>
+<a class="sourceLine" id="cb6-26" title="26"><span class="co">#&gt;     qform_code: 2</span></a>
+<a class="sourceLine" id="cb6-27" title="27"><span class="co">#&gt;     sform_code: 2</span></a>
+<a class="sourceLine" id="cb6-28" title="28"><span class="co">#&gt;      quatern_b: 0</span></a>
+<a class="sourceLine" id="cb6-29" title="29"><span class="co">#&gt;      quatern_c: 1</span></a>
+<a class="sourceLine" id="cb6-30" title="30"><span class="co">#&gt;      quatern_d: 0</span></a>
+<a class="sourceLine" id="cb6-31" title="31"><span class="co">#&gt;      qoffset_x: 122.0339</span></a>
+<a class="sourceLine" id="cb6-32" title="32"><span class="co">#&gt;      qoffset_y: -95.18523</span></a>
+<a class="sourceLine" id="cb6-33" title="33"><span class="co">#&gt;      qoffset_z: -55.03814</span></a>
+<a class="sourceLine" id="cb6-34" title="34"><span class="co">#&gt;         srow_x: -2.5000  0.0000  0.0000  122.0339</span></a>
+<a class="sourceLine" id="cb6-35" title="35"><span class="co">#&gt;         srow_y: 0.00000  2.50000  0.00000  -95.18523</span></a>
+<a class="sourceLine" id="cb6-36" title="36"><span class="co">#&gt;         srow_z: 0.00000  0.00000  2.50000  -55.03814</span></a>
+<a class="sourceLine" id="cb6-37" title="37"><span class="co">#&gt;    intent_name: </span></a>
+<a class="sourceLine" id="cb6-38" title="38"><span class="co">#&gt;          magic: n+1</span></a></code></pre></div>
+<div id="creating-a-matrix" class="section level3">
+<h3 class="hasAnchor">
+<a href="#creating-a-matrix" class="anchor"></a>Creating a Matrix</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">mat =<span class="st"> </span><span class="kw">as</span>(res, <span class="st">"NiftiMatrix"</span>)</a>
+<a class="sourceLine" id="cb7-2" title="2">mat</a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="co">#&gt; &lt;552960 x 1&gt; NiftiMatrix object of type "integer":</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt;           [,1]</span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="co">#&gt;      [1,]    0</span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt;      [2,]    0</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt;      [3,]    0</span></a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="co">#&gt;      [4,]    0</span></a>
+<a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt;      [5,]    0</span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt;       ...    .</span></a>
+<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt; [552956,]    0</span></a>
+<a class="sourceLine" id="cb7-12" title="12"><span class="co">#&gt; [552957,]    0</span></a>
+<a class="sourceLine" id="cb7-13" title="13"><span class="co">#&gt; [552958,]    0</span></a>
+<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt; [552959,]    0</span></a>
+<a class="sourceLine" id="cb7-15" title="15"><span class="co">#&gt; [552960,]    0</span></a></code></pre></div>
+<p>Now that the image is a matrix, we can bind the columns together,</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">mat =<span class="st"> </span>DelayedArray<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/DelayedArray/topics/bind-arrays">acbind</a></span>(mat, mat, mat, mat)</a>
+<a class="sourceLine" id="cb8-2" title="2">testthat<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/testthat/topics/expect_is">expect_is</a></span>(mat, <span class="st">"DelayedMatrix"</span>)</a>
+<a class="sourceLine" id="cb8-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/object.size">object.size</a></span>(mat)</a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="co">#&gt; 33672 bytes</span></a></code></pre></div>
+<p>Now that we have the data in a <code>DelayedMatrix</code> class, we can use the package <code>DelayedMatrixStats</code> package that calls the <code>matrixStats</code> package for quick operations:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">vec_result =<span class="st"> </span>DelayedMatrixStats<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/DelayedMatrixStats/topics/colMedians">rowMedians</a></span>(mat)</a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(vec_result)</a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="co">#&gt; [1] 0 0 0 0 0 0</span></a></code></pre></div>
+<p>Turning the output back into a <code>NiftiArray</code>, we have to pass in the <code>header</code> argument, passing in the correct header information. We can either create the <code>NiftiArray</code> output by creating a matrix, then the <code>NiftiMatrix</code>, then the <code>NiftiArray</code>.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">res_mat =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">matrix</a></span>(vec_result, <span class="dt">ncol =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb10-2" title="2">res_mat =<span class="st"> </span><span class="kw">as</span>(res_mat, <span class="st">"NiftiMatrix"</span>)</a>
+<a class="sourceLine" id="cb10-3" title="3">hdr =<span class="st"> </span><span class="kw"><a href="reference/nifti_header.html">nifti_header</a></span>(res)</a>
+<a class="sourceLine" id="cb10-4" title="4">res_mat =<span class="st"> </span><span class="kw"><a href="reference/writeNiftiArray.html">writeNiftiArray</a></span>(res_mat, <span class="dt">header =</span> hdr)</a>
+<a class="sourceLine" id="cb10-5" title="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/class">class</a></span>(res_mat)</a>
+<a class="sourceLine" id="cb10-6" title="6"><span class="co">#&gt; [1] "NiftiMatrix"</span></a>
+<a class="sourceLine" id="cb10-7" title="7"><span class="co">#&gt; attr(,"package")</span></a>
+<a class="sourceLine" id="cb10-8" title="8"><span class="co">#&gt; [1] "NiftiArray"</span></a>
+<a class="sourceLine" id="cb10-9" title="9">res_arr =<span class="st"> </span><span class="kw">as</span>(res_mat, <span class="st">"NiftiArray"</span>)</a></code></pre></div>
+<p>Or we can create an array and then making the <code>NiftiArray</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">arr =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/array">array</a></span>(vec_result, <span class="dt">dim =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/dim">dim</a></span>(res) )</a>
+<a class="sourceLine" id="cb11-2" title="2">hdr =<span class="st"> </span><span class="kw"><a href="reference/nifti_header.html">nifti_header</a></span>(res)</a>
+<a class="sourceLine" id="cb11-3" title="3">res_arr =<span class="st"> </span><span class="kw"><a href="reference/writeNiftiArray.html">writeNiftiArray</a></span>(arr, <span class="dt">header =</span> hdr)</a>
+<a class="sourceLine" id="cb11-4" title="4">res_arr</a>
+<a class="sourceLine" id="cb11-5" title="5"><span class="co">#&gt; &lt;96 x 96 x 60&gt; NiftiArray object of type "double":</span></a>
+<a class="sourceLine" id="cb11-6" title="6"><span class="co">#&gt; ,,1</span></a>
+<a class="sourceLine" id="cb11-7" title="7"><span class="co">#&gt;        [,1]  [,2]  [,3] ... [,95] [,96]</span></a>
+<a class="sourceLine" id="cb11-8" title="8"><span class="co">#&gt;  [1,]     0     0     0   .     0     0</span></a>
+<a class="sourceLine" id="cb11-9" title="9"><span class="co">#&gt;  [2,]     0     0     0   .     0     0</span></a>
+<a class="sourceLine" id="cb11-10" title="10"><span class="co">#&gt;   ...     .     .     .   .     .     .</span></a>
+<a class="sourceLine" id="cb11-11" title="11"><span class="co">#&gt; [95,]     0     0     0   .     0     0</span></a>
+<a class="sourceLine" id="cb11-12" title="12"><span class="co">#&gt; [96,]     0     0     0   .     0     0</span></a>
+<a class="sourceLine" id="cb11-13" title="13"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-14" title="14"><span class="co">#&gt; ...</span></a>
+<a class="sourceLine" id="cb11-15" title="15"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-16" title="16"><span class="co">#&gt; ,,60</span></a>
+<a class="sourceLine" id="cb11-17" title="17"><span class="co">#&gt;        [,1]  [,2]  [,3] ... [,95] [,96]</span></a>
+<a class="sourceLine" id="cb11-18" title="18"><span class="co">#&gt;  [1,]     0     0     0   .     0     0</span></a>
+<a class="sourceLine" id="cb11-19" title="19"><span class="co">#&gt;  [2,]     0     0     0   .     0     0</span></a>
+<a class="sourceLine" id="cb11-20" title="20"><span class="co">#&gt;   ...     .     .     .   .     .     .</span></a>
+<a class="sourceLine" id="cb11-21" title="21"><span class="co">#&gt; [95,]     0     0     0   .     0     0</span></a>
+<a class="sourceLine" id="cb11-22" title="22"><span class="co">#&gt; [96,]     0     0     0   .     0     0</span></a>
+<a class="sourceLine" id="cb11-23" title="23"><span class="kw"><a href="reference/nifti_header.html">nifti_header</a></span>(res_arr)</a>
+<a class="sourceLine" id="cb11-24" title="24"><span class="co">#&gt; NIfTI-1 header</span></a>
+<a class="sourceLine" id="cb11-25" title="25"><span class="co">#&gt;     sizeof_hdr: 348</span></a>
+<a class="sourceLine" id="cb11-26" title="26"><span class="co">#&gt;       dim_info: 0</span></a>
+<a class="sourceLine" id="cb11-27" title="27"><span class="co">#&gt;            dim: 3  96  96  60  1  1  1  1</span></a>
+<a class="sourceLine" id="cb11-28" title="28"><span class="co">#&gt;      intent_p1: 0</span></a>
+<a class="sourceLine" id="cb11-29" title="29"><span class="co">#&gt;      intent_p2: 0</span></a>
+<a class="sourceLine" id="cb11-30" title="30"><span class="co">#&gt;      intent_p3: 0</span></a>
+<a class="sourceLine" id="cb11-31" title="31"><span class="co">#&gt;    intent_code: 0</span></a>
+<a class="sourceLine" id="cb11-32" title="32"><span class="co">#&gt;       datatype: 8</span></a>
+<a class="sourceLine" id="cb11-33" title="33"><span class="co">#&gt;         bitpix: 32</span></a>
+<a class="sourceLine" id="cb11-34" title="34"><span class="co">#&gt;    slice_start: 0</span></a>
+<a class="sourceLine" id="cb11-35" title="35"><span class="co">#&gt;         pixdim: -1.0  2.5  2.5  2.5  0.0  0.0  0.0  0.0</span></a>
+<a class="sourceLine" id="cb11-36" title="36"><span class="co">#&gt;     vox_offset: 352</span></a>
+<a class="sourceLine" id="cb11-37" title="37"><span class="co">#&gt;      scl_slope: 0</span></a>
+<a class="sourceLine" id="cb11-38" title="38"><span class="co">#&gt;      scl_inter: 0</span></a>
+<a class="sourceLine" id="cb11-39" title="39"><span class="co">#&gt;      slice_end: 0</span></a>
+<a class="sourceLine" id="cb11-40" title="40"><span class="co">#&gt;     slice_code: 0</span></a>
+<a class="sourceLine" id="cb11-41" title="41"><span class="co">#&gt;     xyzt_units: 10</span></a>
+<a class="sourceLine" id="cb11-42" title="42"><span class="co">#&gt;        cal_max: 2503</span></a>
+<a class="sourceLine" id="cb11-43" title="43"><span class="co">#&gt;        cal_min: 0</span></a>
+<a class="sourceLine" id="cb11-44" title="44"><span class="co">#&gt; slice_duration: 0</span></a>
+<a class="sourceLine" id="cb11-45" title="45"><span class="co">#&gt;        toffset: 0</span></a>
+<a class="sourceLine" id="cb11-46" title="46"><span class="co">#&gt;        descrip: TractoR NIfTI writer v3.0.0</span></a>
+<a class="sourceLine" id="cb11-47" title="47"><span class="co">#&gt;       aux_file: </span></a>
+<a class="sourceLine" id="cb11-48" title="48"><span class="co">#&gt;     qform_code: 2</span></a>
+<a class="sourceLine" id="cb11-49" title="49"><span class="co">#&gt;     sform_code: 2</span></a>
+<a class="sourceLine" id="cb11-50" title="50"><span class="co">#&gt;      quatern_b: 0</span></a>
+<a class="sourceLine" id="cb11-51" title="51"><span class="co">#&gt;      quatern_c: 1</span></a>
+<a class="sourceLine" id="cb11-52" title="52"><span class="co">#&gt;      quatern_d: 0</span></a>
+<a class="sourceLine" id="cb11-53" title="53"><span class="co">#&gt;      qoffset_x: 122.0339</span></a>
+<a class="sourceLine" id="cb11-54" title="54"><span class="co">#&gt;      qoffset_y: -95.18523</span></a>
+<a class="sourceLine" id="cb11-55" title="55"><span class="co">#&gt;      qoffset_z: -55.03814</span></a>
+<a class="sourceLine" id="cb11-56" title="56"><span class="co">#&gt;         srow_x: -2.5000  0.0000  0.0000  122.0339</span></a>
+<a class="sourceLine" id="cb11-57" title="57"><span class="co">#&gt;         srow_y: 0.00000  2.50000  0.00000  -95.18523</span></a>
+<a class="sourceLine" id="cb11-58" title="58"><span class="co">#&gt;         srow_z: 0.00000  0.00000  2.50000  -55.03814</span></a>
+<a class="sourceLine" id="cb11-59" title="59"><span class="co">#&gt;    intent_name: </span></a>
+<a class="sourceLine" id="cb11-60" title="60"><span class="co">#&gt;          magic: n+1</span></a></code></pre></div>
+</div>
+<div id="converting-back-to-niftiimage" class="section level3">
+<h3 class="hasAnchor">
+<a href="#converting-back-to-niftiimage" class="anchor"></a>Converting back to niftiImage</h3>
+<p>We can return a <code>niftiImage</code> from the <code>NiftiArray</code> object, as follows:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">nii =<span class="st"> </span><span class="kw">as</span>(res_arr, <span class="st">"niftiImage"</span>)</a>
+<a class="sourceLine" id="cb12-2" title="2">nii</a>
+<a class="sourceLine" id="cb12-3" title="3"><span class="co">#&gt; Image array of mode "double" (4.2 Mb)</span></a>
+<a class="sourceLine" id="cb12-4" title="4"><span class="co">#&gt; - 96 x 96 x 60 voxels</span></a>
+<a class="sourceLine" id="cb12-5" title="5"><span class="co">#&gt; - 2.5 x 2.5 x 2.5 mm per voxel</span></a></code></pre></div>
+</div>
 </div>
 </div>
   </div>
@@ -110,9 +297,9 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/muschellij2/niftiArray">https://​github.com/​muschellij2/​niftiArray</a>
+<li>Browse source code at <br><a href="https://github.com/muschellij2/NiftiArray">https://​github.com/​muschellij2/​NiftiArray</a>
 </li>
-<li>Report a bug at <br><a href="https://github.com/muschellij2/niftiArray/issues">https://​github.com/​muschellij2/​niftiArray/​issues</a>
+<li>Report a bug at <br><a href="https://github.com/muschellij2/NiftiArray/issues">https://​github.com/​muschellij2/​NiftiArray/​issues</a>
 </li>
 </ul>
 </div>

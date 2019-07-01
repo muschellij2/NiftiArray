@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NiftiArray</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
@@ -86,15 +86,18 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/bad-vignette.html">bad-vignette</a>
+      <a href="../articles/niftiarray-vignette.html">NiftiArray: Fast Random Access of NIfTI Objects</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/muschellij2/niftiArray">
+  <a href="https://github.com/muschellij2/NiftiArray">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -112,7 +115,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Seed for NiftiArray Class</h1>
-    <small class="dont-index">Source: <a href='https://github.com/muschellij2/niftiArray/blob/master/R/aaa_niftiArraySeed.R'><code>R/aaa_niftiArraySeed.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/muschellij2/NiftiArray/blob/master/R/aaa_niftiArraySeed.R'><code>R/aaa_niftiArraySeed.R</code></a></small>
     <div class="hidden name"><code>NiftiArraySeed.Rd</code></div>
     </div>
 
@@ -123,7 +126,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>NiftiArraySeed</span>(<span class='no'>filepath</span>, <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"image"</span>, <span class='kw'>header_name</span> <span class='kw'>=</span> <span class='st'>"hdr"</span>,
-  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fl'>NA</span>)</pre>
+  <span class='kw'>type</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>header</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,6 +149,11 @@ file where the dataset is located.</p></td>
       <td><p><code>NA</code> or the R atomic type, passed to
 <code><a href='https://www.rdocumentation.org/packages/HDF5Array/topics/HDF5Array-class'>HDF5Array::HDF5Array()</a></code></p></td>
     </tr>
+    <tr>
+      <th>header</th>
+      <td><p>list of header information to override call of
+<a href='nifti_header.html'>nifti_header</a></p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -154,8 +162,11 @@ file where the dataset is located.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>nii_fname</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"example.nii.gz"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"RNifti"</span>)
-<span class='no'>res</span> <span class='kw'>=</span> <span class='fu'>NiftiArraySeed</span>(<span class='no'>nii_fname</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>nii_fname</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>,
+<span class='st'>"example.nii.gz"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"RNifti"</span>)
+<span class='no'>res</span> <span class='kw'>=</span> <span class='fu'>NiftiArraySeed</span>(<span class='no'>nii_fname</span>)
+<span class='no'>hdr</span> <span class='kw'>=</span> <span class='fu'><a href='nifti_header.html'>nifti_header</a></span>(<span class='no'>res</span>)
+<span class='no'>res2</span> <span class='kw'>=</span> <span class='fu'>NiftiArraySeed</span>(<span class='no'>nii_fname</span>, <span class='kw'>header</span> <span class='kw'>=</span> <span class='no'>hdr</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
