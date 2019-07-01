@@ -1,9 +1,17 @@
-# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
-
 language: R
 cache: packages
 bioc_required: true
-
 after_success:
   - Rscript -e 'covr::codecov(type = "all")'
-  - Rscript -e 'covr::coveralls(type = "all")'  
+  - Rscript -e 'covr::coveralls(type = "all")'
+
+os:
+  - linux
+  - osx 
+deploy:
+  provider: releases
+  api_key:
+    secure: Ri/5Xn1kkH2jQD2d8Kw/oxsNPRvyLmPGjWoBngBu6Y1t0BbnkI5tH07+jWOIlDQl2ueYfnP3nvWFwgpjzPFzwb/MPfPmFzg/rZDZomK67LCZ4MR8pLZk7FdZG07Jgq4B51sdi48sprh/o9cHhxf79dmu0WlAzY8/59WjlZUglQb9evgR+RybEU33Z/8hDcXpzFZriFe8aebBxuR6ZnuJdHxzITHmWvyNsR4KBA+5hA+q8l/AUVHENTadMw/M10lkAVTRVF1TYtiz13gwHf4pkRlVNuOvB98OiWBHMiEq7zaO9Xpk7vZUBKixpIN93Y5oxlIBzldIS7qBRjAhUU25sWUiiFXpf2EQ2BfAJUaYDlt5VRB+nn7IvbVRmGqNecwsJyeLmYpYxbfySzMYDK/QFnkxQy5sRGUrPDiEZncnxlzkyIe0G+IFUADhUUCC5yskApUDuZgACeOOLoGc7a04pZ92uVNVmSyFw/n5oHBK8JRAqGqddBmttyMOPXh+qTX6iUN1bcwghPnNeV2Ft+6+Vb55doyzUXW5eWndr/22udwXlXre1qnsmC4BbHCvfqdzYTs2DftaGOeay9TgGxDwW5cl4xkSKS/acEZYU+oR2ie4jvaYOjqxncNlao4Djwy41zeG2RbS9gNMdaPlmSJisC4vb0dcjrxvwIf9Pr+Ww8Y=
+  file: NiftiArray*.t*gz
+  on:
+    repo: muschellij2/NiftiArray
