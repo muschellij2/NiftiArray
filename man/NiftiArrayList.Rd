@@ -12,11 +12,16 @@ NiftiArrayList(x, ...)
 
 \item{...}{additional arguments to pass to \link{writeNiftiArray}}
 }
+\value{
+A list of class \code{NiftiArrayList}, which is a
+list if \code{NiftiArray} objects
+}
 \description{
 Write NiftiArray Object
 }
 \examples{
-nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
+nii_fname = system.file("extdata",
+"example.nii.gz", package = "RNifti")
 nii_fname = rep(nii_fname, 3)
 res = NiftiArrayList(nii_fname)
 testthat::expect_is(res, "NiftiArrayList")

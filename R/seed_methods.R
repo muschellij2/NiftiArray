@@ -3,9 +3,13 @@
 #' @rdname nifti_header
 #' @aliases nifti_header,NiftiArraySeed-method
 #' @param image An image or NiftiArray object.
+#'
+#' @return A list of class `niftiHeader`, which has
+#' the header information.
 #' @export
 #' @examples
-#' nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
+#' nii_fname = system.file("extdata",
+#' "example.nii.gz", package = "RNifti")
 #' nifti_header(nii_fname)
 #' res = writeNiftiArray(nii_fname)
 #' nifti_header(res)
@@ -24,9 +28,9 @@ setMethod("nifti_header", "NiftiArray", function(image) {
 #' @export
 #' @aliases nifti_header,NiftiArrayList-method
 setMethod("nifti_header", "NiftiArrayList", function(image) {
-  nii_seeds = sapply(image, function(x) {
+  nii_seeds = vapply(image, function(x) {
     is(x, "NiftiArray") | is(x, "NiftiArraySeed")
-  })
+  }, FUN.VALUE = logical(1))
   if (!any(nii_seeds)) {
     stop("No images in NiftiArrayList are NiftiArray or NiftiArraySeed")
   }
@@ -44,11 +48,12 @@ setMethod("nifti_header", "DelayedArray", function(image) {
   seed = slot(image, "seed")
   if ("seeds" %in% slotNames(seed)) {
     seeds = seed@seeds
-    nii_seeds = sapply(seeds, function(x) {
+    nii_seeds = vapply(seeds, function(x) {
       is(x, "NiftiArray") | is(x, "NiftiArraySeed")
-    })
+    }, FUN.VALUE = logical(1))
     if (!any(nii_seeds)) {
-      stop("No seeds in DelayedArray are NiftiArray or NiftiArraySeed")
+      stop(paste0("No seeds in DelayedArray are NiftiArray ",
+                  "or NiftiArraySeed"))
     }
     seeds = seeds[ nii_seeds ]
     seeds = seeds[[ length(seeds) ]]

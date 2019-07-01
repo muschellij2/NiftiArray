@@ -31,7 +31,8 @@ A \code{NiftiArraySeed} object
 Seed for NiftiArray Class
 }
 \examples{
-nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
+nii_fname = system.file("extdata",
+"example.nii.gz", package = "RNifti")
 res = NiftiArraySeed(nii_fname)
 hdr = nifti_header(res)
 res2 = NiftiArraySeed(nii_fname, header = hdr)

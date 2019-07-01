@@ -12,6 +12,9 @@
 \arguments{
 \item{x}{Typically a DelayedArray object.}
 }
+\value{
+A \code{NiftiMatrix} object.
+}
 \description{
 NiftiMatrix Class
 }

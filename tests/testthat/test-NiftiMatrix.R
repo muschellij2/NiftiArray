@@ -1,6 +1,7 @@
 testthat::context("Operations of NiftiMatrix")
 
-nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
+nii_fname = system.file("extdata",
+                        "example.nii.gz", package = "RNifti")
 h5_fname = tempfile(fileext = ".h5")
 img = RNifti::readNifti(nii_fname)
 img_hdr = nifti_header(img)

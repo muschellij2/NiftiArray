@@ -8,8 +8,8 @@ setOldClass("niftiImage")
 
 
 
-
-.as_NiftiArray <- function(from) writeNiftiArray(from)  # write to current dump
+# write to current dump
+.as_NiftiArray <- function(from) writeNiftiArray(from)
 
 #' @aliases coerce,ANY,NiftiArray-method
 #' @rdname NiftiArray
@@ -153,7 +153,7 @@ setAs("ANY", "NiftiMatrix",
 #' @name coerce
 setAs("NiftiArrayList", "NiftiArray", function(from) {
   ndims = lapply(from, dim)
-  ndims = sapply(ndims, length)
+  ndims = vapply(ndims, length, FUN.VALUE = integer(1))
   stopifnot(all(ndims == ndims[1]))
   ndims = unique(ndims)
   hdr = nifti_header(from[[1]])

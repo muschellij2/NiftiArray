@@ -1,4 +1,4 @@
-### =========================================================================
+### ========================
 ### NiftiArraySeed objects
 ### ----------------------
 
@@ -70,6 +70,8 @@ setClass("NiftiArray",
 #'
 #' @importClassesFrom DelayedArray DelayedMatrix
 #' @rdname NiftiMatrix
+#'
+#' @return A `NiftiMatrix` object.
 #' @exportClass NiftiMatrix
 setClass("NiftiMatrix", contains = c("NiftiArray", "DelayedMatrix"))
 
@@ -92,7 +94,8 @@ setClass("NiftiMatrix", contains = c("NiftiArray", "DelayedMatrix"))
 #' @importFrom rhdf5 h5read
 #' @importFrom S4Vectors new2
 #' @examples
-#' nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
+#' nii_fname = system.file("extdata",
+#' "example.nii.gz", package = "RNifti")
 #' res = NiftiArraySeed(nii_fname)
 #' hdr = nifti_header(res)
 #' res2 = NiftiArraySeed(nii_fname, header = hdr)
@@ -117,7 +120,8 @@ NiftiArraySeed <- function(filepath,
     rm(x); gc()
   }
 
-  seed = HDF5Array::HDF5ArraySeed(filepath, name = name, type = type)
+  seed = HDF5Array::HDF5ArraySeed(
+    filepath, name = name, type = type)
   args = list(
     filepath = seed@filepath,
     name = seed@name,

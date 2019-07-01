@@ -29,8 +29,13 @@ Passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
 \item{header}{list of header information to override call of
 \link{nifti_header}}
 
-\item{overwrite}{FALSE by default and an in the event that an HDF5 file already exists for \code{filepath} input then do not overwrite it.
-If set to TRUE then the "image" and "hdr" objects at this file location will overwrite.}
+\item{overwrite}{FALSE by default and an in the event that an HDF5 file
+already exists for \code{filepath} input then do not overwrite it.
+If set to TRUE then the "image" and "hdr" objects at this file
+location will overwrite.}
+}
+\value{
+A \code{NiftiArray} object.
 }
 \description{
 Write NiftiArray Object

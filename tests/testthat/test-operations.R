@@ -1,6 +1,7 @@
 testthat::context("Operations of NiftiArray")
 
-nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
+nii_fname = system.file("extdata", "example.nii.gz",
+                        package = "RNifti")
 h5_fname = tempfile(fileext = ".h5")
 img = RNifti::readNifti(nii_fname)
 img_hdr = nifti_header(img)
@@ -46,7 +47,8 @@ testthat::test_that("Conversion to NiftiArray", {
 
   run_mat = matrix(rnorm(100), nrow = 10)
   testthat::expect_is(as(run_mat, "NiftiArray"), "NiftiArray")
-  testthat::expect_is(as(as(run_mat, "NiftiArray"), "NiftiMatrix"), "NiftiMatrix")
+  testthat::expect_is(as(as(run_mat, "NiftiArray"), "NiftiMatrix"),
+                      "NiftiMatrix")
   run_mat = as(run_mat, "NiftiArray")
   testthat::expect_is(as(run_mat, "NiftiMatrix"), "NiftiMatrix")
 

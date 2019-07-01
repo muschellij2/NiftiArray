@@ -51,7 +51,8 @@ All the operations available for \link[HDF5Array:HDF5Array]{HDF5Array::HDF5Array
 objects work on NiftiArray objects.
 }
 \examples{
-nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
+nii_fname = system.file("extdata",
+"example.nii.gz", package = "RNifti")
 res = NiftiArray(nii_fname)
 res2 = NiftiArray(slot(slot(res, "seed"), "filepath"))
 res2 = NiftiArray(slot(res, "seed"))

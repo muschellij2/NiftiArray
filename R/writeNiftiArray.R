@@ -7,14 +7,17 @@
 #' @param header_name The name of the header in the HDF5 file.
 #' @param chunkdim The dimensions of the chunks to use for
 #' writing the data to disk. Passed to [HDF5Array::writeHDF5Array].
-#' @param level 	The compression level to use for writing the data to disk.
+#' @param level The compression level to use for writing the data to disk.
 #' Passed to [HDF5Array::writeHDF5Array].
 #' @param verbose Display progress. Passed to [HDF5Array::writeHDF5Array].
 #' @param header list of header information to override call of
 #' [nifti_header]
-#' @param overwrite FALSE by default and an in the event that an HDF5 file already exists for `filepath` input then do not overwrite it.
-#' If set to TRUE then the "image" and "hdr" objects at this file location will overwrite.
+#' @param overwrite FALSE by default and an in the event that an HDF5 file
+#' already exists for `filepath` input then do not overwrite it.
+#' If set to TRUE then the "image" and "hdr" objects at this file
+#' location will overwrite.
 #'
+#' @return A `NiftiArray` object.
 #' @export
 #' @importFrom HDF5Array writeHDF5Array
 #' @importFrom rhdf5 h5closeAll h5delete h5write
