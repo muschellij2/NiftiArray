@@ -75,6 +75,7 @@ setMethod("nifti_header", "HDF5ArraySeed", function(image) {
 #' @rdname nifti_header
 #' @export
 #' @aliases nifti_header,ANY-method
+#' @importFrom RNifti niftiHeader
 setMethod("nifti_header", "ANY", function(image) {
   RNifti::niftiHeader(image)
 })
@@ -82,7 +83,6 @@ setMethod("nifti_header", "ANY", function(image) {
 
 #' @rdname nifti_header
 #' @aliases nifti_header,NiftiArraySeed-method
-#' @import RNifti
 #' @export
 setMethod("nifti_header", "NiftiArraySeed", function(image) {
   out = list(

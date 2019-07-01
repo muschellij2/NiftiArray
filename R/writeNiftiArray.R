@@ -21,6 +21,7 @@
 #'
 #' @return A `NiftiArray` object.
 #' @export
+#' @importFrom RNifti readNifti
 #' @importFrom HDF5Array writeHDF5Array
 #' @importFrom rhdf5 h5closeAll h5delete h5write
 #' @examples

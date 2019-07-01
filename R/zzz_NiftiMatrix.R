@@ -115,6 +115,7 @@ setAs("numeric", "NiftiArray",
 #' @aliases coerce,NiftiArray,niftiImage-method
 #' @rdname NiftiArray
 #' @name coerce
+#' @importFrom RNifti updateNifti
 #' @export
 setAs("NiftiArray", "niftiImage", function(from) {
   hdr = nifti_header(from)
