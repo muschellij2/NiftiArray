@@ -12,6 +12,8 @@ Status](https://travis-ci.org/muschellij2/NiftiArray.svg?branch=master)](https:/
 [![AppVeyor Build
 Status](https://ci.appveyor.com/api/projects/status/github/muschellij2/NiftiArray?branch=master&svg=true)](https://ci.appveyor.com/project/muschellij2/NiftiArray)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/NiftiArray)](https://cran.r-project.org/package=NiftiArray)
+[![Codecov test
+coverage](https://codecov.io/gh/muschellij2/NiftiArray/branch/master/graph/badge.svg)](https://codecov.io/gh/muschellij2/NiftiArray?branch=master)
 [![Coverage
 Status](https://img.shields.io/coveralls/muschellij2/NiftiArray.svg)](https://coveralls.io/r/muschellij2/NiftiArray?branch=master)
 
@@ -22,9 +24,6 @@ Status](https://ci.appveyor.com/api/projects/status/github/avalcarcel9/NiftiArra
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/NiftiArray)](https://cran.r-project.org/package=NiftiArray)
 [![Coverage
 Status](https://img.shields.io/coveralls/avalcarcel9/NiftiArray.svg)](https://coveralls.io/r/avalcarcel9/NiftiArray?branch=master)
-
-[![Codecov test
-coverage](https://codecov.io/gh/muschellij2/NiftiArray/branch/master/graph/badge.svg)](https://codecov.io/gh/muschellij2/NiftiArray?branch=master)
 <!-- badges: end -->
 
 The goal of `NiftiArray` is to allow for memory efficient fast random
@@ -89,7 +88,7 @@ We can see the file on disk that was written out:
 
 ``` r
 res@seed@filepath
-#> [1] "/private/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T/Rtmpzk6d90/file6f3764773ace.h5"
+#> [1] "/private/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T/RtmpxXCL0Z/file7902558431c6.h5"
 ```
 
 We see that the object is a low-memory `DelayedArray`:

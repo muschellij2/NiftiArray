@@ -6,3 +6,4 @@ bioc_required: true
 
 after_success:
   - Rscript -e 'covr::codecov(type = "all")'
+  - Rscript -e 'covr::coveralls(type = "all")'  
