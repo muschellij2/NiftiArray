@@ -194,10 +194,16 @@ setAs(
       x
     })
     # 1 for
+    if (verbose) {
+      message("Binding data together")
+    }
     res = do.call(DelayedArray::arbind, args = from)
     res = aperm(res, (ndims + 1):1)
     hdr$dim[ndims + 1 + 1] = dim(res)[ndims + 1]
     hdr$pixdim[ndims + 1 + 1] = 1
+    if (verbose) {
+      message("Running writeNiftiArray")
+    }
     res = writeNiftiArray(res, header = hdr)
     res
   })
