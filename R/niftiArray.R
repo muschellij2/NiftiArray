@@ -3,11 +3,12 @@
 ###
 
 #' @importMethodsFrom DelayedArray DelayedArray
-setMethod("DelayedArray", "NiftiArraySeed",
-          function(seed) {
-            DelayedArray::new_DelayedArray(
-              seed, Class = "NiftiArray")
-          }
+setMethod(
+    "DelayedArray", "NiftiArraySeed",
+    function(seed) {
+        DelayedArray::new_DelayedArray(
+            seed, Class = "NiftiArray")
+    }
 )
 
 
@@ -44,19 +45,19 @@ setMethod("DelayedArray", "NiftiArraySeed",
 #' res = NiftiArray(nii_fname)
 #' res2 = NiftiArray(slot(slot(res, "seed"), "filepath"))
 #' res2 = NiftiArray(slot(res, "seed"))
-NiftiArray <- function(filepath, name = "image",
-                       header_name = "hdr",
-                       type = NA, header = NULL)
-{
-  if (is(filepath, "NiftiArraySeed")) {
-    seed <- filepath
-  } else {
-    seed <- NiftiArraySeed(filepath, name = name,
-                           header_name = header_name,
-                           type = type,
-                           header = header)
-  }
-  DelayedArray::DelayedArray(seed)
+NiftiArray <- function(
+    filepath, name = "image",
+    header_name = "hdr", type = NA, header = NULL){
+    if (is(filepath, "NiftiArraySeed")) {
+        seed <- filepath
+    } else {
+        seed <- NiftiArraySeed(
+            filepath, name = name,
+            header_name = header_name,
+            type = type,
+            header = header)
+    }
+    DelayedArray::DelayedArray(seed)
 }
 
 

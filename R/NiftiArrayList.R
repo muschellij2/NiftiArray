@@ -15,11 +15,10 @@
 #' testthat::expect_is(res, "NiftiArrayList")
 #' mat = as(res, "NiftiMatrix")
 #' arr = as(res, "NiftiArray")
-NiftiArrayList <- function(
-  x, ...) {
-  res = lapply(x, function(xx) {
-    writeNiftiArray(xx, ...)
-  })
-  class(res) = "NiftiArrayList"
-  res
+NiftiArrayList <- function(x, ...) {
+    res = lapply(x, function(xx) {
+      writeNiftiArray(xx, ...)
+    })
+    class(res) = "NiftiArrayList"
+    res
 }
