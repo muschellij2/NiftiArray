@@ -86,7 +86,17 @@ setAs("NiftiArray", "NiftiMatrix", function(from) {
 #' @name coerce
 #' @export
 setAs("NiftiArrayList", "NiftiMatrix", function(from) {
-  from = lapply(from, function(x) {
+  verbose = attr(from, "verbose")
+  if (is.null(verbose)) {
+    verbose = FALSE
+  }
+  applier = lapply
+  if (verbose) {
+    if (requireNamespace("pbapply", quietly = TRUE)) {
+      applier = pbapply::pblapply
+    }
+  }
+  from = applier(from, function(x) {
     as(x, "NiftiMatrix")
   })
   hdr = nifti_header(from[[1]])
@@ -164,9 +174,21 @@ setAs(
     stopifnot(all(ndims == ndims[1]))
     ndims = unique(ndims)
     hdr = nifti_header(from[[1]])
+
+    verbose = attr(from, "verbose")
+    if (is.null(verbose)) {
+      verbose = FALSE
+    }
+    applier = lapply
+    if (verbose) {
+      if (requireNamespace("pbapply", quietly = TRUE)) {
+        applier = pbapply::pblapply
+      }
+    }
+
     # Adapted from
     # https://support.bioconductor.org/p/107051/
-    from = lapply(from, function(x) {
+    from = applier(from, function(x) {
       dim(x) = c(dim(x), 1)
       x = DelayedArray::aperm(x, perm = (ndims + 1):1)
       x

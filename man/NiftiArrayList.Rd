@@ -4,13 +4,15 @@
 \alias{NiftiArrayList}
 \title{Write NiftiArray Object}
 \usage{
-NiftiArrayList(x, ...)
+NiftiArrayList(x, ..., verbose = FALSE)
 }
 \arguments{
 \item{x}{a character or list of objects to be called with
 \link{writeNiftiArray}}
 
 \item{...}{additional arguments to pass to \link{NiftiArray}}
+
+\item{verbose}{show progress bars if \code{pbapply} package installed.}
 }
 \value{
 A list of class \code{NiftiArrayList}, which is a
@@ -24,6 +26,13 @@ nii_fname = system.file("extdata",
 "example.nii.gz", package = "RNifti")
 nii_fname = rep(nii_fname, 3)
 res = NiftiArrayList(nii_fname)
+if (requireNamespace("pbapply", quietly = TRUE)) {
+   res = NiftiArrayList(nii_fname, verbose = TRUE)
+} else {
+   testthat::expect_warning({
+   res = NiftiArrayList(nii_fname, verbose = TRUE)
+   })
+}
 testthat::expect_is(res, "NiftiArrayList")
 mat = as(res, "NiftiMatrix")
 arr = as(res, "NiftiArray")
