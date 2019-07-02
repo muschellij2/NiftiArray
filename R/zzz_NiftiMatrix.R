@@ -71,9 +71,14 @@ setMethod("matrixClass", "NiftiArray", function(x) "NiftiMatrix")
 setAs("NiftiArray", "NiftiMatrix", function(from) {
   dfrom = dim(from)
   nd = length(dfrom)
+  if (nd > 4) {
+    stop(paste0("NiftiMatrix from NiftiArray not ",
+                "defined for > 4 dimensions!"))
+  }
+  dfrom = c(dfrom, rep(1, 4 - nd))
   if (nd > 2) {
     hdr = nifti_header(from)
-    mat = matrix(from, ncol = 1)
+    mat = matrix(from, ncol = dfrom[4])
     writeNiftiArray(mat, header = hdr)
   } else {
     new("NiftiMatrix", from)

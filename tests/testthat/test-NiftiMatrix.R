@@ -6,6 +6,11 @@ h5_fname = tempfile(fileext = ".h5")
 img = RNifti::readNifti(nii_fname)
 img_hdr = nifti_header(img)
 
+nii_4d = system.file("extdata",
+                     "example_4d.nii.gz",
+                     package = "RNifti")
+
+
 check_array = function(x) {
   testthat::expect_is(x, "NiftiArray")
   testthat::expect_is(x, "HDF5Array")
@@ -41,7 +46,21 @@ testthat::test_that("Operations and DelayedArray give header", {
 
 })
 
+testthat::test_that("4D NiftiMatrix Example", {
 
+  res = writeNiftiArray(nii_4d)
+  nd = length(dim(res))
+  mat = as(res, "NiftiMatrix")
+  testthat::expect_equal(ncol(mat), dim(res)[4])
+  testthat::expect_is(mat, "NiftiMatrix")
+  testthat::expect_equal(DelayedArray::matrixClass(mat), "NiftiMatrix")
+  check_array(mat)
 
+  back_res = as(mat, "NiftiArray")
+  testthat::expect_equal(dim(back_res), dim(res))
+  check_array(back_res)
 
+  as(back_res, "niftiImage")
+
+})
 
