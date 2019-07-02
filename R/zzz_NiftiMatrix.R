@@ -69,17 +69,40 @@ setMethod("matrixClass", "NiftiArray", function(x) "NiftiMatrix")
 #' @name coerce
 #' @export
 setAs("NiftiArray", "NiftiMatrix", function(from) {
+  # from = res
   dfrom = dim(from)
   nd = length(dfrom)
   if (nd > 4) {
     stop(paste0("NiftiMatrix from NiftiArray not ",
                 "defined for > 4 dimensions!"))
   }
-  dfrom = c(dfrom, rep(1, 4 - nd))
+  dfrom = c(dfrom, rep(1L, 4 - nd))
+  out_dim = c(prod(dfrom[seq(3)]), dfrom[seq(4, length(dfrom))])
+  out_dim = as.integer(out_dim)
   if (nd > 2) {
     hdr = nifti_header(from)
-    mat = matrix(from, ncol = dfrom[4])
-    writeNiftiArray(mat, header = hdr)
+    # if (utils::packageVersion("HDF5Array") >= package_version("1.13.3")) {
+    #   # 1.13.3
+    #   # stop("Not implemented yet!")
+    #   dim(from) = dfrom
+    #   from = writeNiftiArray(from)
+    #   from@dim = out_dim
+    #   from = HDF5Array::ReshapedHDF5Array(
+    #     filepath = from@seed@filepath,
+    #     name = from@seed@name,
+    #     dim = out_dim)
+    #   # needed from .niftiArraySeed_from_HDF5ArraySeed
+    #   from@chunkdim = NULL
+    #   from = .niftiArraySeed_from_HDF5ArraySeed(
+    #     seed = from,
+    #     header = hdr)
+    #   from = NiftiArray(from)
+    #   # as(from, "NiftiArray")
+    #   from = as(from, "NiftiMatrix")
+    # } else {
+      mat = matrix(from, ncol = dfrom[4])
+      writeNiftiArray(mat, header = hdr)
+    # }
   } else {
     new("NiftiMatrix", from)
   }

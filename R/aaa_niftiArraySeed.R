@@ -121,6 +121,14 @@ NiftiArraySeed <- function(
 
     seed = HDF5Array::HDF5ArraySeed(
         filepath, name = name, type = type)
+    .niftiArraySeed_from_HDF5ArraySeed(seed, header_name = header_name,
+                                       header = header)
+}
+
+
+.niftiArraySeed_from_HDF5ArraySeed = function(seed,
+                                              header_name = "header",
+                                              header = NULL) {
     args = list(
         filepath = seed@filepath,
         name = seed@name,
@@ -129,7 +137,7 @@ NiftiArraySeed <- function(
         chunkdim = seed@chunkdim
     )
     if (is.null(header)) {
-        hdr = rhdf5::h5read(filepath, name = header_name)
+        hdr = rhdf5::h5read(seed@filepath, name = header_name)
     } else {
         hdr = header
     }
@@ -143,4 +151,5 @@ NiftiArraySeed <- function(
     args = c(args, hdr)
     args = c("NiftiArraySeed", args )
     do.call(S4Vectors::new2, args = args)
+
 }
