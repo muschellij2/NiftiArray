@@ -53,8 +53,7 @@ NiftiArray <- function(
     } else {
         seed <- NiftiArraySeed(
             filepath, name = name,
-            header_name = header_name,
-            type = type,
+            header_name = header_name, type = type,
             header = header)
     }
     DelayedArray::DelayedArray(seed)

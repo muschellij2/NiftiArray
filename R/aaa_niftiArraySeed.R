@@ -100,8 +100,7 @@ setClass("NiftiMatrix", contains = c("NiftiArray", "DelayedMatrix"))
 #' res2 = NiftiArraySeed(nii_fname, header = hdr)
 NiftiArraySeed <- function(
     filepath,
-    name = "image",
-    header_name = "hdr",
+    name = "image", header_name = "hdr",
     type=NA,
     header = NULL) {
     # for filepath for .nii.gz
@@ -113,8 +112,7 @@ NiftiArraySeed <- function(
         x = RNifti::readNifti(filepath)
         filepath = tempfile(fileext = ".h5")
         writeNiftiArray(x, filepath = filepath,
-                        name = name,
-                        header_name = header_name,
+                        name = name, header_name = header_name,
                         header = header)
         rm(x); gc()
     }
