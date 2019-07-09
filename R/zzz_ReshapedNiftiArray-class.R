@@ -135,7 +135,7 @@ ReshapedNiftiArray <- function(
 setClass("ReshapedNiftiMatrix", contains = c("ReshapedNiftiArray"))
 
 ### Required for DelayedArray internal business.
-setMethod("matrixClass", "ReshapedNiftiArray", function(x) "ReshapedNiftiMatrix")
+setMethod("matrixClass", "ReshapedNiftiArray", function(x) "ReshapedHDF5Matrix")
 
 
 #' @rdname NiftiArray
