@@ -3,6 +3,8 @@
 export(NiftiArray)
 export(NiftiArrayList)
 export(NiftiArraySeed)
+export(ReshapedNiftiArray)
+export(ReshapedNiftiArraySeed)
 export(coerce)
 export(nifti_header)
 export(writeNiftiArray)

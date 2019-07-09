@@ -29,7 +29,8 @@ setMethod("nifti_header", "NiftiArray", function(image) {
 #' @aliases nifti_header,NiftiArrayList-method
 setMethod("nifti_header", "NiftiArrayList", function(image) {
   nii_seeds = vapply(image, function(x) {
-    is(x, "NiftiArray") | is(x, "NiftiArraySeed")
+    xx = is(x, "NiftiArray") | is(x, "NiftiArraySeed")
+    xx = xx | is(x, "ReshapedNiftiArraySeed") | is(x, "ReshapedNiftiArray")
   }, FUN.VALUE = logical(1))
   if (!any(nii_seeds)) {
     stop("No images in NiftiArrayList are NiftiArray or NiftiArraySeed")
@@ -51,7 +52,8 @@ setMethod("nifti_header", "DelayedArray", function(image) {
   }
   if (!is.null(seeds)) {
     nii_seeds = vapply(seeds, function(x) {
-      is(x, "NiftiArray") | is(x, "NiftiArraySeed")
+      xx = is(x, "NiftiArray") | is(x, "NiftiArraySeed")
+      xx = xx | is(x, "ReshapedNiftiArraySeed") | is(x, "ReshapedNiftiArray")
     }, FUN.VALUE = logical(1))
     if (!any(nii_seeds)) {
       stop(paste0("No seeds in DelayedArray are NiftiArray ",
@@ -89,11 +91,7 @@ setMethod("nifti_header", "ANY", function(image) {
   RNifti::niftiHeader(image)
 })
 
-
-#' @rdname nifti_header
-#' @aliases nifti_header,NiftiArraySeed-method
-#' @export
-setMethod("nifti_header", "NiftiArraySeed", function(image) {
+.nifti_header_from_seed = function(image) {
   out = list(
     sizeof_hdr = image@sizeof_hdr,
     dim_info = image@dim_info,
@@ -136,12 +134,14 @@ setMethod("nifti_header", "NiftiArraySeed", function(image) {
   attr(out, "pixdim") = image@pixdim[2:(2 + ndim - 1)]
   attr(out, "pixunits") = pixunits(out$xyzt_units)
   class(out) = "niftiHeader"
-  # aa = attributes(RNifti::niftiHeader(out))
-  # attr(out, "pixdim") = attr(aa, "pixdim")
-  # attr(out, "imagedim") = attr(aa, "imagedim")
-  # attr(out, "pixunits") = attr(aa, "pixunits")
   out
-})
+}
+
+#' @rdname nifti_header
+#' @aliases nifti_header,NiftiArraySeed-method
+#' @export
+setMethod("nifti_header", "NiftiArraySeed", .nifti_header_from_seed)
+
 
 # setMethod("sizeof_hdr", "NiftiArraySeed", function(object) object@sizeof_hdr)
 # setMethod("dim_info", "NiftiArraySeed", function(object) object@dim_info)

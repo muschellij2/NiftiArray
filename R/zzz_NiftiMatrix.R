@@ -81,28 +81,21 @@ setAs("NiftiArray", "NiftiMatrix", function(from) {
   out_dim = as.integer(out_dim)
   if (nd > 2) {
     hdr = nifti_header(from)
-    # if (utils::packageVersion("HDF5Array") >= package_version("1.13.3")) {
-    #   # 1.13.3
-    #   # stop("Not implemented yet!")
-    #   dim(from) = dfrom
-    #   from = writeNiftiArray(from)
-    #   from@dim = out_dim
-    #   from = HDF5Array::ReshapedHDF5Array(
-    #     filepath = from@seed@filepath,
-    #     name = from@seed@name,
-    #     dim = out_dim)
-    #   # needed from .niftiArraySeed_from_HDF5ArraySeed
-    #   from@chunkdim = NULL
-    #   from = .niftiArraySeed_from_HDF5ArraySeed(
-    #     seed = from,
-    #     header = hdr)
-    #   from = NiftiArray(from)
-    #   # as(from, "NiftiArray")
-    #   from = as(from, "NiftiMatrix")
-    # } else {
+    if (utils::packageVersion("HDF5Array") >= package_version("1.13.3")) {
+      #   # 1.13.3
+      #   # stop("Not implemented yet!")
+      dim(from) = dfrom
+      from = writeNiftiArray(from)
+      A <- ReshapedNiftiArray(filepath = from@seed@filepath,
+                              name = from@seed@name,
+                              dim = out_dim)
+      A = as(A, "NiftiMatrix")
+      return(from)
+    } else {
       mat = matrix(from, ncol = dfrom[4])
-      writeNiftiArray(mat, header = hdr)
-    # }
+      mat = writeNiftiArray(mat, header = hdr)
+      return(mat)
+    }
   } else {
     new("NiftiMatrix", from)
   }
