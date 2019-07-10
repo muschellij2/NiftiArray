@@ -1,6 +1,7 @@
 setClass("ReshapedNiftiArraySeed",
          contains = c("ReshapedHDF5ArraySeed"),
          slots = c(
+           header_name = "character",
            sizeof_hdr = "integer",
            dim_info = "integer",
            dim_ = "integer",
@@ -63,6 +64,7 @@ setClass("ReshapedNiftiArray",
 #' A <- ReshapedNiftiArray(
 #'   filepath = res@seed@filepath,
 #'   name = res@seed@name,
+#'   header_name = res@seed@header_name,
 #'   dim=c(prod(dim(res)[1:3]), 1))
 ReshapedNiftiArraySeed <- function(filepath, name = "image",
                                    header_name = "hdr", dim,

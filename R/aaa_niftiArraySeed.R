@@ -19,6 +19,7 @@ setClass(
     "NiftiArraySeed",
     contains = "HDF5ArraySeed",
     slots = c(
+        header_name = "character",
         sizeof_hdr = "integer",
         dim_info = "integer",
         dim_ = "integer",
@@ -119,9 +120,11 @@ NiftiArraySeed <- function(
 
     seed = HDF5Array::HDF5ArraySeed(
         filepath, name = name, type = type)
-    .niftiArraySeed_from_HDF5ArraySeed(seed, header_name = header_name,
-                                       header = header,
-                                       seed_type = "NiftiArraySeed")
+    .niftiArraySeed_from_HDF5ArraySeed(
+        seed,
+        header_name = header_name,
+        header = header,
+        seed_type = "NiftiArraySeed")
 }
 
 
@@ -138,7 +141,12 @@ NiftiArraySeed <- function(
     args$chunkdim = seed@chunkdim
 
     if (is.null(header)) {
-        hdr = rhdf5::h5read(seed@filepath, name = header_name)
+        if (header_name %in% rhdf5::h5ls(seed@filepath)$name) {
+            hdr = rhdf5::h5read(seed@filepath, name = header_name)
+        } else {
+            warning("Header not found in filepath, using default header")
+            hdr = RNifti::niftiHeader()
+        }
     } else {
         hdr = header
     }
@@ -150,7 +158,7 @@ NiftiArraySeed <- function(
     }
     hdr = lapply(hdr, as.vector)
     args = c(args, hdr)
+    args$header_name = header_name
     args = c(seed_type, args )
     do.call(S4Vectors::new2, args = args)
-
 }

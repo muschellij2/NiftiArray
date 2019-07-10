@@ -4,7 +4,7 @@ nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")
 n_images = 5L
 fnames = rep(nii_fname, n_images)
 res = NiftiArrayList(fnames)
-
+from = res
 
 testthat::test_that("Converting NiftiArrayList to NiftiMatrix", {
 

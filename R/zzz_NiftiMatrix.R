@@ -69,7 +69,7 @@ setMethod("matrixClass", "NiftiArray", function(x) "NiftiMatrix")
 #' @name coerce
 #' @export
 setAs("NiftiArray", "NiftiMatrix", function(from) {
-  # from = res
+  # from = res[[1]]
   dfrom = dim(from)
   nd = length(dfrom)
   if (nd > 4) {
@@ -85,12 +85,15 @@ setAs("NiftiArray", "NiftiMatrix", function(from) {
       #   # 1.13.3
       #   # stop("Not implemented yet!")
       dim(from) = dfrom
-      from = writeNiftiArray(from)
-      A <- ReshapedNiftiArray(filepath = from@seed@filepath,
-                              name = from@seed@name,
-                              dim = out_dim)
-      A = as(A, "NiftiMatrix")
-      return(from)
+      from = writeNiftiArray(from, header = )
+      # does not give resshaped niftimatrix
+      mat <- ReshapedNiftiArray(
+        filepath = from@seed@filepath,
+        name = from@seed@name,
+        dim = out_dim,
+        header = hdr)
+      mat = as(mat, "NiftiMatrix")
+      return(mat)
     } else {
       mat = matrix(from, ncol = dfrom[4])
       mat = writeNiftiArray(mat, header = hdr)
@@ -117,10 +120,10 @@ setAs("NiftiArrayList", "NiftiMatrix", function(from) {
       applier = pbapply::pblapply
     }
   }
+  hdr = nifti_header(from[[1]])
   from = applier(from, function(x) {
     as(x, "NiftiMatrix")
   })
-  hdr = nifti_header(from[[1]])
   from = do.call(DelayedArray::acbind, args = from)
   writeNiftiArray(from, header = hdr)
 })

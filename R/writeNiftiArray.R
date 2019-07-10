@@ -88,7 +88,6 @@ writeNiftiArray <- function(x, filepath = tempfile(fileext = ".h5"),
     class(hdr) = "list"
     attributes(hdr) = aa
     rhdf5::h5write(hdr, file = filepath, name = header_name) # write header
-
     rhdf5::h5closeAll() # Close all open HDF5 handles in the environment
   }
   NiftiArray(filepath, name = name, header_name = header_name)

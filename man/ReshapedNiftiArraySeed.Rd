@@ -45,5 +45,6 @@ res = writeNiftiArray(res)
 A <- ReshapedNiftiArray(
   filepath = res@seed@filepath,
   name = res@seed@name,
+  header_name = res@seed@header_name,
   dim=c(prod(dim(res)[1:3]), 1))
 }

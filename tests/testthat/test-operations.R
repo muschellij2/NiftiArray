@@ -113,3 +113,4 @@ testthat::test_that("Operations and DelayedArray give header", {
     4:1)
 
 })
+
