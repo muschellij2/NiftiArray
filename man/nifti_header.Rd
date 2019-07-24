@@ -36,14 +36,15 @@ nifti_header(image)
 \S4method{nifti_header}{ReshapedNiftiArraySeed}(image)
 }
 \arguments{
-\item{image}{An image or NiftiArray object.}
+\item{image}{A file path to a NIfTI image on disk or a NiftiArray object loaded locally in R.}
 }
 \value{
 A list of class \code{niftiHeader}, which has
-the header information.
+the NIfTI header information.
 }
 \description{
-Dump a NIfTI header
+Extracts the contents of a NIfTI header, from a NIfTI file on disk or a
+\code{NiftiArray} object loaded into R.
 }
 \examples{
 nii_fname = system.file("extdata",

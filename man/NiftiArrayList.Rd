@@ -2,7 +2,7 @@
 % Please edit documentation in R/NiftiArrayList.R
 \name{NiftiArrayList}
 \alias{NiftiArrayList}
-\title{Write NiftiArray Object}
+\title{Write Multiple NiftiArray Objects into a List}
 \usage{
 NiftiArrayList(x, ..., verbose = FALSE)
 }
@@ -19,7 +19,8 @@ A list of class \code{NiftiArrayList}, which is a
 list if \code{NiftiArray} objects
 }
 \description{
-Write NiftiArray Object
+Reads multiple NiftiArray objects into elements of a list.
+TODO: Add more detail based on BUG fix.
 }
 \examples{
 nii_fname = system.file("extdata",

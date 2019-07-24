@@ -26,14 +26,17 @@ has_nifti_header = function(x) {
   seeds
 }
 
-#' Dump a NIfTI header
+#' @title Dump a NIfTI header
+#'
+#' @description Extracts the contents of a NIfTI header, from a NIfTI file on disk or a
+#' `NiftiArray` object loaded into R.
 #'
 #' @rdname nifti_header
 #' @aliases nifti_header,NiftiArraySeed-method
-#' @param image An image or NiftiArray object.
+#' @param image A file path to a NIfTI image on disk or a NiftiArray object loaded locally in R.
 #'
 #' @return A list of class `niftiHeader`, which has
-#' the header information.
+#' the NIfTI header information.
 #' @export
 #' @examples
 #' nii_fname = system.file("extdata",
