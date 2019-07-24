@@ -14,16 +14,12 @@ Status](https://ci.appveyor.com/api/projects/status/github/muschellij2/NiftiArra
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/NiftiArray)](https://cran.r-project.org/package=NiftiArray)
 [![Codecov test
 coverage](https://codecov.io/gh/muschellij2/NiftiArray/branch/master/graph/badge.svg)](https://codecov.io/gh/muschellij2/NiftiArray?branch=master)
-[![Coverage
-Status](https://img.shields.io/coveralls/muschellij2/NiftiArray.svg)](https://coveralls.io/r/muschellij2/NiftiArray?branch=master)
 
 avalcarcel9 badges: [![Build
 Status](https://travis-ci.org/avalcarcel9/NiftiArray.svg?branch=master)](https://travis-ci.org/avalcarcel9/NiftiArray)
 [![AppVeyor Build
 Status](https://ci.appveyor.com/api/projects/status/github/avalcarcel9/NiftiArray?branch=master&svg=true)](https://ci.appveyor.com/project/avalcarcel9/NiftiArray)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/NiftiArray)](https://cran.r-project.org/package=NiftiArray)
-[![Coverage
-Status](https://img.shields.io/coveralls/avalcarcel9/NiftiArray.svg)](https://coveralls.io/r/avalcarcel9/NiftiArray?branch=master)
 [![Coveralls test
 coverage](https://coveralls.io/repos/github/avalcarcel9/NiftiArray/badge.svg)](https://coveralls.io/r/avalcarcel9/NiftiArray?branch=master)
 <!-- badges: end -->
@@ -34,6 +30,11 @@ convenient and memory-efficient containers for on-disk representation of
 NIfTI objects. We allow for `DelayedArray` extensions and support all
 operations supported by DelayedArray objects. These operations can be
 either delayed or block-processed.
+
+You can find a package vignette
+[here](https://github.com/avalcarcel9/NiftiArray/blob/master/vignettes/niftiarray-vignette.Rmd).
+
+<!-- TODO: Put the package down site eventually-->
 
 ## Installation
 
@@ -49,8 +50,6 @@ We are working to get a stable version on
 [Neuroconductor](www.neuroconductor.org).
 
 ## Example
-
-![](https://media.giphy.com/media/1ken0zzzL79NPy3QZj/giphy.gif)
 
 Here we use the example image from `RNifti`. We use the
 `writeNiftiArray` function to create a `NiftiArray` object:
@@ -90,7 +89,7 @@ We can see the file on disk that was written out:
 
 ``` r
 res@seed@filepath
-#> [1] "/private/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T/RtmpeZeN1H/file105ee4c4af80e.h5"
+#> [1] "/private/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T/Rtmp0WocfN/file1585a6fe4f86b.h5"
 ```
 
 We see that the object is a low-memory `DelayedArray`:

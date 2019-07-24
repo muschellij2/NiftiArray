@@ -4,7 +4,6 @@ output:
     rmarkdown::html_document:
       base_format: rmarkdown::html_vignette
       keep_md: true
-    rmarkdown::github_document:
 vignette: >
   %\VignetteIndexEntry{Using NiftiArray}
   %\VignetteEngine{knitr::rmarkdown}
