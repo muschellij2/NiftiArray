@@ -82,6 +82,7 @@ library(NiftiArray)
 library(neurobase)
 library(pbapply)
 library(profmem)
+library(remotes)
 library(RNifti)
 library(stringr)
 library(tibble)
@@ -152,6 +153,9 @@ fileinfo = tibble::tibble(url = c('https://raw.githubusercontent.com/muschellij2
 temp = neurobase::readnii(fileinfo$nii_destination[1])
 ```
 
+
+
+
 These data are $182 \times 218 \times 182$ with pixel dimension $1 mm \times 1mm \times 1 mm$. On disk they take up approximately 5MB as nii.gz compressed objects. When loaded into R, each image consumes approximately 55 MB worth of memory.  
 
 <!-- TODO: Melissa fill these in.. something generally average... and make the last sentence of the previous paragraph.
@@ -174,7 +178,7 @@ Let's convert and write the first subject's data as a temporary file to the temp
 
 ```{r}
 # Write the NiftiArray object to disk and load it into R as patient01
-patient01 = NiftiArray::writeNiftiArray(fileinfo$nii_destination[1], filepath = tempfile(pattern = 'NiftiArraypatient01', fileext = ".h5"))
+patient01 = NiftiArray::writeNiftiArray(fileinfo$nii_destination[1], filepath = fileinfo$hdf5_destination[1], overwrite = TRUE)
 # List the files in the temporary directory
 # Change tempdir() to the directory where you saved the files if you adapted hdf5_destination
 list.files(tempdir())
@@ -259,6 +263,23 @@ rm(patient01)
 ## Multiple NIfTI Images to `NiftiArray` Objects
 
 In practice we have a list of subjects we want to convert from NIfTIs to `NiftiArray` objects and load into R. 
+
+### `mapply` `NiftiArray::writeNiftiArray`
+
+<!-- 
+TODO: Fix NiftiArrayList to properly call lapply when given an nii to convert and a specific file path to convert it to. Then remove this section and add it to the NiftiArrayList code.
+-->
+
+To write out multiple NIfTI images on disk to the required HDF5 files we can simply `mapply` over `NiftiArray::writeNiftiArray`.
+
+```{r}
+# Write out the entire filepath of NIfTI objects to HDF5s
+all_patients_list = mapply(function(x,y) writeNiftiArray(x = x, filepath = y, overwrite = TRUE), fileinfo$nii_destination, fileinfo$hdf5_destination)
+# List the files in the temporary directory -- all subjects should be there as NIfTIs and .h5s
+list.files(tempdir())
+# Remove all_patients_list since we will load it in a different way later
+rm(all_patients_list)
+```
 
 ### `NiftiArray::NiftiArrayList`
 
@@ -450,7 +471,7 @@ neurobase::ortho2(median_nii)
 neurobase::ortho2(mean_nii)
 ```
 
-You could write these objects out as NIfTI's using `RNifti::writeNifti`
+You could write these objects out as NIfTIs using `RNifti::writeNifti`
 
 # Comparison of `NiftiArray` to Traditional Methods
 
