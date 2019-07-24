@@ -24,6 +24,8 @@ Status](https://ci.appveyor.com/api/projects/status/github/avalcarcel9/NiftiArra
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/NiftiArray)](https://cran.r-project.org/package=NiftiArray)
 [![Coverage
 Status](https://img.shields.io/coveralls/avalcarcel9/NiftiArray.svg)](https://coveralls.io/r/avalcarcel9/NiftiArray?branch=master)
+[![Coveralls test
+coverage](https://coveralls.io/repos/github/avalcarcel9/NiftiArray/badge.svg)](https://coveralls.io/r/avalcarcel9/NiftiArray?branch=master)
 <!-- badges: end -->
 
 The goal of `NiftiArray` is to allow for memory efficient fast random
@@ -88,14 +90,14 @@ We can see the file on disk that was written out:
 
 ``` r
 res@seed@filepath
-#> [1] "/private/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T/RtmpyVro02/file794dc397671.h5"
+#> [1] "/private/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T/RtmpeZeN1H/file105ee4c4af80e.h5"
 ```
 
 We see that the object is a low-memory `DelayedArray`:
 
 ``` r
 object.size(res)
-#> 8688 bytes
+#> 8912 bytes
 ```
 
 You can also simply use the `NiftiArray` function of the NIfTI filename
@@ -175,7 +177,7 @@ Now that the image is a matrix, we can bind the columns together,
 mat = DelayedArray::acbind(mat, mat, mat, mat)
 testthat::expect_is(mat, "DelayedMatrix")
 object.size(mat)
-#> 33672 bytes
+#> 34568 bytes
 ```
 
 Now that we have the data in a `DelayedMatrix` class, we can use the

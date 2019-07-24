@@ -14,21 +14,32 @@ Description: Nifti Objects as DelayedArrays backended in HDF5.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Suggests: 
-    knitr,
-    rmarkdown,
-    testthat,
-    DelayedMatrixStats,
-    covr,
-    pbapply
 VignetteBuilder: knitr
 Imports: 
+    DelayedArray,
     HDF5Array (>= 1.13.3),
+    methods,
     rhdf5,
     RNifti,
-    DelayedArray,
-    S4Vectors,
-    methods
+    S4Vectors
+Suggests: 
+    covr,
+    DelayedMatrixStats,
+    dplyr,
+    forcats,
+    ggplot2,
+    gridExtra,
+    kableExtra,
+    knitr,
+    microbenchmark,
+    neurobase,
+    pbapply,
+    profmem,
+    rmarkdown,
+    stringr,
+    testthat,
+    tibble,
+    tidyr
 RoxygenNote: 6.1.1
 URL: https://github.com/muschellij2/NiftiArray
 BugReports: https://github.com/muschellij2/NiftiArray/issues

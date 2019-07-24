@@ -30,6 +30,7 @@ avalcarcel9 badges:
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/avalcarcel9/NiftiArray?branch=master&svg=true)](https://ci.appveyor.com/project/avalcarcel9/NiftiArray)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/NiftiArray)](https://cran.r-project.org/package=NiftiArray)
 [![Coverage Status](https://img.shields.io/coveralls/avalcarcel9/NiftiArray.svg)](https://coveralls.io/r/avalcarcel9/NiftiArray?branch=master)
+[![Coveralls test coverage](https://coveralls.io/repos/github/avalcarcel9/NiftiArray/badge.svg)](https://coveralls.io/r/avalcarcel9/NiftiArray?branch=master)
 <!-- badges: end -->
 
 The goal of `NiftiArray` is to allow for memory efficient fast random access of NIfTI objects. `NiftiArray` is an R package that allows for convenient and memory-efficient containers for on-disk representation of NIfTI objects. We allow for `DelayedArray` extensions and support all operations supported by DelayedArray objects. These operations can be either delayed or block-processed.

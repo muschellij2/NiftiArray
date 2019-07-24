@@ -1,6 +1,10 @@
 ---
 title: "NiftiArray: Fast Random Access of NIfTI Objects"
-output: rmarkdown::html_vignette
+output: 
+    rmarkdown::html_document:
+      base_format: rmarkdown::html_vignette
+      keep_md: true
+    rmarkdown::github_document:
 vignette: >
   %\VignetteIndexEntry{Using NiftiArray}
   %\VignetteEngine{knitr::rmarkdown}
@@ -56,7 +60,7 @@ You can install the development version of `NiftiArray` from [GitHub](https://gi
 remotes::install_github("muschellij2/NiftiArray")
 ```
 
-We are working to get a stable version on [Neuroconductor](www.neuroconductor.org) and [Bioconductor](www.bioconductor.org).
+We are working to get a stable version on [Neuroconductor](www.neuroconductor.org).
 
 # Tutorial
 
@@ -644,5 +648,7 @@ Write pseudo code to do this
 - Do stuff across list or convert to matrix using acbind
 - Calculate voxel level stuff maybe using DelayedMatrixStats or other stuff
 - Convert back to an NiftiImage
+
+TODO: 4D tutorial?
 
 -->
