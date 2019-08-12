@@ -1,9 +1,6 @@
 ---
 title: "NiftiArray: Fast Random Access of NIfTI Objects"
-output: 
-    rmarkdown::html_document:
-      base_format: rmarkdown::html_vignette
-      keep_md: true
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Using NiftiArray}
   %\VignetteEngine{knitr::rmarkdown}
