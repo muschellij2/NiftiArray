@@ -9,13 +9,16 @@ writeNiftiArray(x, filepath = tempfile(fileext = ".h5"),
   level = NULL, verbose = FALSE, header = NULL, overwrite = FALSE)
 }
 \arguments{
-\item{x}{a \code{niftiImage} object or file path to \code{NIfTI} file}
+\item{x}{A \code{niftiImage} object loaded into R or a file path to a \code{NIfTI} file.}
 
-\item{filepath}{The path (single character string) to the HDF5 file.}
+\item{filepath}{The file path (single character string) of where to save the HDF5
+file converted from the NIfTI input as \code{x}. By default creates a temporary file on disk.}
 
-\item{name}{The name of the image in the HDF5 file.}
+\item{name}{The name of the group for the NIfTI image in the HDF5 file. Default is set to "image".
+Unless you have to other "image" groups in the HDF5 file there is no need to change default settings.}
 
-\item{header_name}{The name of the header in the HDF5 file.}
+\item{header_name}{The name of the group for the NIfTI header in the HDF5 file. Default is set to "header".
+Unless you have to other "header" groups in the HDF5 file there is no need to change default settings.}
 
 \item{chunkdim}{The dimensions of the chunks to use for
 writing the data to disk.
@@ -27,20 +30,21 @@ passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
 \item{verbose}{Display progress,
 passed to \link[HDF5Array:writeHDF5Array]{HDF5Array::writeHDF5Array}.}
 
-\item{header}{list of header information;
-overrides call of \link{nifti_header}}
+\item{header}{List of header information;
+overrides call of \link{nifti_header}.}
 
-\item{overwrite}{\code{FALSE} by default and an in the
+\item{overwrite}{\code{FALSE} by default. In the
 event that an HDF5 file already exists for \code{filepath}
 input then do not overwrite it.
-If set to \code{TRUE} then the "image" and "hdr" objects at this file
+If set to \code{TRUE} then the \code{name} and \code{header_name} group objects in the HDF5 file
 location will overwrite.}
 }
 \value{
 A \code{NiftiArray} object.
 }
 \description{
-Write NiftiArray Object
+A function for writing NIfTI objects on disk to a specifically formated HDF5 file.
+The HDF5 file will include a group for the NIfTI image or array and the NIfTI header.
 }
 \examples{
 nii_fname = system.file("extdata", "example.nii.gz", package = "RNifti")

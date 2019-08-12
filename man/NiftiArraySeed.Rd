@@ -11,18 +11,24 @@ NiftiArraySeed(filepath, name = "image", header_name = "hdr",
   type = NA, header = NULL)
 }
 \arguments{
-\item{filepath}{The path (as a single character string) to the HDF5
-file where the dataset is located.}
+\item{filepath}{The path (as a single character string) to the NIfTI or HDF5
+file where the dataset is located. If a path to the NIfTI is provided we call
+\code{\link[RNifti:readNifti]{RNifti::readNifti()}} and \code{\link[NiftiArray:writeNiftiArray]{NiftiArray::writeNiftiArray()}} to convert to the HDF5
+and more memory and time are used. If a path to a HDF5 file the data is simply loaded
+into R as an object of class \link{NiftiArray}. A path to the HDF5 file is more memory and time efficient.}
 
-\item{name}{The name of the image in the HDF5 file.}
+\item{name}{The name of the group for the NIfTI image in the HDF5 file. Default is set to "image".
+Unless you have to other "image" groups in the HDF5 file there is no need to change default settings.}
 
-\item{header_name}{The name of the header in the HDF5 file.}
+\item{header_name}{The name of the group for the NIfTI header in the HDF5 file. Default is set to "header".
+Unless you have to other "header" groups in the HDF5 file there is no need to change default settings.}
 
 \item{type}{\code{NA} or the R atomic type, passed to
-\code{\link[HDF5Array:HDF5Array]{HDF5Array::HDF5Array()}}}
+\code{\link[HDF5Array:HDF5Array]{HDF5Array::HDF5Array()}} corresponding to the type of the HDF5 dataset. Default is set to \code{NA}.
+Unless you want different types of HDF5 storage files there is no need to change default settings.}
 
-\item{header}{list of header information to override call of
-\link{nifti_header}}
+\item{header}{List of NIfTI header information to override call of
+\link{nifti_header}.}
 }
 \value{
 A \code{NiftiArraySeed} object

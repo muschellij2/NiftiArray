@@ -1,4 +1,7 @@
-#' Write NiftiArray Object
+#' @title Write Multiple NiftiArray Objects into a List
+#'
+#' @description Reads multiple NiftiArray objects into elements of a list.
+#' TODO: Add more detail based on BUG fix.
 #'
 #' @param x a character or list of objects to be called with
 #' [writeNiftiArray]

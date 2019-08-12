@@ -1,9 +1,15 @@
-#' Write NiftiArray Object
+#' @title Write NiftiArray Object
 #'
-#' @param x a `niftiImage` object or file path to `NIfTI` file
-#' @param filepath The path (single character string) to the HDF5 file.
-#' @param name The name of the image in the HDF5 file.
-#' @param header_name The name of the header in the HDF5 file.
+#' @description A function for writing NIfTI objects on disk to a specifically formated HDF5 file.
+#' The HDF5 file will include a group for the NIfTI image or array and the NIfTI header.
+#'
+#' @param x A `niftiImage` object loaded into R or a file path to a `NIfTI` file.
+#' @param filepath The file path (single character string) of where to save the HDF5
+#' file converted from the NIfTI input as `x`. By default creates a temporary file on disk.
+#' @param name The name of the group for the NIfTI image in the HDF5 file. Default is set to "image".
+#' Unless you have to other "image" groups in the HDF5 file there is no need to change default settings.
+#' @param header_name The name of the group for the NIfTI header in the HDF5 file. Default is set to "header".
+#' Unless you have to other "header" groups in the HDF5 file there is no need to change default settings.
 #' @param chunkdim The dimensions of the chunks to use for
 #' writing the data to disk.
 #' Passed to [HDF5Array::writeHDF5Array].
@@ -11,12 +17,12 @@
 #' passed to [HDF5Array::writeHDF5Array].
 #' @param verbose Display progress,
 #' passed to [HDF5Array::writeHDF5Array].
-#' @param header list of header information;
-#' overrides call of [nifti_header]
-#' @param overwrite `FALSE` by default and an in the
+#' @param header List of header information;
+#' overrides call of [nifti_header].
+#' @param overwrite `FALSE` by default. In the
 #' event that an HDF5 file already exists for `filepath`
 #' input then do not overwrite it.
-#' If set to `TRUE` then the "image" and "hdr" objects at this file
+#' If set to `TRUE` then the `name` and `header_name` group objects in the HDF5 file
 #' location will overwrite.
 #'
 #' @return A `NiftiArray` object.

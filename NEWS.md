@@ -4,3 +4,4 @@
 * Making changes for `BiocCheck`.
 * Added `NiftiArrayList` to help for large number of images.
 * First release.
+* Added a vignette.
