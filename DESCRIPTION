@@ -1,6 +1,6 @@
 Package: NiftiArray
 Title: HDF5 Delayed Array for Nifti Objects
-Version: 0.99.2.9000
+Version: 0.99.2.9001
 Authors@R: c(person(given = "John",
                     family = "Muschelli",
                     email = "muschellij2@gmail.com",
@@ -16,7 +16,7 @@ Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
 Imports: 
-    DelayedArray,
+    DelayedArray (>= 0.10.0),
     HDF5Array (>= 1.13.3),
     methods,
     rhdf5,
