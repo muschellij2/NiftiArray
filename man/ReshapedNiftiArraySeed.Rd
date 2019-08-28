@@ -6,10 +6,10 @@
 \title{Virtually reshaped Nifti images as DelayedArray objects}
 \usage{
 ReshapedNiftiArraySeed(filepath, name = "image", header_name = "hdr",
-  dim, type = NA, header = NULL)
+  dim, type = NA, header = NULL, chunkdim = NULL)
 
 ReshapedNiftiArray(filepath, name = "image", header_name = "hdr", dim,
-  type = NA, header = NULL)
+  type = NA, header = NULL, chunkdim = NULL)
 }
 \arguments{
 \item{filepath}{The path (as a single character string) to the NIfTI or HDF5
@@ -35,6 +35,8 @@ Unless you want different types of HDF5 storage files there is no need to change
 
 \item{header}{List of NIfTI header information to override call of
 \link{nifti_header}.}
+
+\item{chunkdim}{the reshaped dimensions of chunks.}
 }
 \value{
 An object of class \code{ReshapedNiftiArraySeed}

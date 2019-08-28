@@ -108,7 +108,7 @@ setClass("NiftiMatrix", contains = c("NiftiArray", "DelayedMatrix"))
 NiftiArraySeed <- function(
     filepath,
     name = "image", header_name = "hdr",
-    type=NA,
+    type = NA,
     header = NULL) {
     # for filepath for .nii.gz
     fe = tools::file_ext(filepath)

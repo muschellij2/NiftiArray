@@ -53,6 +53,7 @@ setClass("ReshapedNiftiArray",
 #' reshaping i.e. the reshaping that is virtually applied upfront
 #' to the HDF5 dataset when the ReshapedHDF5Array object gets constructed.
 #' See [HDF5Array::ReshapedHDF5Array].
+#' @param chunkdim the reshaped dimensions of chunks.
 #' @return An object of class `ReshapedNiftiArraySeed`
 #' @export
 #' @examples
@@ -68,7 +69,9 @@ setClass("ReshapedNiftiArray",
 #'   dim=c(prod(dim(res)[1:3]), 1))
 ReshapedNiftiArraySeed <- function(filepath, name = "image",
                                    header_name = "hdr", dim,
-                                   type = NA, header = NULL){
+                                   type = NA, header = NULL,
+                                   chunkdim = NULL
+){
 
 
   seed <- NiftiArraySeed(filepath, name = name,
@@ -77,11 +80,16 @@ ReshapedNiftiArraySeed <- function(filepath, name = "image",
   hdr = nifti_header(seed)
   reshaped_dim <- as.integer(dim)
   collapse_along <- HDF5Array:::find_dims_to_collapse(reshaped_dim, seed@dim)
-  if (is.null(seed@chunkdim)) {
-    reshaped_chunkdim <- NULL
+  if (is.null(chunkdim)) {
+    if (is.null(seed@chunkdim)) {
+      reshaped_chunkdim <- NULL
+    } else {
+      reshaped_chunkdim <-  HDF5Array:::collapse_dims(seed@chunkdim,
+                                                      collapse_along)
+      reshaped_chunkdim <- as.integer(reshaped_chunkdim)
+    }
   } else {
-    reshaped_chunkdim <-  HDF5Array:::collapse_dims(seed@chunkdim,
-                                                    collapse_along)
+    reshaped_chunkdim = chunkdim
     reshaped_chunkdim <- as.integer(reshaped_chunkdim)
   }
   args = list(reshaped_chunkdim = reshaped_chunkdim,
@@ -115,7 +123,8 @@ setMethod("DelayedArray", "ReshapedNiftiArraySeed",
 ReshapedNiftiArray <- function(
   filepath, name = "image",
   header_name = "hdr", dim,
-  type = NA, header = NULL){
+  type = NA, header = NULL,
+  chunkdim = NULL){
 
   if (is(filepath, "NiftiArraySeed")) {
     seed <- filepath
@@ -124,7 +133,7 @@ ReshapedNiftiArray <- function(
       filepath, name = name,
       dim = dim,
       header_name = header_name, type = type,
-      header = header)
+      header = header, chunkdim = chunkdim)
   }
   DelayedArray::DelayedArray(seed)
 }
