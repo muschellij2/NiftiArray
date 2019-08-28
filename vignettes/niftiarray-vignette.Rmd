@@ -232,6 +232,8 @@ Notice this is exactly the same `patient01` object as before.
 Though a `NiftiArray` object you'll interact with R and the `NiftiArray` as you would a normal image. 
 
 ```{r}
+# TODO explain subsetting and loading into memory
+# drop = FALSE - https://github.com/Bioconductor/DelayedArray/issues/6
 # Index a single voxel
 patient01[90, 89, 101]
 # Change the value of the background voxels from 0 to -100
@@ -251,6 +253,7 @@ Due to the block processing some functionality will not be available.
 ```{r}
 # Due to the blcok calculation some base functions will not be available
 # The table function errors
+# TODO: Does DelayedArray have a table? DelayedArray::table()
 # table(patient01)
 ```
 
