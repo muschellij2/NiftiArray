@@ -1,23 +1,16 @@
 ---
 title: "NiftiArray: Fast Random Access of NIfTI Objects"
-output: rmarkdown::html_vignette
+output: 
+    rmarkdown::html_document:
+      base_format: rmarkdown::html_vignette
+      keep_md: true
 vignette: >
   %\VignetteIndexEntry{Using NiftiArray}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-    collapse = TRUE,
-    comment = "#>",
-    eval = TRUE,
-    echo = TRUE,
-    fig.width = 7,
-    fig.height = 5,
-    fig.align = 'center'
-)
-```
+
 
 This page is still under construction! Check back later for updates!
 
@@ -51,9 +44,28 @@ TODO:  Add a GRAPHIC OF NIFTI TO NIFTIARRAY TO MATRIX TO CBINDED MATRIX TO DELAY
 
 You can install the development version of `NiftiArray` from [GitHub](https://github.com/) using the following:
 
-```{r, eval = FALSE}
+
+```r
 # install.packages('remotes')
 remotes::install_github("muschellij2/NiftiArray")
+#> Downloading GitHub repo muschellij2/NiftiArray@master
+#> RNifti (0.11.0 -> 0.11.1) [CRAN]
+#> Rcpp   (1.0.1  -> 1.0.2 ) [CRAN]
+#> Skipping 8 packages ahead of CRAN: DelayedArray, HDF5Array, rhdf5, S4Vectors, BiocGenerics, IRanges, BiocParallel, Rhdf5lib
+#> Installing 2 packages: RNifti, Rcpp
+#> 
+#> The downloaded binary packages are in
+#> 	/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/downloaded_packages
+#>      checking for file ‘/private/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T/Rtmpa8l31S/remotes971b26d665c9/muschellij2-NiftiArray-e68faa4/DESCRIPTION’ ...  ✔  checking for file ‘/private/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T/Rtmpa8l31S/remotes971b26d665c9/muschellij2-NiftiArray-e68faa4/DESCRIPTION’
+#>   ─  preparing ‘NiftiArray’:
+#>      checking DESCRIPTION meta-information ...  ✔  checking DESCRIPTION meta-information
+#>   ─  checking for LF line-endings in source and make files and shell scripts
+#>   ─  checking for empty or unneeded directories
+#>   ─  building ‘NiftiArray_0.99.1.9000.tar.gz’
+#>      Warning: invalid uid value replaced by that for user 'nobody'
+#>    Warning: invalid gid value replaced by that for user 'nobody'
+#>      
+#> 
 ```
 
 We are working to get a stable version on [Neuroconductor](www.neuroconductor.org).
@@ -64,7 +76,8 @@ We are working to get a stable version on [Neuroconductor](www.neuroconductor.or
 
 The packages you will need to load for use with this tutorial are below:
 
-```{r, warning = FALSE, message = FALSE}
+
+```r
 library(DelayedArray)
 library(DelayedMatrixStats)
 library(dplyr)
@@ -83,7 +96,6 @@ library(RNifti)
 library(stringr)
 library(tibble)
 library(tidyr)
-nifti_header = NiftiArray::nifti_header
 ```
 
 ## Data
@@ -92,41 +104,81 @@ nifti_header = NiftiArray::nifti_header
 
 This tutorial will use data found [here](https://github.com/muschellij2/open_ms_data/tree/master/cross_sectional/MNI). A description of the data is available [here](https://johnmuschelli.com/open_ms_data/#process-registered-to-mni). In this tutorial we will use the FLAIR images for subjects 1-5. We will download the data to a [temporary folder](https://en.wikipedia.org/wiki/Temporary_folder). If you prefer to load these to a specific directory feel free to change the `nii_destination` in `fileinfo` to the file path where you'd like to save each image.
 
-```{r}
-# Information about URL to download and where to save the image locally in destiation
-urls = file.path("https://raw.githubusercontent.com", 
-                     "muschellij2", "open_ms_data", "master", 
-                     "cross_sectional", "MNI", paste0("patient0", 1:5),
-                     "FLAIR_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz")
-nii_destinations = sapply(urls, function(x) tempfile(fileext = ".nii.gz"))
-hdf5_destinations = sub(".nii.gz", ".h5", nii_destinations)
 
-fileinfo = tibble::tibble(url = urls, 
-                          nii_destination = nii_destinations,
-                          hdf5_destination = hdf5_destinations)
+```r
+# Information about URL to download and where to save the image locally in destiation
+fileinfo = tibble::tibble(url = c('https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient01/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz',
+                                  'https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient02/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz',
+                                  'https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient03/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz',
+                                  'https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient04/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz',
+                                  'https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient05/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz'),
+          nii_destination = c(tempfile(pattern = "flairpatient01", tmpdir = tempdir(), 
+                                       fileext = ".nii.gz"),
+                              tempfile(pattern = "flairpatient02", tmpdir = tempdir(), 
+                                       fileext = ".nii.gz"),
+                              tempfile(pattern = "flairpatient03", tmpdir = tempdir(), 
+                                       fileext = ".nii.gz"),
+                              tempfile(pattern = "flairpatient04", tmpdir = tempdir(), 
+                                       fileext = ".nii.gz"),
+                              tempfile(pattern = "flairpatient05", tmpdir = tempdir(), 
+                                       fileext = ".nii.gz")),
+          hdf5_destination = c(tempfile(pattern = "flairpatient01", tmpdir = tempdir(), 
+                                        fileext = ".h5"),
+                               tempfile(pattern = "flairpatient02", tmpdir = tempdir(), 
+                                        fileext = ".h5"),
+                               tempfile(pattern = "flairpatient03", tmpdir = tempdir(), 
+                                        fileext = ".h5"),
+                               tempfile(pattern = "flairpatient04", tmpdir = tempdir(), 
+                                        fileext = ".h5"),
+                               tempfile(pattern = "flairpatient05", tmpdir = tempdir(), 
+                                        fileext = ".h5")))
+
 # Download all the files to the nii_destination
-mapply(function(x,y) {
-    download.file(url = x, destfile = y)
-}, fileinfo$url, fileinfo$nii_destination)
+mapply(function(x,y) download.file(url = x, destfile = y), fileinfo$url,fileinfo$nii_destination)
+#> https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient01/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz 
+#>                                                                                                                                                               0 
+#> https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient02/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz 
+#>                                                                                                                                                               0 
+#> https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient03/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz 
+#>                                                                                                                                                               0 
+#> https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient04/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz 
+#>                                                                                                                                                               0 
+#> https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient05/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz 
+#>                                                                                                                                                               0
 
 # Notice the files were saved to a temporary directory on your machine
 # Change tempdir() to the directory where you saved the files if you adapted nii_destination
 list.files(tempdir(), full.names = TRUE)
+#>  [1] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/downloaded_packages"                                                                                         
+#>  [2] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/file971b24b2959d"                                                                                            
+#>  [3] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/file971b3f77996b"                                                                                            
+#>  [4] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/file971b44f9605a"                                                                                            
+#>  [5] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/file971b487c893d"                                                                                            
+#>  [6] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/file971b58932639"                                                                                            
+#>  [7] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/file971b681628f8"                                                                                            
+#>  [8] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/flairpatient01971b74a39c7a.nii.gz"                                                                           
+#>  [9] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/flairpatient02971b21764969.nii.gz"                                                                           
+#> [10] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/flairpatient03971b5ccd9da8.nii.gz"                                                                           
+#> [11] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/flairpatient04971b3f29b031.nii.gz"                                                                           
+#> [12] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/flairpatient05971b49ee815c.nii.gz"                                                                           
+#> [13] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/HDF5Array_dataset_creation_global_counter"                                                                   
+#> [14] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/HDF5Array_dump"                                                                                              
+#> [15] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/HDF5Array_dump_files_global_counter"                                                                         
+#> [16] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/HDF5Array_dump_log"                                                                                          
+#> [17] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/HDF5Array_dump_names_global_counter"                                                                         
+#> [18] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/libloc_213_e619d72855daa0d8.rds"                                                                             
+#> [19] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/remotes971b26d665c9"                                                                                         
+#> [20] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/repos_https%3A%2F%2Fbioconductor.org%2Fpackages%2F3.9%2Fbioc%2Fbin%2Fmacosx%2Fel-capitan%2Fcontrib%2F3.6.rds"
+#> [21] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/repos_https%3A%2F%2Fbioconductor.org%2Fpackages%2F3.9%2Fbioc%2Fsrc%2Fcontrib.rds"                            
+#> [22] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/repos_https%3A%2F%2Fbioconductor.org%2Fpackages%2F3.9%2Fdata%2Fannotation%2Fsrc%2Fcontrib.rds"               
+#> [23] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/repos_https%3A%2F%2Fbioconductor.org%2Fpackages%2F3.9%2Fdata%2Fexperiment%2Fsrc%2Fcontrib.rds"               
+#> [24] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/repos_https%3A%2F%2Fbioconductor.org%2Fpackages%2F3.9%2Fworkflows%2Fsrc%2Fcontrib.rds"                       
+#> [25] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/repos_https%3A%2F%2Fcran.rstudio.com%2Fbin%2Fmacosx%2Fel-capitan%2Fcontrib%2F3.6.rds"                        
+#> [26] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/repos_https%3A%2F%2Fcran.rstudio.com%2Fsrc%2Fcontrib.rds"                                                    
+#> [27] "/var/folders/sq/x3htb34928bfn79jk3qksqg56zmf39/T//Rtmpa8l31S/temp_libpath971b22e6b575"
 ```
 
-```{r, echo = FALSE}
-if (Sys.info()[["user"]] == 'alval') {
-    # Information about URL to download and where to save the image locally in destiation
-    data_dir = '/Users/alval/Box/rpackages/NiftiArray_examples/data/'
-    fileinfo = tibble::tibble(
-        url = fileinfo$url,
-        nii_destination = paste0(data_dir, "nii/", 
-                                 "flairpatient0", 1:5, ".nii.gz"),
-        hdf5_destination = paste0(data_dir, "hdf5/", 
-                                  "flairpatient0", 1:5, ".h5"))
-}
-temp = neurobase::readnii(fileinfo$nii_destination[1])
-```
+
 
 
 
@@ -151,31 +203,101 @@ __Note__: When calling `NiftiArray::writeNiftiArray` you are converting the NIfT
 
 Let's convert and write the first subject's data as a temporary file to the temporary directory on-disk. This temporary file will have the pattern `NiftiArraypatient01` in the file name. Again, if you'd like to save this object somewhere other than the temporary directory simply change the `filepath` option in `NiftiArray::writeNiftiArray`.
 
-```{r}
+
+```r
 # Write the NiftiArray object to disk and load it into R as patient01
-patient01 = NiftiArray::writeNiftiArray(
-    fileinfo$nii_destination[1], 
-    filepath = fileinfo$hdf5_destination[1], 
-    overwrite = TRUE)
-file.exists(fileinfo$hdf5_destination[1])
+patient01 = NiftiArray::writeNiftiArray(fileinfo$nii_destination[1], filepath = fileinfo$hdf5_destination[1], overwrite = TRUE)
+# List the files in the temporary directory
+# Change tempdir() to the directory where you saved the files if you adapted hdf5_destination
+list.files(tempdir())
+#>  [1] "downloaded_packages"                                                                                         
+#>  [2] "file971b24b2959d"                                                                                            
+#>  [3] "file971b3f77996b"                                                                                            
+#>  [4] "file971b44f9605a"                                                                                            
+#>  [5] "file971b487c893d"                                                                                            
+#>  [6] "file971b58932639"                                                                                            
+#>  [7] "file971b681628f8"                                                                                            
+#>  [8] "flairpatient01971b74a39c7a.nii.gz"                                                                           
+#>  [9] "flairpatient02971b21764969.nii.gz"                                                                           
+#> [10] "flairpatient03971b5ccd9da8.nii.gz"                                                                           
+#> [11] "flairpatient04971b3f29b031.nii.gz"                                                                           
+#> [12] "flairpatient05971b49ee815c.nii.gz"                                                                           
+#> [13] "HDF5Array_dataset_creation_global_counter"                                                                   
+#> [14] "HDF5Array_dump"                                                                                              
+#> [15] "HDF5Array_dump_files_global_counter"                                                                         
+#> [16] "HDF5Array_dump_log"                                                                                          
+#> [17] "HDF5Array_dump_names_global_counter"                                                                         
+#> [18] "libloc_213_e619d72855daa0d8.rds"                                                                             
+#> [19] "remotes971b26d665c9"                                                                                         
+#> [20] "repos_https%3A%2F%2Fbioconductor.org%2Fpackages%2F3.9%2Fbioc%2Fbin%2Fmacosx%2Fel-capitan%2Fcontrib%2F3.6.rds"
+#> [21] "repos_https%3A%2F%2Fbioconductor.org%2Fpackages%2F3.9%2Fbioc%2Fsrc%2Fcontrib.rds"                            
+#> [22] "repos_https%3A%2F%2Fbioconductor.org%2Fpackages%2F3.9%2Fdata%2Fannotation%2Fsrc%2Fcontrib.rds"               
+#> [23] "repos_https%3A%2F%2Fbioconductor.org%2Fpackages%2F3.9%2Fdata%2Fexperiment%2Fsrc%2Fcontrib.rds"               
+#> [24] "repos_https%3A%2F%2Fbioconductor.org%2Fpackages%2F3.9%2Fworkflows%2Fsrc%2Fcontrib.rds"                       
+#> [25] "repos_https%3A%2F%2Fcran.rstudio.com%2Fbin%2Fmacosx%2Fel-capitan%2Fcontrib%2F3.6.rds"                        
+#> [26] "repos_https%3A%2F%2Fcran.rstudio.com%2Fsrc%2Fcontrib.rds"                                                    
+#> [27] "temp_libpath971b22e6b575"
 ```
 
 The NIfTI was converted to the the NIfTI-HDF5 file format and saved on disk. It was also loaded into memory is a `NiftiArray` object and returned in R as `patient01`. `patient01` is of class `NiftiArray`. 
 
-```{r}
+
+```r
 class(patient01)
+#> [1] "NiftiArray"
+#> attr(,"package")
+#> [1] "NiftiArray"
 ```
 
 The NIfTI header is conserved in the `NiftiArray` class in case you ever need to quality control or convert a `NiftiArray` back to a NIfTI image. You can extract the header information from a `NiftiArray` object using the `NiftiArray::nifti_header` function.
 
-```{r}
+
+```r
 # Print the NIfTI header associated with patient01
 NiftiArray::nifti_header(patient01)
+#> NIfTI-1 header
+#>     sizeof_hdr: 348
+#>       dim_info: 0
+#>            dim: 3  182  218  182  1  1  1  1
+#>      intent_p1: 0
+#>      intent_p2: 0
+#>      intent_p3: 0
+#>    intent_code: 0
+#>       datatype: 64
+#>         bitpix: 64
+#>    slice_start: 0
+#>         pixdim: -1  1  1  1  0  0  0  0
+#>     vox_offset: 352
+#>      scl_slope: 0
+#>      scl_inter: 0
+#>      slice_end: 0
+#>     slice_code: 0
+#>     xyzt_units: 2
+#>        cal_max: 1312.557
+#>        cal_min: -68.21912
+#> slice_duration: 0
+#>        toffset: 0
+#>        descrip: 
+#>       aux_file: 
+#>     qform_code: 1
+#>     sform_code: 0
+#>      quatern_b: 0
+#>      quatern_c: 1
+#>      quatern_d: 0
+#>      qoffset_x: 90
+#>      qoffset_y: -126
+#>      qoffset_z: -72
+#>         srow_x: 0  0  0  0
+#>         srow_y: 0  0  0  0
+#>         srow_z: 0  0  0  0
+#>    intent_name: 
+#>          magic: n+1
 ```
 
 In the next section we will re-load `patient01` using the `NiftiArray::NiftiArray` function. Let's remove the `patient01` object from R memory so we can re-load it later.
 
-```{r}
+
+```r
 # Remove patient01 object from R memory so it can be re-loaded later
 rm(patient01)
 ```
@@ -188,7 +310,8 @@ When you want to work with `NiftiArray` objects for lots of subjects frequently 
 
 The `NiftiArray` function can be used to load an on disk NIfTI object into R as a `NiftiArray`. 
 
-```{r}
+
+```r
 # Reload patient01 using NiftiArray::NiftiArray from a NIfTI object on disk
 patient01 = NiftiArray::NiftiArray(fileinfo$nii_destination[1])
 # Remove patient01 object from R memory so it can be re-loaded later
@@ -197,7 +320,8 @@ rm(patient01)
 
 It can also load the `NiftiArray` object from the HDF5 file converted using `NiftiArray::writeNiftiArray` object on-disk and stored as a HDF5 it can be loaded into R using the `NiftiArray::NiftiArray` function. 
 
-```{r}
+
+```r
 # Reload patient01 using NiftiArray::NiftiArray from a HDF5 object on disk
 patient01 = NiftiArray::NiftiArray(fileinfo$hdf5_destination[1])
 ```
@@ -208,34 +332,37 @@ Notice this is exactly the same `patient01` object as before.
 
 Though a `NiftiArray` object you'll interact with R and the `NiftiArray` as you would a normal image. 
 
-```{r}
-# TODO explain subsetting and loading into memory
-# drop = FALSE - https://github.com/Bioconductor/DelayedArray/issues/6
+
+```r
 # Index a single voxel
 patient01[90, 89, 101]
+#> [1] 97.87328
 # Change the value of the background voxels from 0 to -100
 ## Note: Normally this should be done using a brain mask but this is just an example for this tutorial
 patient01[patient01 == 0] = -100
 # Summary stats
 min(patient01)
+#> [1] -100
 max(patient01)
+#> [1] 1312.557
 # Image operations
 patient_sum = patient01 + patient01
 # Notice it did sum the NiftiArray objects voxel-wise across objects
 patient_sum[90, 89, 101]
+#> [1] 195.7466
 ```
 
 Due to the block processing some functionality will not be available.
 
-```{r}
-# Due to the block calculation some base functions will not be available
+
+```r
+# Due to the blcok calculation some base functions will not be available
 # The table function errors
-# TODO: Does DelayedArray have a table? DelayedArray::table()
 # table(patient01)
-table(c(patient01 > 5))
 ```
 
-```{r}
+
+```r
 # Remove patient01 object from R memory so it can be re-loaded later
 rm(patient01)
 ```
@@ -252,13 +379,40 @@ TODO: Fix NiftiArrayList to properly call lapply when given an nii to convert an
 
 To write out multiple NIfTI images on disk to the required HDF5 files we can simply `mapply` over `NiftiArray::writeNiftiArray`.
 
-```{r}
+
+```r
 # Write out the entire filepath of NIfTI objects to HDF5s
-all_patients_list = mapply(function(x,y) {
-    writeNiftiArray(x = x, filepath = y, overwrite = TRUE)
-}, fileinfo$nii_destination, fileinfo$hdf5_destination)
+all_patients_list = mapply(function(x,y) writeNiftiArray(x = x, filepath = y, overwrite = TRUE), fileinfo$nii_destination, fileinfo$hdf5_destination)
 # List the files in the temporary directory -- all subjects should be there as NIfTIs and .h5s
-list.files(tempdir(), pattern = ".(nii|h5)")
+list.files(tempdir())
+#>  [1] "downloaded_packages"                                                                                         
+#>  [2] "file971b24b2959d"                                                                                            
+#>  [3] "file971b3f77996b"                                                                                            
+#>  [4] "file971b44f9605a"                                                                                            
+#>  [5] "file971b487c893d"                                                                                            
+#>  [6] "file971b58932639"                                                                                            
+#>  [7] "file971b681628f8"                                                                                            
+#>  [8] "file971b79794025.h5"                                                                                         
+#>  [9] "flairpatient01971b74a39c7a.nii.gz"                                                                           
+#> [10] "flairpatient02971b21764969.nii.gz"                                                                           
+#> [11] "flairpatient03971b5ccd9da8.nii.gz"                                                                           
+#> [12] "flairpatient04971b3f29b031.nii.gz"                                                                           
+#> [13] "flairpatient05971b49ee815c.nii.gz"                                                                           
+#> [14] "HDF5Array_dataset_creation_global_counter"                                                                   
+#> [15] "HDF5Array_dump"                                                                                              
+#> [16] "HDF5Array_dump_files_global_counter"                                                                         
+#> [17] "HDF5Array_dump_log"                                                                                          
+#> [18] "HDF5Array_dump_names_global_counter"                                                                         
+#> [19] "libloc_213_e619d72855daa0d8.rds"                                                                             
+#> [20] "remotes971b26d665c9"                                                                                         
+#> [21] "repos_https%3A%2F%2Fbioconductor.org%2Fpackages%2F3.9%2Fbioc%2Fbin%2Fmacosx%2Fel-capitan%2Fcontrib%2F3.6.rds"
+#> [22] "repos_https%3A%2F%2Fbioconductor.org%2Fpackages%2F3.9%2Fbioc%2Fsrc%2Fcontrib.rds"                            
+#> [23] "repos_https%3A%2F%2Fbioconductor.org%2Fpackages%2F3.9%2Fdata%2Fannotation%2Fsrc%2Fcontrib.rds"               
+#> [24] "repos_https%3A%2F%2Fbioconductor.org%2Fpackages%2F3.9%2Fdata%2Fexperiment%2Fsrc%2Fcontrib.rds"               
+#> [25] "repos_https%3A%2F%2Fbioconductor.org%2Fpackages%2F3.9%2Fworkflows%2Fsrc%2Fcontrib.rds"                       
+#> [26] "repos_https%3A%2F%2Fcran.rstudio.com%2Fbin%2Fmacosx%2Fel-capitan%2Fcontrib%2F3.6.rds"                        
+#> [27] "repos_https%3A%2F%2Fcran.rstudio.com%2Fsrc%2Fcontrib.rds"                                                    
+#> [28] "temp_libpath971b22e6b575"
 # Remove all_patients_list since we will load it in a different way later
 rm(all_patients_list)
 ```
@@ -267,20 +421,24 @@ rm(all_patients_list)
 
 The `NiftiArray::NiftiArrayList` function converts and writes `NiftiArray` objects if the `x` input is of class NIfTI and then loads all the `NiftiArray` objects into R in a `list` as a new class `NiftiArrayList`. That is, every element in the list is a `NiftiArray`. 
 
-```{r}
+
+```r
 # Convert, write to temporary disk, and load all_patients_list using NiftiArray::NiftiArrayList
 all_patients_list = NiftiArray::NiftiArrayList(fileinfo$nii_destination)
 # Show the class is NiftiArrayList
 class(all_patients_list)
+#> [1] "NiftiArrayList"
 ```
 
 The `NiftiArray::NiftiArrayList` class also simply loads the `NiftiArray` objects as a `list` if the `x` input is a set of file paths to the HDF5 `NiftiArray` files on disk.
 
-```{r}
+
+```r
 # Load all_patients_list using NiftiArray::NiftiArrayList
 all_patients_list = NiftiArray::NiftiArrayList(fileinfo$hdf5_destination)
 # Show the class is NiftiArrayList
 class(all_patients_list)
+#> [1] "NiftiArrayList"
 ```
 
 At this point, we have all 5 patients loaded into R as a `NiftiArrayList` object. We can now convert the `NiftiArray` object to a `NiftiMatrix` object in order to run voxel-wise calculations.
@@ -294,21 +452,65 @@ TODO Melissa if possible put function operations for accessing voxels or info ac
 
 The `NiftiArray` object is a 3 dimensional array structure that allows for memory efficient delayed random access of NIfTI objects. The `NiftiMatrix` is the result of concatenating the `NiftiArray`. Similar to `NiftiArray`, `NiftiMatrix` is a new class object. Rather than an array structure we can strung out the image to a vector. In the code below, we convert a `NiftiArray` to a `NiftiMatrix` for one patient. We then verify that the class of this object is in fact a `NiftiMatrix`, has only a single column, index the vector to print some values, and validate that the object size is as memory efficient as the `NiftiMatrix`.
 
-```{r} 
+
+```r
 # Reload patient01 using NiftiArray::NiftiArray from a HDF5 object on disk
 patient01 = NiftiArray::NiftiArray(fileinfo$hdf5_destination[[1]])
 # Convert the NiftiArray to a NiftiMatrix
 patient01_niimat = as(patient01, "NiftiMatrix")
 # Verify patient01_niimat is of class NiftiMatrix
 class(patient01_niimat)
+#> [1] "NiftiMatrix"
+#> attr(,"package")
+#> [1] "NiftiArray"
 # Notice the NiftiMatrix has only 1 column
 dim(patient01_niimat)
+#> [1] 7221032       1
 # Index the NiftiMatrix like a vector
 patient01_niimat[40000:40010]
+#>  [1] 0 0 0 0 0 0 0 0 0 0 0
 # The NiftiMatrix object is still memory efficient
 object.size(patient01_niimat)
+#> 8872 bytes
 # Obtain the NIfTI header
 NiftiArray::nifti_header(patient01_niimat)
+#> NIfTI-1 header
+#>     sizeof_hdr: 348
+#>       dim_info: 0
+#>            dim: 3  182  218  182  1  1  1  1
+#>      intent_p1: 0
+#>      intent_p2: 0
+#>      intent_p3: 0
+#>    intent_code: 0
+#>       datatype: 64
+#>         bitpix: 64
+#>    slice_start: 0
+#>         pixdim: -1  1  1  1  0  0  0  0
+#>     vox_offset: 352
+#>      scl_slope: 0
+#>      scl_inter: 0
+#>      slice_end: 0
+#>     slice_code: 0
+#>     xyzt_units: 2
+#>        cal_max: 1312.557
+#>        cal_min: -68.21912
+#> slice_duration: 0
+#>        toffset: 0
+#>        descrip: 
+#>       aux_file: 
+#>     qform_code: 1
+#>     sform_code: 0
+#>      quatern_b: 0
+#>      quatern_c: 1
+#>      quatern_d: 0
+#>      qoffset_x: 90
+#>      qoffset_y: -126
+#>      qoffset_z: -72
+#>         srow_x: 0  0  0  0
+#>         srow_y: 0  0  0  0
+#>         srow_z: 0  0  0  0
+#>    intent_name: 
+#>          magic: n+1
 ```
 
 In this example, we showed the result of converting a single patients `NiftiArray` to a `NiftiMatrix` but it will be more useful to create a `NiftiMatrix` with multiple subjects. 
@@ -317,19 +519,67 @@ In this example, we showed the result of converting a single patients `NiftiArra
 
 In order to use tools like `DelayedArray` and `DelayedMatrixStats` to calculate voxel-level statistics across multiple subjects we need to create a big `NiftiMatrix`. That is, each row will represent a voxel and each column a new subject. To do this, we can take advantage of the `NiftiArrayList` class.
 
-```{r}
+
+```r
 # Show all_patients_list is of NiftiArrayList
 class(all_patients_list)
+#> [1] "NiftiArrayList"
 # Convert each element in the list to a NiftiMatrix
 all_patients_niimat = pbapply::pblapply(all_patients_list, as, "NiftiMatrix")
 # Concatenate the list elements column-wise
 all_patients_niimat  = do.call(DelayedArray::acbind, all_patients_niimat)
 # Show the matrix
 head(all_patients_niimat)
+#> <6 x 5> DelayedMatrix object of type "double":
+#>      [,1] [,2] [,3] [,4] [,5]
+#> [1,]    0    0    0    0    0
+#> [2,]    0    0    0    0    0
+#> [3,]    0    0    0    0    0
+#> [4,]    0    0    0    0    0
+#> [5,]    0    0    0    0    0
+#> [6,]    0    0    0    0    0
 # Notice the dimension is all the voxels in the brain by the 5 patients we are working with
 dim(all_patients_niimat)
+#> [1] 7221032       5
 # Obtain the NIfTI header
 NiftiArray::nifti_header(all_patients_niimat)
+#> NIfTI-1 header
+#>     sizeof_hdr: 348
+#>       dim_info: 0
+#>            dim: 3  182  218  182  1  1  1  1
+#>      intent_p1: 0
+#>      intent_p2: 0
+#>      intent_p3: 0
+#>    intent_code: 0
+#>       datatype: 64
+#>         bitpix: 64
+#>    slice_start: 0
+#>         pixdim: -1  1  1  1  0  0  0  0
+#>     vox_offset: 352
+#>      scl_slope: 0
+#>      scl_inter: 0
+#>      slice_end: 0
+#>     slice_code: 0
+#>     xyzt_units: 2
+#>        cal_max: 775.0591
+#>        cal_min: -40.33138
+#> slice_duration: 0
+#>        toffset: 0
+#>        descrip: 
+#>       aux_file: 
+#>     qform_code: 1
+#>     sform_code: 0
+#>      quatern_b: 0
+#>      quatern_c: 1
+#>      quatern_d: 0
+#>      qoffset_x: 90
+#>      qoffset_y: -126
+#>      qoffset_z: -72
+#>         srow_x: 0  0  0  0
+#>         srow_y: 0  0  0  0
+#>         srow_z: 0  0  0  0
+#>    intent_name: 
+#>          magic: n+1
 ```
 
 
@@ -339,31 +589,75 @@ The `DelayedMatrixStats` package allows for row or column wise statistical opera
 
 Below we show a simple example obtaining the voxel level mean and median across subjects.
 
-```{r}
+
+```r
 # Calculate the voxel-wise  median across subjects
 voxel_medians = DelayedMatrixStats::rowMedians(all_patients_niimat)
 # Index the median vector
 voxel_medians[1043001]
+#> [1] 0
 # Show the class of voxel_medians
 class(voxel_medians)
+#> [1] "numeric"
 # Calculate the object size
 object.size(voxel_medians)
+#> 57768304 bytes
 ```
 
 Notice the resulting vector `voxel_medians` is not a `DelayedArray` or `NiftiArray` object but rather a normal `vector`. We can convert it to a `NiftiMatrix` so that it returns to a memory efficient object using `as`.
 
-```{r}
+
+```r
 # Convert the median vector back to a `NiftiMatrix`
 voxel_medians = as(voxel_medians, 'NiftiMatrix')
 # Notice the size is back to a memory efficient value
 object.size(voxel_medians)
+#> 8872 bytes
 # The header is no longer accurate though
 NiftiArray::nifti_header(voxel_medians)
+#> NIfTI-1 header
+#>     sizeof_hdr: 348
+#>       dim_info: 0
+#>            dim: 1  12072  1  1  1  1  1  1
+#>      intent_p1: 0
+#>      intent_p2: 0
+#>      intent_p3: 0
+#>    intent_code: 0
+#>       datatype: 64
+#>         bitpix: 64
+#>    slice_start: 0
+#>         pixdim: 0  1  1  0  0  0  0  0
+#>     vox_offset: 348
+#>      scl_slope: 0
+#>      scl_inter: 0
+#>      slice_end: 0
+#>     slice_code: 0
+#>     xyzt_units: 0
+#>        cal_max: 0
+#>        cal_min: 0
+#> slice_duration: 0
+#>        toffset: 0
+#>        descrip: 
+#>       aux_file: 
+#>     qform_code: 0
+#>     sform_code: 0
+#>      quatern_b: 0
+#>      quatern_c: 0
+#>      quatern_d: 0
+#>      qoffset_x: 0
+#>      qoffset_y: 0
+#>      qoffset_z: 0
+#>         srow_x: 0  0  0  0
+#>         srow_y: 0  0  0  0
+#>         srow_z: 0  0  0  0
+#>    intent_name: 
+#>          magic: n+1
 ```
 
 Notice the NIfTI header is no longer accurate when we coerce the normal vector to a `NiftiMatrix`.
 
-```{r}
+
+```r
 # Calculate the voxel-wise  mean across subjects
 voxel_means = DelayedMatrixStats::rowMeans2(all_patients_niimat)
 ```
@@ -381,41 +675,66 @@ So long as the object belongs to the classes available in `NiftiArray` (i.e. `Ni
 
 #### NiftiMatrix to NiftiArray
 
-```{r}
+
+```r
 class(patient01_niimat)
+#> [1] "NiftiMatrix"
+#> attr(,"package")
+#> [1] "NiftiArray"
 niimat2niiarr = as(patient01_niimat, "NiftiArray")
 class(niimat2niiarr)
+#> [1] "NiftiArray"
+#> attr(,"package")
+#> [1] "NiftiArray"
 ```
 
 #### `NiftiMatrix` to `niftiImage`
 
-```{r}
+
+```r
 class(patient01_niimat)
+#> [1] "NiftiMatrix"
+#> attr(,"package")
+#> [1] "NiftiArray"
 niimat2nii = as(patient01_niimat, "niftiImage")
 class(niimat2nii)
+#> [1] "niftiImage" "array"
 ```
 
 #### `NiftiArray` to `NiftiMatrix`
 
-```{r}
+
+```r
 class(patient01)
+#> [1] "NiftiArray"
+#> attr(,"package")
+#> [1] "NiftiArray"
 niiarr2niimat = as(patient01, "NiftiMatrix")
 class(niiarr2niimat)
+#> [1] "NiftiMatrix"
+#> attr(,"package")
+#> [1] "NiftiArray"
 ```
 
 #### `NiftiArray` to `niftiImage`
 
-```{r}
+
+```r
 class(patient01)
+#> [1] "NiftiArray"
+#> attr(,"package")
+#> [1] "NiftiArray"
 niiarr2nii = as(patient01, "niftiImage")
 class(niiarr2nii)
+#> [1] "niftiImage" "array"
 ```
 
 ### `DelayedMatrixStats` and Vectors to `NiftiArray`
 
 Converting between the objects returned from `DelayedMatrixStats` functions and `NiftiArray` objects is not as easy because the NIfTI header was lost in the calculations involved in `DelayedMatrixStats` functions. We must extract the header from previous object and then re-initialize the `NiftiArray`.
 
-```{r}
+
+```r
 # Median
 # Obtain the image header associated with the all_patients_list NiftiArrayList
 image_header = NiftiArray::nifti_header(all_patients_list)
@@ -423,10 +742,12 @@ image_header = NiftiArray::nifti_header(all_patients_list)
 median_arr = array(voxel_medians, dim = image_header$dim[2:4])
 # The object size of median_arr is normal because it is a normal array
 object.size(median_arr)
+#> 57768480 bytes
 # Convert the array to a NiftiArray and write it out to a temporary file
 median_niiarr = NiftiArray::writeNiftiArray(median_arr, header = image_header)
 # The object size is back to our efficient NiftiArray
 object.size(median_niiarr)
+#> 8888 bytes
 
 # Mean
 # Obtain the image header associated with the all_patients_list NiftiArrayList
@@ -435,23 +756,34 @@ image_header = NiftiArray::nifti_header(all_patients_list)
 mean_arr = array(voxel_means, dim = image_header$dim[2:4])
 # The object size of mean_arr is normal because it is a normal array
 object.size(mean_arr)
+#> 57768480 bytes
 # Convert the array to a NiftiArray and write it out to a temporary file
 mean_niiarr = NiftiArray::writeNiftiArray(mean_arr, header = image_header)
 # The object size is back to our efficient NiftiArray
 object.size(mean_niiarr)
+#> 8888 bytes
 ```
 
 Once a `NiftiArray` it is easy to create the `niftiImage` object.
 
-```{r}
+
+```r
 median_nii = as(median_niiarr, "niftiImage")
 mean_nii = as(mean_niiarr, "niftiImage")
 ```
 
-```{r}
-neurobase::ortho2(median_nii, pdim = nifti_header(median_nii)$pixdim)
-neurobase::ortho2(mean_nii, pdim = nifti_header(mean_nii)$pixdim)
+
+```r
+neurobase::ortho2(median_nii)
 ```
+
+<img src="niftiarray-vignette_files/figure-html/unnamed-chunk-29-1.png" style="display: block; margin: auto;" />
+
+```r
+neurobase::ortho2(mean_nii)
+```
+
+<img src="niftiarray-vignette_files/figure-html/unnamed-chunk-29-2.png" style="display: block; margin: auto;" />
 
 You could write these objects out as NIfTIs using `RNifti::writeNifti`
 
@@ -461,7 +793,8 @@ You could write these objects out as NIfTIs using `RNifti::writeNifti`
 
 ### Local Object Size
 
-```{r, echo = TRUE}
+
+```r
 # Calculate the a single patient object size using different NIfTI read functions
 memory = tibble::tibble(read_type = c('NiftiArray::NiftiArray', 
                                       'NiftiArray::writeNiftiArray', 
@@ -471,14 +804,14 @@ memory = tibble::tibble(read_type = c('NiftiArray::NiftiArray',
                                       object.size(NiftiArray::writeNiftiArray(fileinfo$nii_destination[1])),
                                       object.size(RNifti::readNifti(fileinfo$nii_destination[1])),
                                       object.size(neurobase::readnii(fileinfo$nii_destination[1]))),
-                       log_byte_size = log10(byte_size)) %>% 
+                       log_byte_size = log(byte_size)) %>% 
   dplyr::mutate(read_type = as.factor(read_type),
                 read_type = forcats::fct_reorder(read_type, byte_size, .desc = TRUE))
 
 # Table of memory
 knitr::kable(
   memory,
-  col.names = c('Read Function', 'Byte Size', 'log_10(Byte Size)'),
+  col.names = c('Read Function', 'Byte Size', 'log(Byte Size)'),
   format = 'html',
   digits = 2, 
   caption = 'Memory mapped in bytes from a single patients image read. 
@@ -489,7 +822,43 @@ knitr::kable(
   kableExtra::kable_styling("striped", full_width = FALSE) 
 ```
 
-```{r}
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>Memory mapped in bytes from a single patients image read. 
+  The image dimension is 182 by 218 by 182 with pixel dimension 1 mm by 1 mm by 1 mm. 
+  On disk the image is 4.9 MB.</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Read Function </th>
+   <th style="text-align:right;"> Byte Size </th>
+   <th style="text-align:right;"> log(Byte Size) </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> NiftiArray::NiftiArray </td>
+   <td style="text-align:right;"> 8888 </td>
+   <td style="text-align:right;"> 9.09 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> NiftiArray::writeNiftiArray </td>
+   <td style="text-align:right;"> 8888 </td>
+   <td style="text-align:right;"> 9.09 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> RNifti::readNifti </td>
+   <td style="text-align:right;"> 57769432 </td>
+   <td style="text-align:right;"> 17.87 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> neurobase::readnii </td>
+   <td style="text-align:right;"> 57777136 </td>
+   <td style="text-align:right;"> 17.87 </td>
+  </tr>
+</tbody>
+</table>
+
+
+```r
 # Bar graph in bytes
 ggplot(memory, aes(x = read_type, y = byte_size, fill = read_type)) +
   geom_bar(stat="identity") +
@@ -500,6 +869,11 @@ ggplot(memory, aes(x = read_type, y = byte_size, fill = read_type)) +
        subtitle = 'Image Dimension: 182 by 218 by 182, Pixel Dimension: 1 mm by 1 mm by 1 mm') +
   theme_minimal() +
   theme(plot.title = element_text(hjust=0.5), legend.position = 'none')
+```
+
+<img src="niftiarray-vignette_files/figure-html/unnamed-chunk-31-1.png" style="display: block; margin: auto;" />
+
+```r
 
 # Bar graph in log(bytes)
 ggplot(memory, aes(x = read_type, y = log_byte_size, fill = read_type)) +
@@ -511,7 +885,10 @@ ggplot(memory, aes(x = read_type, y = log_byte_size, fill = read_type)) +
        subtitle = 'Image Dimension: 182 by 218 by 182, Pixel Dimension: 1 mm by 1 mm by 1 mm') +
   theme_minimal() +
   theme(plot.title = element_text(hjust=0.5), legend.position = 'none')
+#> Warning: Ignoring unknown aesthetics: digits
 ```
+
+<img src="niftiarray-vignette_files/figure-html/unnamed-chunk-31-2.png" style="display: block; margin: auto;" />
 
 <!--
 # TODO: Melissa put these plots together -- use cowplot or gridExtra to clean up
@@ -524,7 +901,8 @@ ggplot(memory, aes(x = read_type, y = log_byte_size, fill = read_type)) +
 TODO Melissa add a scatter plot and line graph using the memory profile for each -- this is especially useful to show that writeNiftiArray uses more memory in the profile but the object is the same 
 -->
 
-```{r}
+
+```r
 # Initalize a list to store the memory profile
 memory_profile = list()
 # Memory profile of RNifti::readNifti()
@@ -543,7 +921,7 @@ memory_profile = dplyr::bind_rows(memory_profile) %>%
   tidyr::drop_na() %>% 
   dplyr::group_by(read_type) %>% 
   dplyr::mutate(x = dplyr::row_number())
-```  
+```
 
 <!-- 
 Melissa
@@ -551,16 +929,15 @@ Melissa
 # TODO WHY IS NIFTIARRAY FUNCTION THE SAME MEMORY AS WRITENIFTIARRAY
 -->
 
-```{r}
-ggplot(data=memory_profile, aes(x=x, y=log10(memory_profile))) +
-  geom_line()+
-  geom_point() +
-  facet_wrap(~read_type, scales = "free_x")
-ggplot(data=memory_profile, aes(x=x, y=log10(memory_profile))) +
+
+```r
+ggplot(data=memory_profile, aes(x=x, y=log(memory_profile))) +
   geom_line()+
   geom_point() +
   facet_wrap(~read_type, scales = "free")
 ```
+
+<img src="niftiarray-vignette_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" />
 
 ## Speed
 
@@ -576,7 +953,8 @@ Miller, R. B. (1968). Response time in man-computer conversational transactions.
 
 <!-- TODO: Explain the HDF5 and NIfTI NiftiArray functions. Maybe explain all the labels.-->
 
-```{r}
+
+```r
 speed = tibble::as_tibble(
   microbenchmark::microbenchmark(
     NiftiArray::NiftiArray(fileinfo$hdf5_destination[1]),
@@ -622,7 +1000,66 @@ knitr::kable(
   kableExtra::kable_styling("striped", full_width = FALSE)
 ```
 
-```{r}
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>Memory mapped in bytes from a single patients image read.
+  The image dimension is 182 by 218 by 182 with pixel dimension 1 mm by 1 mm by 1 mm.
+  On disk the image is 4.9 MB.</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Read Function </th>
+   <th style="text-align:right;"> Mean </th>
+   <th style="text-align:right;"> Median </th>
+   <th style="text-align:right;"> Std. Dev. </th>
+   <th style="text-align:right;"> Min. </th>
+   <th style="text-align:right;"> Max. </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> NiftiArray::NiftiArray - NIfTI File </td>
+   <td style="text-align:right;"> 2.13 </td>
+   <td style="text-align:right;"> 2.13 </td>
+   <td style="text-align:right;"> 0.05 </td>
+   <td style="text-align:right;"> 2.07 </td>
+   <td style="text-align:right;"> 2.20 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> NiftiArray::writeNiftiArray </td>
+   <td style="text-align:right;"> 2.03 </td>
+   <td style="text-align:right;"> 2.03 </td>
+   <td style="text-align:right;"> 0.08 </td>
+   <td style="text-align:right;"> 1.94 </td>
+   <td style="text-align:right;"> 2.13 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> neurobase::readnii </td>
+   <td style="text-align:right;"> 1.34 </td>
+   <td style="text-align:right;"> 1.34 </td>
+   <td style="text-align:right;"> 0.18 </td>
+   <td style="text-align:right;"> 1.14 </td>
+   <td style="text-align:right;"> 1.61 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> NiftiArray::NiftiArray - HDF5 File </td>
+   <td style="text-align:right;"> 0.18 </td>
+   <td style="text-align:right;"> 0.18 </td>
+   <td style="text-align:right;"> 0.01 </td>
+   <td style="text-align:right;"> 0.17 </td>
+   <td style="text-align:right;"> 0.20 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> RNifti::readNifti </td>
+   <td style="text-align:right;"> 0.14 </td>
+   <td style="text-align:right;"> 0.14 </td>
+   <td style="text-align:right;"> 0.01 </td>
+   <td style="text-align:right;"> 0.13 </td>
+   <td style="text-align:right;"> 0.16 </td>
+  </tr>
+</tbody>
+</table>
+
+
+```r
 ggplot(data = speed, aes(x = read_type, y = time)) +
   geom_boxplot() +   
   coord_flip() +
@@ -633,6 +1070,8 @@ ggplot(data = speed, aes(x = read_type, y = time)) +
   theme_minimal() +
   theme(plot.title = element_text(hjust=0.5), legend.position = 'none')
 ```
+
+<img src="niftiarray-vignette_files/figure-html/unnamed-chunk-35-1.png" style="display: block; margin: auto;" />
 
 The `NiftiArray::NiftiArray - HDF5` and `RNifti::readNifti` both are around the 0.1 limit of seamless user flow. The remaining functions are around the 1 second limit where a user will notice a lag but not lose their train of thought.
 

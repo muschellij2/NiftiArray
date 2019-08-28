@@ -43,7 +43,7 @@ location will overwrite.}
 A \code{NiftiArray} object.
 }
 \description{
-A function for writing NIfTI objects on disk to a specifically formated HDF5 file.
+A function for writing NIfTI objects on disk to a specifically formatted HDF5 file.
 The HDF5 file will include a group for the NIfTI image or array and the NIfTI header.
 }
 \examples{
