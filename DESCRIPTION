@@ -22,7 +22,8 @@ Imports:
     rhdf5,
     RNifti,
     S4Vectors
-Suggests: 
+Suggests:
+    spelling, 
     covr,
     DelayedMatrixStats,
     dplyr,
@@ -46,3 +47,4 @@ URL: https://github.com/muschellij2/NiftiArray
 BugReports: https://github.com/muschellij2/NiftiArray/issues
 Roxygen: list(markdown = TRUE)
 biocViews: Infrastructure, DataRepresentation, DataImport
+Language: en-US

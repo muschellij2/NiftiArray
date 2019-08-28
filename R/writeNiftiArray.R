@@ -1,6 +1,6 @@
 #' @title Write NiftiArray Object
 #'
-#' @description A function for writing NIfTI objects on disk to a specifically formated HDF5 file.
+#' @description A function for writing NIfTI objects on disk to a specifically formatted HDF5 file.
 #' The HDF5 file will include a group for the NIfTI image or array and the NIfTI header.
 #'
 #' @param x A `niftiImage` object loaded into R or a file path to a `NIfTI` file.
