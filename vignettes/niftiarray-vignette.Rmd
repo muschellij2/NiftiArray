@@ -1,9 +1,6 @@
 ---
 title: "NiftiArray: Fast Random Access of NIfTI Objects"
-output: 
-    rmarkdown::html_document:
-      base_format: rmarkdown::html_vignette
-      keep_md: true
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Using NiftiArray}
   %\VignetteEngine{knitr::rmarkdown}
@@ -12,13 +9,13 @@ vignette: >
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  eval = TRUE,
-  echo = TRUE,
-  fig.width=7, 
-  fig.height=5,
-  fig.align = 'center'
+    collapse = TRUE,
+    comment = "#>",
+    eval = TRUE,
+    echo = TRUE,
+    fig.width = 7,
+    fig.height = 5,
+    fig.align = 'center'
 )
 ```
 
@@ -54,7 +51,7 @@ TODO:  Add a GRAPHIC OF NIFTI TO NIFTIARRAY TO MATRIX TO CBINDED MATRIX TO DELAY
 
 You can install the development version of `NiftiArray` from [GitHub](https://github.com/) using the following:
 
-```{r}
+```{r, eval = FALSE}
 # install.packages('remotes')
 remotes::install_github("muschellij2/NiftiArray")
 ```
@@ -86,6 +83,7 @@ library(RNifti)
 library(stringr)
 library(tibble)
 library(tidyr)
+nifti_header = NiftiArray::nifti_header
 ```
 
 ## Data
@@ -96,34 +94,20 @@ This tutorial will use data found [here](https://github.com/muschellij2/open_ms_
 
 ```{r}
 # Information about URL to download and where to save the image locally in destiation
-fileinfo = tibble::tibble(url = c('https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient01/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz',
-                                  'https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient02/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz',
-                                  'https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient03/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz',
-                                  'https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient04/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz',
-                                  'https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient05/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz'),
-          nii_destination = c(tempfile(pattern = "flairpatient01", tmpdir = tempdir(), 
-                                       fileext = ".nii.gz"),
-                              tempfile(pattern = "flairpatient02", tmpdir = tempdir(), 
-                                       fileext = ".nii.gz"),
-                              tempfile(pattern = "flairpatient03", tmpdir = tempdir(), 
-                                       fileext = ".nii.gz"),
-                              tempfile(pattern = "flairpatient04", tmpdir = tempdir(), 
-                                       fileext = ".nii.gz"),
-                              tempfile(pattern = "flairpatient05", tmpdir = tempdir(), 
-                                       fileext = ".nii.gz")),
-          hdf5_destination = c(tempfile(pattern = "flairpatient01", tmpdir = tempdir(), 
-                                        fileext = ".h5"),
-                               tempfile(pattern = "flairpatient02", tmpdir = tempdir(), 
-                                        fileext = ".h5"),
-                               tempfile(pattern = "flairpatient03", tmpdir = tempdir(), 
-                                        fileext = ".h5"),
-                               tempfile(pattern = "flairpatient04", tmpdir = tempdir(), 
-                                        fileext = ".h5"),
-                               tempfile(pattern = "flairpatient05", tmpdir = tempdir(), 
-                                        fileext = ".h5")))
+urls = file.path("https://raw.githubusercontent.com", 
+                     "muschellij2", "open_ms_data", "master", 
+                     "cross_sectional", "MNI", paste0("patient0", 1:5),
+                     "T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz")
+nii_destinations = sapply(urls, function(x) tempfile(fileext = ".nii.gz"))
+hdf5_destinations = sub(".nii.gz", ".h5", nii_destinations)
 
+fileinfo = tibble::tibble(url = urls, 
+                          nii_destination = nii_destinations,
+                          hdf5_destination = hdf5_destinations)
 # Download all the files to the nii_destination
-mapply(function(x,y) download.file(url = x, destfile = y), fileinfo$url,fileinfo$nii_destination)
+mapply(function(x,y) {
+    download.file(url = x, destfile = y)
+}, fileinfo$url, fileinfo$nii_destination)
 
 # Notice the files were saved to a temporary directory on your machine
 # Change tempdir() to the directory where you saved the files if you adapted nii_destination
@@ -131,23 +115,15 @@ list.files(tempdir(), full.names = TRUE)
 ```
 
 ```{r, echo = FALSE}
-if(stringr::str_detect(getwd(), '/Users/alval') == TRUE){
+if (Sys.info()[["user"]] == 'alval') {
     # Information about URL to download and where to save the image locally in destiation
-fileinfo = tibble::tibble(url = c('https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient01/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz',
-                                  'https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient02/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz',
-                                  'https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient03/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz',
-                                  'https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient04/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz',
-                                  'https://raw.githubusercontent.com/muschellij2/open_ms_data/master/cross_sectional/MNI/patient05/T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz'),
-          nii_destination = c('/Users/alval/Box/rpackages/NiftiArray_examples/data/nii/flairpatient01.nii.gz',
-                              '/Users/alval/Box/rpackages/NiftiArray_examples/data/nii/flairpatient02.nii.gz',
-                              '/Users/alval/Box/rpackages/NiftiArray_examples/data/nii/flairpatient03.nii.gz',
-                              '/Users/alval/Box/rpackages/NiftiArray_examples/data/nii/flairpatient04.nii.gz',
-                              '/Users/alval/Box/rpackages/NiftiArray_examples/data/nii/flairpatient05.nii.gz'),
-          hdf5_destination = c('/Users/alval/Box/rpackages/NiftiArray_examples/data/hdf5/flairpatient01.h5',
-                              '/Users/alval/Box/rpackages/NiftiArray_examples/data/hdf5/flairpatient02.h5',
-                              '/Users/alval/Box/rpackages/NiftiArray_examples/data/hdf5/flairpatient03.h5',
-                              '/Users/alval/Box/rpackages/NiftiArray_examples/data/hdf5/flairpatient04.h5',
-                              '/Users/alval/Box/rpackages/NiftiArray_examples/data/hdf5/flairpatient05.h5'))
+    data_dir = '/Users/alval/Box/rpackages/NiftiArray_examples/data/'
+    fileinfo = tibble::tibble(
+        url = fileinfo$url,
+        nii_destination = paste0(data_dir, "nii/", 
+                                 "flairpatient0", 1:5, ".nii.gz"),
+        hdf5_destination = paste0(data_dir, "hdf5/", 
+                                  "flairpatient0", 1:5, ".h5"))
 }
 temp = neurobase::readnii(fileinfo$nii_destination[1])
 ```
@@ -177,10 +153,11 @@ Let's convert and write the first subject's data as a temporary file to the temp
 
 ```{r}
 # Write the NiftiArray object to disk and load it into R as patient01
-patient01 = NiftiArray::writeNiftiArray(fileinfo$nii_destination[1], filepath = fileinfo$hdf5_destination[1], overwrite = TRUE)
-# List the files in the temporary directory
-# Change tempdir() to the directory where you saved the files if you adapted hdf5_destination
-list.files(tempdir())
+patient01 = NiftiArray::writeNiftiArray(
+    fileinfo$nii_destination[1], 
+    filepath = fileinfo$hdf5_destination[1], 
+    overwrite = TRUE)
+file.exists(fileinfo$hdf5_destination[1])
 ```
 
 The NIfTI was converted to the the NIfTI-HDF5 file format and saved on disk. It was also loaded into memory is a `NiftiArray` object and returned in R as `patient01`. `patient01` is of class `NiftiArray`. 
@@ -251,10 +228,11 @@ patient_sum[90, 89, 101]
 Due to the block processing some functionality will not be available.
 
 ```{r}
-# Due to the blcok calculation some base functions will not be available
+# Due to the block calculation some base functions will not be available
 # The table function errors
 # TODO: Does DelayedArray have a table? DelayedArray::table()
 # table(patient01)
+table(c(patient01 > 5))
 ```
 
 ```{r}
@@ -276,9 +254,11 @@ To write out multiple NIfTI images on disk to the required HDF5 files we can sim
 
 ```{r}
 # Write out the entire filepath of NIfTI objects to HDF5s
-all_patients_list = mapply(function(x,y) writeNiftiArray(x = x, filepath = y, overwrite = TRUE), fileinfo$nii_destination, fileinfo$hdf5_destination)
+all_patients_list = mapply(function(x,y) {
+    writeNiftiArray(x = x, filepath = y, overwrite = TRUE)
+}, fileinfo$nii_destination, fileinfo$hdf5_destination)
 # List the files in the temporary directory -- all subjects should be there as NIfTIs and .h5s
-list.files(tempdir())
+list.files(tempdir(), pattern = ".(nii|h5)")
 # Remove all_patients_list since we will load it in a different way later
 rm(all_patients_list)
 ```
@@ -469,8 +449,8 @@ mean_nii = as(mean_niiarr, "niftiImage")
 ```
 
 ```{r}
-neurobase::ortho2(median_nii)
-neurobase::ortho2(mean_nii)
+neurobase::ortho2(median_nii, pdim = nifti_header(median_nii)$pixdim)
+neurobase::ortho2(mean_nii, pdim = nifti_header(mean_nii)$pixdim)
 ```
 
 You could write these objects out as NIfTIs using `RNifti::writeNifti`
@@ -491,14 +471,14 @@ memory = tibble::tibble(read_type = c('NiftiArray::NiftiArray',
                                       object.size(NiftiArray::writeNiftiArray(fileinfo$nii_destination[1])),
                                       object.size(RNifti::readNifti(fileinfo$nii_destination[1])),
                                       object.size(neurobase::readnii(fileinfo$nii_destination[1]))),
-                       log_byte_size = log(byte_size)) %>% 
+                       log_byte_size = log10(byte_size)) %>% 
   dplyr::mutate(read_type = as.factor(read_type),
                 read_type = forcats::fct_reorder(read_type, byte_size, .desc = TRUE))
 
 # Table of memory
 knitr::kable(
   memory,
-  col.names = c('Read Function', 'Byte Size', 'log(Byte Size)'),
+  col.names = c('Read Function', 'Byte Size', 'log_10(Byte Size)'),
   format = 'html',
   digits = 2, 
   caption = 'Memory mapped in bytes from a single patients image read. 
@@ -572,7 +552,11 @@ Melissa
 -->
 
 ```{r}
-ggplot(data=memory_profile, aes(x=x, y=log(memory_profile))) +
+ggplot(data=memory_profile, aes(x=x, y=log10(memory_profile))) +
+  geom_line()+
+  geom_point() +
+  facet_wrap(~read_type, scales = "free_x")
+ggplot(data=memory_profile, aes(x=x, y=log10(memory_profile))) +
   geom_line()+
   geom_point() +
   facet_wrap(~read_type, scales = "free")
