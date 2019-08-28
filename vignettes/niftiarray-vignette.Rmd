@@ -97,7 +97,7 @@ This tutorial will use data found [here](https://github.com/muschellij2/open_ms_
 urls = file.path("https://raw.githubusercontent.com", 
                      "muschellij2", "open_ms_data", "master", 
                      "cross_sectional", "MNI", paste0("patient0", 1:5),
-                     "T1_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz")
+                     "FLAIR_N4_noneck_reduced_winsor_regtoFLAIR_brain_N4_regtoMNI.nii.gz")
 nii_destinations = sapply(urls, function(x) tempfile(fileext = ".nii.gz"))
 hdf5_destinations = sub(".nii.gz", ".h5", nii_destinations)
 
