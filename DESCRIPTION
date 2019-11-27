@@ -15,6 +15,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
+Depends: R (>= 3.6)
 Imports: 
     DelayedArray (>= 0.10.0),
     HDF5Array (>= 1.13.3),
