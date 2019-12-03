@@ -19,9 +19,9 @@
 \alias{coerce,numeric,NiftiArray-method}
 \alias{coerce,NiftiArray,niftiImage-method}
 \alias{coerce,ReshapedNiftiArray,niftiImage-method}
+\alias{coerce,ReshapedNiftiMatrix,niftiImage-method}
 \alias{coerce,ReshapedHDF5Matrix,niftiImage-method}
 \alias{coerce,NiftiMatrix,niftiImage-method}
-\alias{coerce,ReshapedNiftiMatrix,niftiImage-method}
 \alias{coerce,NiftiMatrix,NiftiArray-method}
 \alias{coerce,ANY,NiftiMatrix-method}
 \alias{coerce,NiftiArrayList,NiftiArray-method}
