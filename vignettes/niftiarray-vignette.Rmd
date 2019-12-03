@@ -252,7 +252,7 @@ TODO: Fix NiftiArrayList to properly call lapply when given an nii to convert an
 
 To write out multiple NIfTI images on disk to the required HDF5 files we can simply `mapply` over `NiftiArray::writeNiftiArray`.
 
-```{r}
+```{r listmap}
 # Write out the entire filepath of NIfTI objects to HDF5s
 all_patients_list = mapply(function(x,y) {
     writeNiftiArray(x = x, filepath = y, overwrite = TRUE)
@@ -267,7 +267,7 @@ rm(all_patients_list)
 
 The `NiftiArray::NiftiArrayList` function converts and writes `NiftiArray` objects if the `x` input is of class NIfTI and then loads all the `NiftiArray` objects into R in a `list` as a new class `NiftiArrayList`. That is, every element in the list is a `NiftiArray`. 
 
-```{r}
+```{r nilist2}
 # Convert, write to temporary disk, and load all_patients_list using NiftiArray::NiftiArrayList
 all_patients_list = NiftiArray::NiftiArrayList(fileinfo$nii_destination)
 # Show the class is NiftiArrayList
@@ -276,7 +276,7 @@ class(all_patients_list)
 
 The `NiftiArray::NiftiArrayList` class also simply loads the `NiftiArray` objects as a `list` if the `x` input is a set of file paths to the HDF5 `NiftiArray` files on disk.
 
-```{r}
+```{r niArrayList}
 # Load all_patients_list using NiftiArray::NiftiArrayList
 all_patients_list = NiftiArray::NiftiArrayList(fileinfo$hdf5_destination)
 # Show the class is NiftiArrayList
@@ -294,7 +294,7 @@ TODO Melissa if possible put function operations for accessing voxels or info ac
 
 The `NiftiArray` object is a 3 dimensional array structure that allows for memory efficient delayed random access of NIfTI objects. The `NiftiMatrix` is the result of concatenating the `NiftiArray`. Similar to `NiftiArray`, `NiftiMatrix` is a new class object. Rather than an array structure we can strung out the image to a vector. In the code below, we convert a `NiftiArray` to a `NiftiMatrix` for one patient. We then verify that the class of this object is in fact a `NiftiMatrix`, has only a single column, index the vector to print some values, and validate that the object size is as memory efficient as the `NiftiMatrix`.
 
-```{r} 
+```{r niarray} 
 # Reload patient01 using NiftiArray::NiftiArray from a HDF5 object on disk
 patient01 = NiftiArray::NiftiArray(fileinfo$hdf5_destination[[1]])
 # Convert the NiftiArray to a NiftiMatrix
@@ -317,7 +317,7 @@ In this example, we showed the result of converting a single patients `NiftiArra
 
 In order to use tools like `DelayedArray` and `DelayedMatrixStats` to calculate voxel-level statistics across multiple subjects we need to create a big `NiftiMatrix`. That is, each row will represent a voxel and each column a new subject. To do this, we can take advantage of the `NiftiArrayList` class.
 
-```{r}
+```{r acbind}
 # Show all_patients_list is of NiftiArrayList
 class(all_patients_list)
 # Convert each element in the list to a NiftiMatrix
@@ -339,7 +339,8 @@ The `DelayedMatrixStats` package allows for row or column wise statistical opera
 
 Below we show a simple example obtaining the voxel level mean and median across subjects.
 
-```{r}
+```{r vmedians}
+all_patients_niimat = as(all_patients_niimat, "HDF5Matrix")
 # Calculate the voxel-wise  median across subjects
 voxel_medians = DelayedMatrixStats::rowMedians(all_patients_niimat)
 # Index the median vector
@@ -363,7 +364,7 @@ NiftiArray::nifti_header(voxel_medians)
 
 Notice the NIfTI header is no longer accurate when we coerce the normal vector to a `NiftiMatrix`.
 
-```{r}
+```{r vmeans}
 # Calculate the voxel-wise  mean across subjects
 voxel_means = DelayedMatrixStats::rowMeans2(all_patients_niimat)
 ```
@@ -381,7 +382,7 @@ So long as the object belongs to the classes available in `NiftiArray` (i.e. `Ni
 
 #### NiftiMatrix to NiftiArray
 
-```{r}
+```{r as_to_array}
 class(patient01_niimat)
 niimat2niiarr = as(patient01_niimat, "NiftiArray")
 class(niimat2niiarr)
@@ -389,7 +390,7 @@ class(niimat2niiarr)
 
 #### `NiftiMatrix` to `niftiImage`
 
-```{r}
+```{r reshaping_again}
 class(patient01_niimat)
 niimat2nii = as(patient01_niimat, "niftiImage")
 class(niimat2nii)
@@ -397,7 +398,7 @@ class(niimat2nii)
 
 #### `NiftiArray` to `NiftiMatrix`
 
-```{r}
+```{r niMatrix}
 class(patient01)
 niiarr2niimat = as(patient01, "NiftiMatrix")
 class(niiarr2niimat)
@@ -405,7 +406,7 @@ class(niiarr2niimat)
 
 #### `NiftiArray` to `niftiImage`
 
-```{r}
+```{r niImage}
 class(patient01)
 niiarr2nii = as(patient01, "niftiImage")
 class(niiarr2nii)
@@ -415,7 +416,7 @@ class(niiarr2nii)
 
 Converting between the objects returned from `DelayedMatrixStats` functions and `NiftiArray` objects is not as easy because the NIfTI header was lost in the calculations involved in `DelayedMatrixStats` functions. We must extract the header from previous object and then re-initialize the `NiftiArray`.
 
-```{r}
+```{r hdr}
 # Median
 # Obtain the image header associated with the all_patients_list NiftiArrayList
 image_header = NiftiArray::nifti_header(all_patients_list)
@@ -443,7 +444,7 @@ object.size(mean_niiarr)
 
 Once a `NiftiArray` it is easy to create the `niftiImage` object.
 
-```{r}
+```{r medianimg}
 median_nii = as(median_niiarr, "niftiImage")
 mean_nii = as(mean_niiarr, "niftiImage")
 ```
@@ -461,7 +462,7 @@ You could write these objects out as NIfTIs using `RNifti::writeNifti`
 
 ### Local Object Size
 
-```{r, echo = TRUE}
+```{r objsize, echo = TRUE}
 # Calculate the a single patient object size using different NIfTI read functions
 memory = tibble::tibble(read_type = c('NiftiArray::NiftiArray', 
                                       'NiftiArray::writeNiftiArray', 
@@ -524,7 +525,7 @@ ggplot(memory, aes(x = read_type, y = log_byte_size, fill = read_type)) +
 TODO Melissa add a scatter plot and line graph using the memory profile for each -- this is especially useful to show that writeNiftiArray uses more memory in the profile but the object is the same 
 -->
 
-```{r}
+```{r profmem}
 # Initalize a list to store the memory profile
 memory_profile = list()
 # Memory profile of RNifti::readNifti()
@@ -551,7 +552,7 @@ Melissa
 # TODO WHY IS NIFTIARRAY FUNCTION THE SAME MEMORY AS WRITENIFTIARRAY
 -->
 
-```{r}
+```{r plotmem}
 ggplot(data=memory_profile, aes(x=x, y=log10(memory_profile))) +
   geom_line()+
   geom_point() +
