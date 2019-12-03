@@ -171,16 +171,21 @@ setAs("ReshapedNiftiArray", "niftiImage", function(from) {
   out_img
 })
 
-#' @aliases coerce,ReshapedNiftiMatrix,niftiImage-method
+#' @aliases coerce,ReshapedNiftiMatrix,NiftiArray-method
 #' @rdname NiftiArray
 #' @name coerce
 #' @export
 setAs("ReshapedNiftiMatrix", "NiftiArray", function(from) {
-  NiftiArray(from@seed@filepath,
-             extendible = from@seed@extendible,
+  extendible = from@seed@extendible
+  x = NiftiArray(from@seed@filepath,
+             extendible = ,
              name = from@seed@name,
              header_name = from@seed@header_name,
              header = nifti_header(from))
+  if (extendible) {
+    dim(x) = dim(x)[-length(dim(x))]
+  }
+  x
   # hdr = nifti_header(from)
   # d = hdr$dim
   # d = d[ 2:(2 + d[1] - 1)]
