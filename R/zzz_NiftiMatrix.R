@@ -175,6 +175,25 @@ setAs("ReshapedNiftiArray", "niftiImage", function(from) {
 #' @rdname NiftiArray
 #' @name coerce
 #' @export
+setAs("ReshapedHDF5Matrix", "NiftiArray", function(from) {
+  NiftiArray(from@seed@filepath,
+             extendible = from@seed@extendible,
+             name = from@seed@name,
+             header_name = from@seed@header_name,
+             header = nifti_header(from))
+  # hdr = nifti_header(from)
+  # d = hdr$dim
+  # d = d[ 2:(2 + d[1] - 1)]
+  # arr = array(as.array(from), dim = d)
+  #
+  # out_img = RNifti::updateNifti(arr, template = hdr)
+  # out_img
+})
+
+#' @aliases coerce,ReshapedHDF5Matrix,niftiImage-method
+#' @rdname NiftiArray
+#' @name coerce
+#' @export
 setAs("ReshapedHDF5Matrix", "niftiImage", function(from) {
   hdr = nifti_header(from)
   d = hdr$dim

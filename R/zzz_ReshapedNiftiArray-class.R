@@ -1,5 +1,5 @@
 setClass("ReshapedNiftiArraySeed",
-         contains = c("ReshapedHDF5ArraySeed"),
+         contains = c("ReshapedHDF5ArraySeed", "NiftiArraySeed"),
          slots = c(
            header_name = "character",
            sizeof_hdr = "integer",
@@ -42,8 +42,12 @@ setClass("ReshapedNiftiArraySeed",
          )
 )
 
+# setClass("ReshapedNiftiArray",
+#          contains = "ReshapedHDF5Array"
+# )
 setClass("ReshapedNiftiArray",
-         contains = "ReshapedHDF5Array"
+         contains="NiftiArray",
+         representation(seed="ReshapedNiftiArraySeed")
 )
 
 
@@ -146,11 +150,11 @@ ReshapedNiftiArray <- function(
 ### ReshapedHDF5Matrix objects
 ###
 
-setClass("ReshapedNiftiMatrix", contains = c("ReshapedNiftiArray"))
+setClass("ReshapedNiftiMatrix", contains = c("ReshapedNiftiArray", "NiftiMatrix"))
 
 ### Required for DelayedArray internal business.
 # setMethod("matrixClass", "ReshapedNiftiArray", function(x) "ReshapedHDF5Matrix")
-
+setMethod("matrixClass", "ReshapedNiftiArray", function(x) "ReshapedNiftiMatrix")
 
 #' @rdname NiftiArray
 #' @aliases coerce,ReshapedNiftiArray,ReshapedNiftiMatrix-method

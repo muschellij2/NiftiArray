@@ -17,6 +17,8 @@ check_array = function(x) {
   testthat::expect_is(x, "DelayedArray")
 }
 
+# mat_class = "NiftiMatrix"
+mat_class = "ReshapedNiftiMatrix"
 
 
 testthat::test_that("Operations and DelayedArray give header", {
@@ -24,13 +26,15 @@ testthat::test_that("Operations and DelayedArray give header", {
   res = writeNiftiArray(img)
   mat = as(res, "NiftiMatrix")
   testthat::expect_is(mat, "NiftiMatrix")
-  testthat::expect_equal(DelayedArray::matrixClass(mat), "NiftiMatrix")
+  # testthat::expect_equal(DelayedArray::matrixClass(mat), "NiftiMatrix")
+  testthat::expect_equal(DelayedArray::matrixClass(mat), mat_class)
+
   check_array(mat)
 
   hdf5mat = HDF5Array::HDF5Array(res@seed@filepath, "image")
   testthat::expect_is(as(hdf5mat, "NiftiMatrix"), "NiftiMatrix")
   testthat::expect_warning(as(hdf5mat, "NiftiMatrix"))
-  testthat::expect_equal(DelayedArray::matrixClass(mat), "NiftiMatrix")
+  testthat::expect_equal(DelayedArray::matrixClass(mat), mat_class)
   check_array(mat)
 
   mat = DelayedArray::acbind(mat, mat, mat, mat)
@@ -53,7 +57,7 @@ testthat::test_that("4D NiftiMatrix Example", {
   mat = as(res, "NiftiMatrix")
   testthat::expect_equal(ncol(mat), dim(res)[4])
   testthat::expect_is(mat, "NiftiMatrix")
-  testthat::expect_equal(DelayedArray::matrixClass(mat), "NiftiMatrix")
+  testthat::expect_equal(DelayedArray::matrixClass(mat), mat_class)
   check_array(mat)
 
   back_res = as(mat, "NiftiArray")
