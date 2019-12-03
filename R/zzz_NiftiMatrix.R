@@ -71,12 +71,16 @@ setMethod("matrixClass", "NiftiArray", function(x) "NiftiMatrix")
 setAs("NiftiArray", "NiftiMatrix", function(from) {
   # from = res[[1]]
   dfrom = dim(from)
+  if (is_extendible(from)) {
+    dfrom = dfrom[-length(dfrom)]
+  }
   nd = length(dfrom)
-  if (nd > 4) {
+  if ( (nd > 4 && dfrom[5] > 1) ||
+      nd > 5) {
     stop(paste0("NiftiMatrix from NiftiArray not ",
                 "defined for > 4 dimensions!"))
   }
-  dfrom = c(dfrom, rep(1L, 4 - nd))
+  dfrom = c(dfrom, rep(1L, max(4 - nd, 0)))
   out_dim = c(prod(dfrom[seq(3)]), dfrom[seq(4, length(dfrom))])
   out_dim = as.integer(out_dim)
   if (nd > 2) {
@@ -85,18 +89,18 @@ setAs("NiftiArray", "NiftiMatrix", function(from) {
       #   # 1.13.3
       #   # stop("Not implemented yet!")
       dim(from) = dfrom
-      from = writeNiftiArray(from, header = )
+      from = writeNiftiArray(from, header = hdr, extendible = FALSE)
       # does not give resshaped niftimatrix
       mat <- ReshapedNiftiArray(
         filepath = from@seed@filepath,
         name = from@seed@name,
         dim = out_dim,
         header = hdr)
-      mat = as(mat, "NiftiMatrix")
+      # mat = as(mat, "NiftiMatrix")
       return(mat)
     } else {
       mat = matrix(from, ncol = dfrom[4])
-      mat = writeNiftiArray(mat, header = hdr)
+      mat = writeNiftiArray(mat, header = hdr, extendible = FALSE)
       return(mat)
     }
   } else {
@@ -125,7 +129,7 @@ setAs("NiftiArrayList", "NiftiMatrix", function(from) {
     as(x, "NiftiMatrix")
   })
   from = do.call(DelayedArray::acbind, args = from)
-  writeNiftiArray(from, header = hdr)
+  writeNiftiArray(from, header = hdr, extendible = FALSE)
 })
 
 
@@ -172,10 +176,14 @@ setAs("NiftiMatrix", "niftiImage", function(from) {
 #' @name coerce
 setAs("NiftiMatrix", "NiftiArray", function(from) {
   hdr = nifti_header(from)
+  extendible = hdr$extendible
+  if (is.null(extendible)) {
+    extendible = FALSE
+  }
   d = hdr$dim
   d = d[ 2:(2 + d[1] - 1)]
   mat = array(from, dim = d)
-  writeNiftiArray(mat, header = hdr)
+  writeNiftiArray(mat, header = hdr, extendible = extendible)
 })  # no-op
 
 #' @rdname NiftiArray
@@ -198,6 +206,10 @@ setAs(
     stopifnot(all(ndims == ndims[1]))
     ndims = unique(ndims)
     hdr = nifti_header(from[[1]])
+    extendible = hdr$extendible
+    if (is.null(extendible)) {
+      extendible = FALSE
+    }
 
     verbose = attr(from, "verbose")
     if (is.null(verbose)) {
@@ -213,7 +225,7 @@ setAs(
     # Adapted from
     # https://support.bioconductor.org/p/107051/
     from = applier(from, function(x) {
-      dim(x) = c(dim(x), 1)
+      dim(x) = c(dim(x), 1L)
       x = DelayedArray::aperm(x, perm = (ndims + 1):1)
       x
     })
@@ -228,7 +240,8 @@ setAs(
     if (verbose) {
       message("Running writeNiftiArray")
     }
-    res = writeNiftiArray(res, header = hdr, verbose = verbose)
+    res = writeNiftiArray(res, header = hdr, verbose = verbose,
+                          extendible = extendible)
     res
   })
 

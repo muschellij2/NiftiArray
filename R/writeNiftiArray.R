@@ -24,6 +24,8 @@
 #' input then do not overwrite it.
 #' If set to `TRUE` then the `name` and `header_name` group objects in the HDF5 file
 #' location will overwrite.
+#' @param extendible Should a single empty dimension be added to the array?
+#' Currently necessary for easy reshaping.
 #'
 #' @return A `NiftiArray` object.
 #' @export
@@ -44,7 +46,8 @@
 #' writeNiftiArray(c(img), header = nifti_header(img))
 writeNiftiArray <- function(x, filepath = tempfile(fileext = ".h5"),
   name = "image", header_name = "hdr", chunkdim = NULL, level = NULL,
-  verbose = FALSE, header = NULL, overwrite = FALSE){
+  verbose = FALSE, header = NULL, overwrite = FALSE,
+  extendible = FALSE){
   # Check if filepath exists as h5 already
   # If it does delete it, will error if the file exists and no overwrite
   if (file.exists(filepath)) {
@@ -82,6 +85,9 @@ writeNiftiArray <- function(x, filepath = tempfile(fileext = ".h5"),
   if (!is(x, "DelayedArray")) {
     x = array(x, dim = dim(x))
   }
+  if (extendible) {
+    dim(x) = c(dim(x), 1L)
+  }
   HDF5Array::writeHDF5Array(x = x, filepath = filepath, name = name,
                             chunkdim = chunkdim, level = level,
                             verbose = verbose)
@@ -90,11 +96,13 @@ writeNiftiArray <- function(x, filepath = tempfile(fileext = ".h5"),
   }
   if (!is.null(hdr)) {
     aa = attributes(hdr)
+    # aa$extendible = extendible
     aa$class = NULL
     class(hdr) = "list"
     attributes(hdr) = aa
     rhdf5::h5write(hdr, file = filepath, name = header_name) # write header
     rhdf5::h5closeAll() # Close all open HDF5 handles in the environment
   }
-  NiftiArray(filepath, name = name, header_name = header_name)
+  NiftiArray(filepath, name = name, header_name = header_name,
+             extendible = extendible)
 }

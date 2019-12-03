@@ -1,3 +1,11 @@
+is_extendible = function(x) {
+  hdr = nifti_header(x)
+  extendible = hdr$extendible
+  if (is.null(extendible)) {
+    extendible = FALSE
+  }
+  extendible
+}
 has_nifti_header = function(x) {
   xx = is(x, "NiftiArray") | is(x, "NiftiArraySeed")
   xx = xx | is(x, "ReshapedNiftiArraySeed") | is(x, "ReshapedNiftiArray")
@@ -96,7 +104,11 @@ setMethod("nifti_header", "HDF5Array", function(image) {
 #' @aliases nifti_header,HDF5ArraySeed-method
 setMethod("nifti_header", "HDF5ArraySeed", function(image) {
   warning("No header available, giving default header")
-  RNifti::niftiHeader()
+  x = RNifti::niftiHeader()
+  if (is.null(x$extendible)) {
+    x$extendible = FALSE
+  }
+  x
 })
 
 #' @rdname nifti_header
@@ -104,7 +116,11 @@ setMethod("nifti_header", "HDF5ArraySeed", function(image) {
 #' @aliases nifti_header,ANY-method
 #' @importFrom RNifti niftiHeader
 setMethod("nifti_header", "ANY", function(image) {
-  RNifti::niftiHeader(image)
+  x = RNifti::niftiHeader(image)
+  if (is.null(x$extendible)) {
+    x$extendible = FALSE
+  }
+  x
 })
 
 .nifti_header_from_seed = function(image) {
@@ -145,6 +161,10 @@ setMethod("nifti_header", "ANY", function(image) {
     srow_z = image@srow_z,
     intent_name = image@intent_name,
     magic = image@magic)
+  out$extendible = image@extendible
+  if (is.null(out$extendible)) {
+    out$extendible = FALSE
+  }
   ndim = length(dim(image))
   attr(out, "imagedim") = dim(image)
   attr(out, "pixdim") = image@pixdim[2:(2 + ndim - 1)]

@@ -7,8 +7,14 @@
 \alias{NiftiArraySeed}
 \title{Seed for NiftiArray Class}
 \usage{
-NiftiArraySeed(filepath, name = "image", header_name = "hdr",
-  type = NA, header = NULL)
+NiftiArraySeed(
+  filepath,
+  name = "image",
+  header_name = "hdr",
+  type = NA,
+  header = NULL,
+  extendible = FALSE
+)
 }
 \arguments{
 \item{filepath}{The path (as a single character string) to the NIfTI or HDF5

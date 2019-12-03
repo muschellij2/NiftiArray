@@ -27,8 +27,14 @@
 \alias{coerce,ANY,ReshapedNiftiMatrix-method}
 \title{Realize NIfTI images as DelayedArray objects, using HDF5Array}
 \usage{
-NiftiArray(filepath, name = "image", header_name = "hdr", type = NA,
-  header = NULL)
+NiftiArray(
+  filepath,
+  name = "image",
+  header_name = "hdr",
+  type = NA,
+  header = NULL,
+  extendible = FALSE
+)
 }
 \arguments{
 \item{filepath}{The path (as a single character string) to the NIfTI or HDF5
@@ -49,6 +55,9 @@ Unless you want different types of HDF5 storage files there is no need to change
 
 \item{header}{List of NIfTI header information to override call of
 \link{nifti_header}.}
+
+\item{extendible}{Should a single empty dimension be added to the array?
+Currently necessary for easy reshaping.}
 }
 \value{
 A \code{NiftiArray} object

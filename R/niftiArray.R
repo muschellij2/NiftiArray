@@ -35,6 +35,8 @@ setMethod(
 #' Unless you want different types of HDF5 storage files there is no need to change default settings.
 #' @param header List of NIfTI header information to override call of
 #' [nifti_header].
+#' @param extendible Should a single empty dimension be added to the array?
+#' Currently necessary for easy reshaping.
 #'
 #' @return A `NiftiArray` object
 #' @export
@@ -53,14 +55,15 @@ setMethod(
 #' res2 = NiftiArray(slot(res, "seed"))
 NiftiArray <- function(
     filepath, name = "image",
-    header_name = "hdr", type = NA, header = NULL){
+    header_name = "hdr", type = NA, header = NULL,
+    extendible = FALSE){
     if (is(filepath, "NiftiArraySeed")) {
         seed <- filepath
     } else {
         seed <- NiftiArraySeed(
             filepath, name = name,
             header_name = header_name, type = type,
-            header = header)
+            header = header, extendible = extendible)
     }
     DelayedArray::DelayedArray(seed)
 }

@@ -5,11 +5,25 @@
 \alias{ReshapedNiftiArray}
 \title{Virtually reshaped Nifti images as DelayedArray objects}
 \usage{
-ReshapedNiftiArraySeed(filepath, name = "image", header_name = "hdr",
-  dim, type = NA, header = NULL, chunkdim = NULL)
+ReshapedNiftiArraySeed(
+  filepath,
+  name = "image",
+  header_name = "hdr",
+  dim,
+  type = NA,
+  header = NULL,
+  chunkdim = NULL
+)
 
-ReshapedNiftiArray(filepath, name = "image", header_name = "hdr", dim,
-  type = NA, header = NULL, chunkdim = NULL)
+ReshapedNiftiArray(
+  filepath,
+  name = "image",
+  header_name = "hdr",
+  dim,
+  type = NA,
+  header = NULL,
+  chunkdim = NULL
+)
 }
 \arguments{
 \item{filepath}{The path (as a single character string) to the NIfTI or HDF5

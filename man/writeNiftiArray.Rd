@@ -4,9 +4,18 @@
 \alias{writeNiftiArray}
 \title{Write NiftiArray Object}
 \usage{
-writeNiftiArray(x, filepath = tempfile(fileext = ".h5"),
-  name = "image", header_name = "hdr", chunkdim = NULL,
-  level = NULL, verbose = FALSE, header = NULL, overwrite = FALSE)
+writeNiftiArray(
+  x,
+  filepath = tempfile(fileext = ".h5"),
+  name = "image",
+  header_name = "hdr",
+  chunkdim = NULL,
+  level = NULL,
+  verbose = FALSE,
+  header = NULL,
+  overwrite = FALSE,
+  extendible = FALSE
+)
 }
 \arguments{
 \item{x}{A \code{niftiImage} object loaded into R or a file path to a \code{NIfTI} file.}
@@ -38,6 +47,9 @@ event that an HDF5 file already exists for \code{filepath}
 input then do not overwrite it.
 If set to \code{TRUE} then the \code{name} and \code{header_name} group objects in the HDF5 file
 location will overwrite.}
+
+\item{extendible}{Should a single empty dimension be added to the array?
+Currently necessary for easy reshaping.}
 }
 \value{
 A \code{NiftiArray} object.

@@ -37,7 +37,8 @@ setClass("ReshapedNiftiArraySeed",
            srow_y = "numeric",
            srow_z = "numeric",
            intent_name = "character",
-           magic = "character"
+           magic = "character",
+           extendible = "logical"
          )
 )
 
@@ -71,12 +72,13 @@ ReshapedNiftiArraySeed <- function(filepath, name = "image",
                                    header_name = "hdr", dim,
                                    type = NA, header = NULL,
                                    chunkdim = NULL
-){
+                                   ){
 
 
   seed <- NiftiArraySeed(filepath, name = name,
                          header_name = header_name,
-                         header = header, type = type)
+                         header = header, type = type,
+                         extendible = TRUE)
   hdr = nifti_header(seed)
   reshaped_dim <- as.integer(dim)
   collapse_along <- HDF5Array:::find_dims_to_collapse(reshaped_dim, seed@dim)
@@ -98,7 +100,8 @@ ReshapedNiftiArraySeed <- function(filepath, name = "image",
                                      header_name = header_name,
                                      header = hdr,
                                      args =  args,
-                                     seed_type = "ReshapedNiftiArraySeed")
+                                     seed_type = "ReshapedNiftiArraySeed",
+                                     extendible = FALSE)
 
   # new2("ReshapedNiftiArraySeed", seed,
   #      reshaped_dim = reshaped_dim,

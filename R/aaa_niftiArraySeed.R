@@ -55,7 +55,8 @@ setClass(
         srow_y = "numeric",
         srow_z = "numeric",
         intent_name = "character",
-        magic = "character"))
+        magic = "character",
+        extendible = "logical"))
 
 #' @importClassesFrom HDF5Array HDF5Array
 #' @rdname NiftiArray
@@ -109,7 +110,8 @@ NiftiArraySeed <- function(
     filepath,
     name = "image", header_name = "hdr",
     type = NA,
-    header = NULL) {
+    header = NULL,
+    extendible = FALSE) {
     # for filepath for .nii.gz
     fe = tools::file_ext(filepath)
     if (fe == "gz") {
@@ -120,7 +122,8 @@ NiftiArraySeed <- function(
         filepath = tempfile(fileext = ".h5")
         writeNiftiArray(x, filepath = filepath,
                         name = name, header_name = header_name,
-                        header = header)
+                        header = header,
+                        extendible = extendible)
         rm(x); gc()
     }
 
@@ -130,7 +133,8 @@ NiftiArraySeed <- function(
         seed,
         header_name = header_name,
         header = header,
-        seed_type = "NiftiArraySeed")
+        seed_type = "NiftiArraySeed",
+        extendible = extendible)
 }
 
 
@@ -138,7 +142,8 @@ NiftiArraySeed <- function(
                                               header_name = "hdr",
                                               header = NULL,
                                               args = list(),
-                                              seed_type = "NiftiArraySeed") {
+                                              seed_type = "NiftiArraySeed",
+                                              extendible = FALSE) {
 
     args$filepath = seed@filepath
     args$name = seed@name
@@ -165,6 +170,7 @@ NiftiArraySeed <- function(
     hdr = lapply(hdr, as.vector)
     args = c(args, hdr)
     args$header_name = header_name
+    args$extendible = extendible
     args = c(seed_type, args )
     do.call(S4Vectors::new2, args = args)
 }
