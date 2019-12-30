@@ -89,10 +89,11 @@ testthat::test_that("Conversion to NiftiArray", {
 
 })
 
-testthat::test_that("Conversion to NiftiArray", {
+testthat::test_that("Conversion to niftiImage", {
 
   arr = writeNiftiArray(nii_fname)
   out_img = as(as(arr, "NiftiMatrix"), "niftiImage")
+  out_img = drop(out_img)
   testthat::expect_is(out_img, "niftiImage")
 
   testthat::expect_equal(dim(out_img), dim(img))

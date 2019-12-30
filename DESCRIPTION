@@ -1,6 +1,6 @@
 Package: NiftiArray
 Title: HDF5 Delayed Array for Nifti Objects
-Version: 0.99.4.1
+Version: 0.99.4.2
 Authors@R: c(person(given = "John",
                     family = "Muschelli",
                     email = "muschellij2@gmail.com",
