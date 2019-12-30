@@ -35,6 +35,9 @@ Unless you want different types of HDF5 storage files there is no need to change
 
 \item{header}{List of NIfTI header information to override call of
 \link{nifti_header}.}
+
+\item{extendible}{Should a single empty dimension be added to the array?
+Currently necessary for easy reshaping.}
 }
 \value{
 A \code{NiftiArraySeed} object
