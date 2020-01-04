@@ -112,6 +112,8 @@ testthat::test_that("Operations and DelayedArray give header", {
       DelayedArray::aperm(res, 4:1),
       DelayedArray::aperm(res2, 4:1)),
     4:1)
+  res = nifti_header(big_res)
+  testthat::expect_equal(res$qoffset_x, 122.033897399902)
 
 })
 
