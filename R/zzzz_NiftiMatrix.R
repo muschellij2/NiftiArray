@@ -185,13 +185,14 @@ setAs("ReshapedNiftiMatrix", "NiftiArray", function(from) {
   if (extendible) {
     dim(x) = dim(x)[-length(dim(x))]
   }
-  hdr = nifti_header(from)
-  d = hdr$dim
-  d = d[ 2:(2 + d[1] - 1)]
-  arr = array(as.array(from), dim = d)
-
-  out_img = RNifti::updateNifti(arr, template = hdr)
-  out_img
+  x
+  # hdr = nifti_header(from)
+  # d = hdr$dim
+  # d = d[ 2:(2 + d[1] - 1)]
+  # arr = array(as.array(from), dim = d)
+  #
+  # out_img = RNifti::updateNifti(arr, template = hdr)
+  # out_img
 })
 
 #' @aliases coerce,ReshapedHDF5Matrix,niftiImage-method
