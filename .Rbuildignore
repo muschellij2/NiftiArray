@@ -12,3 +12,6 @@
 ^cran-comments\.md$
 ^\.DS_Store$
 ^\.Rhistory$
+^build\.sh$
+^run\.sh$
+^Dockerfile$
